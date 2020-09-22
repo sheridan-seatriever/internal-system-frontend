@@ -116,7 +116,7 @@ function DateGrid({year, month}) {
   let dateRows = [];
   for(let i=0;i<rows;i++) {
     // EVENT DATA GOES HERE
-    const eventTable = eventTableGenerator(eventRangeWeeks[i]);
+    const eventTable = eventTableGenerator(sampleData[i]); //change to eventRangeWeeks in production
     dateRows.push(containerTableGenerator(eventTable, dateRangeWeeks[i], dayRangeWeeks[i]));
   }
 
