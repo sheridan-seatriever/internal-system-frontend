@@ -1,0 +1,115 @@
+.date_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+td {
+  padding: 0;
+}
+
+.table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table_main {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #d6d6d6;
+}
+
+.day_row {
+  min-height: 50px;
+  width: 100%;
+}
+
+.width_max {
+  width: 100%;
+}
+
+.event {
+  padding: 3px;
+  position: relative;
+  z-index: 1;
+}
+.event_inner {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 100%;
+  padding-left: 4px;
+  font-size: .8rem;
+  background-color: #61bd4f;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.cell_date {
+  font-weight: 300;
+  text-align: left;
+  padding: 4px;
+}
+
+.day_header {
+  padding: 10px;
+  border-bottom: 1px solid #d6d6d6;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.current_day {
+  padding: 0;
+  background-color: rgba(214, 221, 111, 0.5);
+  border-right: 1px solid #d6d6d6;
+  flex-grow: 1;
+}
+
+
+
+.table_row_container {
+  position: relative;
+  min-height: 200px;
+}
+
+.table_day_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+}
+
+.table_events_container {
+  position: relative;
+}
+
+.day {
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  border-left: 1px solid #d6d6d6;
+  border-bottom: 1px solid #d6d6d6;
+  flex-grow: 1;
+}
+.day:first-child {
+  border-left: none;
+}
+.day:hover {
+  background-color: rgba(111, 217, 221, 0.5);
+}
+
+.not_current_month {
+  background-color: rgba(190, 190, 190, 0.5);
+}
+.not_current_month:hover {
+  background-color: rgba(190, 190, 190, 0.5);
+}
+
+.currentDay {
+  background-color: rgba(255, 251, 0, 0.445);
+}

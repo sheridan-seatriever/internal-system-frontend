@@ -1,0 +1,22 @@
+.container {
+  z-index: 10;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  bottom: 0;
+  box-shadow: 0 0 10px rgba(0,0,0,.175);
+  width: 200px;
+}
+
+.nav_item {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border-bottom: 1px solid #d6d6d6;
+}
+.nav_item:hover {
+  background-color: #f2f2f2;
+  color: #007cba;
+}

@@ -1,0 +1,60 @@
+@font-face {
+  font-family: Roboto;
+  src: url('./Fonts/Roboto-Black.ttf');
+  font-weight: 900;
+}
+@font-face {
+  font-family: Roboto;
+  src: url('./Fonts/Roboto-Bold.ttf');
+  font-weight: 700;
+}
+@font-face {
+  font-family: Roboto;
+  src: url('./Fonts/Roboto-Medium.ttf');
+  font-weight: 500;
+}
+@font-face {
+  font-family: Roboto;
+  src: url('./Fonts/Roboto-Regular.ttf');
+  font-weight: 400;
+}
+@font-face {
+  font-family: Roboto;
+  src: url('./Fonts/Roboto-Light.ttf');
+  font-weight: 300;
+}
+@font-face {
+  font-family: Roboto;
+  src: url('./Fonts/Roboto-Thin.ttf');
+  font-weight: 100;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  background-color: #f4f5f7;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: rgb(61, 79, 88);
+}
+
+#root {
+  height: 100%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
