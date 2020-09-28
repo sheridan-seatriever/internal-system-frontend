@@ -50,10 +50,15 @@ function DateGrid({year, month}) {
       offset = endDate.getTimezoneOffset();
       offset = Math.abs(offset / 60);
       endDate.setHours(endDate.getHours() + offset);
+    startDate = moment(startDate).format('YYYYMMDD');
+    endDate = moment(endDate).format('YYYYMMDD');
 
     //get dates starting from first monday and ending on last additional day
     const fetchData = async () => {
-      const events = (await axios.get(`http://localhost:3001/project?startDate=${startDate}&endDate=${endDate}`)).data;
+      console.log(startDate);
+      console.log(endDate)
+      const events = (await axios.get(`http://localhost:8080/testsite/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
+      console.log(events);
       setEvents(events);
     }
     fetchData()
@@ -116,7 +121,7 @@ function DateGrid({year, month}) {
   let dateRows = [];
   for(let i=0;i<rows;i++) {
     // EVENT DATA GOES HERE
-    const eventTable = eventTableGenerator(sampleData[i]); //change to eventRangeWeeks in production
+    const eventTable = eventTableGenerator(eventRangeWeeks[i]); //change to eventRangeWeeks in production
     dateRows.push(containerTableGenerator(eventTable, dateRangeWeeks[i], dayRangeWeeks[i]));
   }
 

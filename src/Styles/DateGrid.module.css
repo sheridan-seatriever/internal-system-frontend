@@ -38,9 +38,8 @@ td {
 .event_inner {
   display: flex;
   align-items: center;
-  height: 20px;
   width: 100%;
-  padding-left: 4px;
+  padding: 4px;
   font-size: .8rem;
   background-color: #61bd4f;
   border-radius: 4px;
