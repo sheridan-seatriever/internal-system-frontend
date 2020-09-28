@@ -12,7 +12,7 @@ const containerTableGenerator = (eventTable, dateRange, dayRange) => {
             htmlRowArray.push(<td key={nextId()}></td>);
           } else {
             const colspan = tempRow[0].endInt - tempRow[0].startInt;
-            htmlRowArray.push(<td key={nextId()} className={styles.event} colSpan={colspan}><div className={styles.event_inner}>{tempRow[0].eventName}</div></td>);
+            htmlRowArray.push(<td key={nextId()} className={styles.event} colSpan={colspan}><div className={styles.event_inner}>{tempRow[0].project_title}</div></td>);
             i+=(colspan-1);
             tempRow.shift();
           }

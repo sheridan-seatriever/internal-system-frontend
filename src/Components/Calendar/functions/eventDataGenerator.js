@@ -1,5 +1,4 @@
 const eventDataGenerator = (year, month, dateRangeWeeks, events) => {
-  console.log(dateRangeWeeks)
   const eventRangeWeeks = [];
 
   dateRangeWeeks.map((week, index)=>{
@@ -18,9 +17,8 @@ const eventDataGenerator = (year, month, dateRangeWeeks, events) => {
     }
 
     events.map(event=>{
-      const startDate = new Date(event.startDate);
-      const endDate = new Date(event.endDate);
-      
+      const startDate = new Date(event.project_start_date.substring(0,4), parseInt(event.project_start_date.substring(4,6))-1, event.project_start_date.substring(6,8));
+      const endDate = new Date(event.project_end_date.substring(0,4), parseInt(event.project_end_date.substring(4,6))-1, event.project_end_date.substring(6,8));
       if(!(
         (startDate.getTime()<startRange.getTime()&&endDate.getTime()<startRange.getTime())||
         (startDate.getTime()>endRange.getTime()&&endDate.getTime()>endRange.getTime())
@@ -31,17 +29,12 @@ const eventDataGenerator = (year, month, dateRangeWeeks, events) => {
         
         newEvent.startInt = null;
         newEvent.endInt = null;
-        console.log(week);
-        console.log(startDate);
-        console.log(endDate);
         if(startDate.getTime()<startRange.getTime()) {
-          console.log(week + 'startInt less than start range')
           newEvent.startInt = 0;
         } else {
           newEvent.startInt = week.indexOf(startDate.getDate());
         }
         if(endDate.getTime()>endRange.getTime()) {
-          console.log(week + 'endInt greater than end range')
           newEvent.endInt = 7;
         } else {
           newEvent.endInt = week.indexOf(endDate.getDate()+1);
@@ -51,7 +44,6 @@ const eventDataGenerator = (year, month, dateRangeWeeks, events) => {
     })
     eventRangeWeeks.push(eventDataWeek);
   })
-  console.log(eventRangeWeeks)
   return eventRangeWeeks;
 }
 

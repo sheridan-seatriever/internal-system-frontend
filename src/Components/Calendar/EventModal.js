@@ -42,8 +42,6 @@ function EventModal(props) {
       offset = endDate.getTimezoneOffset();
       offset = Math.abs(offset / 60);
       endDate.setHours(endDate.getHours() + offset);
-      console.log(startDate)
-      console.log(endDate)
     
     const res = await axios.post('http://localhost:3001/project/create', {
       title,
