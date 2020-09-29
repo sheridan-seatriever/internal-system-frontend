@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react';
 import styles from '../../Styles/EventModal.module.css';
+import moment from 'moment';
 import axios from 'axios';
 import nextId from "react-id-generator";
 import Modal from '../Modal';
@@ -11,7 +12,7 @@ function EventModal(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const users = await axios.get('http://localhost:3001/user/users');
+      const users = await axios.get('http://localhost:8080/testsite/wp-json/system-api/v1/users_studio');
       setUsers(users.data);
     }
     fetchData();
@@ -21,7 +22,7 @@ function EventModal(props) {
   const [milestones, setMilestones] = useState([]);
   const [milestoneInput, setMilestoneInput] = useState('');
 
-  const [title, setTitle] = useState('New Project');
+  const [title, setTitle] = useState('');
   const [startDateInput, setStartDateInput] = useState(props.startDate);
   const [endDateInput, setEndDateInput] = useState(props.startDate);
   const [startTimeInput, setStartTimeInput] = useState('09:00:00');
@@ -42,14 +43,14 @@ function EventModal(props) {
       offset = endDate.getTimezoneOffset();
       offset = Math.abs(offset / 60);
       endDate.setHours(endDate.getHours() + offset);
-    
-    const res = await axios.post('http://localhost:3001/project/create', {
+    const res = await axios.post('http://localhost:8080/testsite/wp-json/system-api/v1/create_studio_project', {
       title,
-      members: teamMembers,
       milestones,
-      startDate,
-      endDate,
+      members: teamMembers,
+      startDate: moment(startDate).format('YYYYMMDD'),
+      endDate: moment(endDate).format('YYYYMMDD'),
     });
+    console.log(res)
   }
 
   const mapUsers = () => {
@@ -57,7 +58,7 @@ function EventModal(props) {
       return users.map(user=>{
         return (
           <div key={nextId()} className={styles.user_container}>
-            <div className={styles.user}>{`${user.forename} ${user.surname}`}</div>
+            <div className={styles.user}>{user.user_name}</div>
             <button className={styles.button} type="button" onClick={()=>{
               setTeamMembers([...teamMembers, user]);
               const index = users.indexOf(user);
@@ -74,7 +75,7 @@ function EventModal(props) {
       return teamMembers.map(member=>{
         return (
           <div key={nextId()} className={styles.user_container}>
-            <div className={styles.user}>{`${member.forename} ${member.surname}`}</div>
+            <div className={styles.user}>{member.user_name}</div>
             <button className={`${styles.button} ${styles.delete}`} type="button" onClick={()=>{
               setUsers([...users, member]);
               const index = teamMembers.indexOf(member);
@@ -91,7 +92,7 @@ function EventModal(props) {
       return milestones.map(milestone=>{
         return (
           <div key={nextId()} className={styles.user_container}>
-            <div className={styles.user}>{milestone.description}</div>
+            <div className={styles.user}>{milestone.title}</div>
             <button className={`${styles.button} ${styles.delete}`} type="button" onClick={()=>{
               const index = milestones.indexOf(milestone);
               setMilestones([...milestones.slice(0,index), ...milestones.slice(index+1, milestones.length)]);
@@ -109,10 +110,7 @@ function EventModal(props) {
       <div className={`${`${styles.modal} ${styles.transform}`} ${props.modalOpen?styles.open:''}`} >
         <div className={styles.modal_header}>Add new project</div>
         <form onSubmit={e=>submit(e)} className={styles.inner}>
-          <div className={styles.input_group}>
-            <label className={styles.label}>Project title:</label>
-            <input value={title} onChange={e=>setTitle(e.target.value)}></input>
-          </div>
+          <input placeholder="Project title" value={title} onChange={e=>setTitle(e.target.value)}></input>
           <div className={styles.input_group}>
             <label className={styles.label}>Start:</label>
             <input value={startDateInput} onChange={e=>setStartDateInput(e.target.value)}></input>
@@ -136,7 +134,7 @@ function EventModal(props) {
             <input type="text" value={milestoneInput} onChange={e=>setMilestoneInput(e.target.value)}></input>
             <button type="button" className={styles.button} onClick={()=>{
               //validate
-              setMilestones([...milestones, {description: milestoneInput, completed: false}]);
+              setMilestones([...milestones, {title: milestoneInput}]);
               setMilestoneInput('');
             }}>Add</button>
           </div>
