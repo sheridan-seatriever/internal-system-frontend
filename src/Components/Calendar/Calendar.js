@@ -67,7 +67,7 @@ function Calendar() {
           <button className={styles.button} onClick={()=>decrementMonth(month, setMonth, year, setYear)}>&lt;</button>
           <button className={styles.button} onClick={()=>incrementMonth(month, setMonth, year, setYear)}>&gt;</button>
           <button className={styles.button} onClick={()=>setDateToCurrentDay()}>Today</button>
-          <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} startDate={`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}>
+          <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen}>
             <button className={`${styles.button} ${styles.add_new_button}`} onClick={()=>setModalOpen(!modalOpen)}>Add New</button>
           </EventModal>
         </div>

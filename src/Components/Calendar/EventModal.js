@@ -4,65 +4,146 @@ import moment from 'moment';
 import axios from 'axios';
 import nextId from "react-id-generator";
 import Modal from '../Modal';
-
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function EventModal(props) {
   const [users, setUsers] = useState(null);
+  const [usersInput, setUsersInput] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
       const users = await axios.get('http://localhost:8080/testsite/wp-json/system-api/v1/users_studio');
       setUsers(users.data);
+      setUsersInput(users.data);
     }
     fetchData();
   }, [])
 
   const [teamMembers, setTeamMembers] = useState([]);
+  const [teamMembersError, setTeamMembersError] = useState('');
   const [milestones, setMilestones] = useState([]);
   const [milestoneInput, setMilestoneInput] = useState('');
-
+  const [milestoneError, setMilestoneError] = useState('');
   const [title, setTitle] = useState('');
-  const [startDateInput, setStartDateInput] = useState(props.startDate);
-  const [endDateInput, setEndDateInput] = useState(props.startDate);
+  const [titleError, setTitleError] = useState('');
+  const [startDateInput, setStartDateInput] = useState(new Date());
+  const [endDateInput, setEndDateInput] = useState(new Date());
+  const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState('09:00:00');
   const [endTimeInput, setEndTimeInput] = useState('05:00:00');
   
   const submit = async e => {
-    //validate
     e.preventDefault();
-    let startDate = startDateInput.split('/').reverse();
-    let endDate = endDateInput.split('/').reverse();
-    startDate = new Date(`${startDate[0]}-${startDate[1].length<2?0+startDate[1]:startDate[1]}-${startDate[2].length<2?0+startDate[2]:startDate[2]}T${startTimeInput}`);
-    //disables DST conversion
-      let offset = startDate.getTimezoneOffset();
-      offset = Math.abs(offset / 60);
-      startDate.setHours(startDate.getHours() + offset);
-    endDate = new Date(`${endDate[0]}-${endDate[1].length<2?0+endDate[1]:endDate[1]}-${endDate[2].length<2?0+endDate[2]:endDate[2]}T${endTimeInput}`);
-    //disables DST conversion
-      offset = endDate.getTimezoneOffset();
-      offset = Math.abs(offset / 60);
-      endDate.setHours(endDate.getHours() + offset);
-    const res = await axios.post('http://localhost:8080/testsite/wp-json/system-api/v1/create_studio_project', {
-      title,
-      milestones,
-      members: teamMembers,
-      startDate: moment(startDate).format('YYYYMMDD'),
-      endDate: moment(endDate).format('YYYYMMDD'),
-    });
-    console.log(res)
+    if(validateSubmit()) {
+      //disables DST conversion
+        let offset = startDateInput.getTimezoneOffset();
+        offset = Math.abs(offset / 60);
+        startDateInput.setHours(startDateInput.getHours() + offset);
+      //disables DST conversion
+        offset = endDateInput.getTimezoneOffset();
+        offset = Math.abs(offset / 60);
+        endDateInput.setHours(endDateInput.getHours() + offset);
+      const res = await axios.post('http://localhost:8080/testsite/wp-json/system-api/v1/create_studio_project', {
+        title,
+        milestones,
+        members: teamMembers,
+        startDate: moment(startDateInput).format('YYYYMMDD'),
+        endDate: moment(endDateInput).format('YYYYMMDD'),
+      });
+    }
   }
 
-  const mapUsers = () => {
-    if(users) {
-      return users.map(user=>{
+  //validation
+  const validateSubmit = () => {
+    let valid = true;
+    setTitleError('');
+    setTeamMembersError('');
+    setDateError('');
+    if(!validateTitle(title)) {
+      valid = false; 
+    }
+    if(!validateTeamMembers(teamMembers)) {
+      valid = false;
+    }
+    if(!validateDates(startDateInput, endDateInput)) {
+      valid = false;
+    }
+    return valid;
+  }
+
+  const validateDates = (startDate, endDate) => {
+    let valid = true;
+    if(!startDate||!endDate) {
+      valid = false;
+      setDateError('Please enter a valid start and end date');
+    }
+    return valid;
+  }
+
+  const validateTeamMembers = teamMembers => {
+    let valid = true;
+    if(teamMembers.length<1) {
+      valid = false;
+      setTeamMembersError('Please select at least one project member');
+    }
+    return valid;
+  }
+
+  const validateMilestone = milestone => {
+    let valid = true;
+    if(milestone.length < 1) {
+      valid = false;
+    } else if(milestone.length > 100) {
+      valid = false;
+      setMilestoneError('Must be 100 characters or less');
+    }
+    return valid; 
+  }
+
+  const validateTitle = title => {
+    let valid = true;
+    console.log('validate')
+    if(title.length < 1) {
+      valid = false;
+      setTitleError('Please enter a project title');
+    } else if(title.length > 50) {
+      valid = false;
+      setTitleError('Must be 50 characters or less');
+    }
+    return valid;
+  }
+
+  //functions
+  const closeModalResetState = () => {
+    props.closeModal();
+    setTitle('');
+    setStartDateInput(new Date());
+    setEndDateInput(new Date());
+    setMilestoneInput('');
+    setMilestones([]);
+    setTeamMembers([]);
+    setUsersInput(users);
+    
+    setTitleError('');
+    setTeamMembersError('');
+    setMilestoneError('');
+    setDateError('');
+  }
+
+  //html
+
+  const mapUsersInput = () => {
+    if(usersInput) {
+      return usersInput.map(user=>{
         return (
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{user.user_name}</div>
             <button className={styles.button} type="button" onClick={()=>{
               setTeamMembers([...teamMembers, user]);
-              const index = users.indexOf(user);
-              setUsers([...users.slice(0,index), ...users.slice(index+1,users.length)]);
+              const index = usersInput.indexOf(user);
+              setUsersInput([...usersInput.slice(0,index), ...usersInput.slice(index+1,usersInput.length)]);
             }}>Add</button>
           </div>
         )
@@ -77,7 +158,7 @@ function EventModal(props) {
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{member.user_name}</div>
             <button className={`${styles.button} ${styles.delete}`} type="button" onClick={()=>{
-              setUsers([...users, member]);
+              setUsersInput([...usersInput, member]);
               const index = teamMembers.indexOf(member);
               setTeamMembers([...teamMembers.slice(0,index), ...teamMembers.slice(index+1, teamMembers.length)])
             }}>Remove</button>
@@ -105,42 +186,50 @@ function EventModal(props) {
 
 
   return (
-    <Modal callback={props.closeModal} open={props.modalOpen}>
+    <Modal callback={closeModalResetState} open={props.modalOpen}>
       {props.children}
       <div className={`${`${styles.modal} ${styles.transform}`} ${props.modalOpen?styles.open:''}`} >
         <div className={styles.modal_header}>Add new project</div>
         <form onSubmit={e=>submit(e)} className={styles.inner}>
-          <input placeholder="Project title" value={title} onChange={e=>setTitle(e.target.value)}></input>
+          <input placeholder="Project title" className={titleError?styles.error_input:''} value={title} onChange={e=>setTitle(e.target.value)}></input>
+          <div className={styles.error_message}>{titleError}</div>
           <div className={styles.input_group}>
             <label className={styles.label}>Start:</label>
-            <input value={startDateInput} onChange={e=>setStartDateInput(e.target.value)}></input>
+            <DatePicker selected={startDateInput} onChange={date=>setStartDateInput(date)}/>
             <label className={styles.time_label}>At:</label>
             <input value={startTimeInput} onChange={e=>setStartTimeInput(e.target.value)}></input>
           </div>
           <div className={styles.input_group}>
             <label className={styles.label}>End:&nbsp;&nbsp;</label>
-            <input value={endDateInput} onChange={e=>setEndDateInput(e.target.value)}></input>
+            <DatePicker selected={endDateInput} onChange={date=>setEndDateInput(date)}/>
             <label className={styles.time_label}>At:</label>
             <input value={endTimeInput} onChange={e=>setEndTimeInput(e.target.value)}></input>
           </div>
+          <div className={styles.error_message}>{dateError}</div>
           <label className={styles.label}>Project members:</label>
           <div className={styles.team_members_container}>
-            <div className={styles.team_members}>{mapUsers()}</div>
+            <div className={styles.team_members}>{mapUsersInput()}</div>
             <div className={styles.team_members}>{mapTeamMembers()}</div>
           </div>
+          <div className={styles.error_message}>{teamMembersError}</div>
           <label className={styles.label}>Milestones:</label>
           <div className={styles.milestones}>{mapMilestones()}</div>
           <div className={styles.input_group}>
-            <input type="text" value={milestoneInput} onChange={e=>setMilestoneInput(e.target.value)}></input>
+            <input type="text" className={milestoneError?styles.error_input:''} value={milestoneInput} onChange={e=>{
+              setMilestoneInput(e.target.value);
+              setMilestoneError('');
+            }}></input>
             <button type="button" className={styles.button} onClick={()=>{
-              //validate
-              setMilestones([...milestones, {title: milestoneInput}]);
-              setMilestoneInput('');
+              if(validateMilestone(milestoneInput)) {
+                setMilestones([...milestones, {title: milestoneInput}]);
+                setMilestoneInput('');
+              }
             }}>Add</button>
           </div>
+          <div className={styles.error_message}>{milestoneError}</div>
           <div className={styles.button_group}>
             <button className={styles.button} type="submit">Submit</button>
-            <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={props.closeModal}>Cancel</button>
+            <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>
           </div>
         </form>
       </div>
