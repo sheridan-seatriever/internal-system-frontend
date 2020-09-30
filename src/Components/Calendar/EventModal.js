@@ -5,6 +5,7 @@ import axios from 'axios';
 import nextId from "react-id-generator";
 import Modal from '../Modal';
 import DatePicker from 'react-datepicker';
+import TimePicker from '../TimePicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 
@@ -31,8 +32,8 @@ function EventModal(props) {
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
   const [dateError, setDateError] = useState('');
-  const [startTimeInput, setStartTimeInput] = useState('09:00:00');
-  const [endTimeInput, setEndTimeInput] = useState('05:00:00');
+  const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
+  const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
   
   const submit = async e => {
     e.preventDefault();
@@ -157,7 +158,7 @@ function EventModal(props) {
         return (
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{member.user_name}</div>
-            <button className={`${styles.button} ${styles.delete}`} type="button" onClick={()=>{
+            <button className={styles.button} type="button" onClick={()=>{
               setUsersInput([...usersInput, member]);
               const index = teamMembers.indexOf(member);
               setTeamMembers([...teamMembers.slice(0,index), ...teamMembers.slice(index+1, teamMembers.length)])
@@ -174,7 +175,7 @@ function EventModal(props) {
         return (
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{milestone.title}</div>
-            <button className={`${styles.button} ${styles.delete}`} type="button" onClick={()=>{
+            <button className={styles.button} type="button" onClick={()=>{
               const index = milestones.indexOf(milestone);
               setMilestones([...milestones.slice(0,index), ...milestones.slice(index+1, milestones.length)]);
             }}>Remove</button>
@@ -197,13 +198,13 @@ function EventModal(props) {
             <label className={styles.label}>Start:</label>
             <DatePicker selected={startDateInput} onChange={date=>setStartDateInput(date)}/>
             <label className={styles.time_label}>At:</label>
-            <input value={startTimeInput} onChange={e=>setStartTimeInput(e.target.value)}></input>
+            <TimePicker time={startTimeInput} setTime={setStartTimeInput} />
           </div>
           <div className={styles.input_group}>
             <label className={styles.label}>End:&nbsp;&nbsp;</label>
             <DatePicker selected={endDateInput} onChange={date=>setEndDateInput(date)}/>
             <label className={styles.time_label}>At:</label>
-            <input value={endTimeInput} onChange={e=>setEndTimeInput(e.target.value)}></input>
+            <TimePicker time={endTimeInput} setTime={setEndTimeInput} />
           </div>
           <div className={styles.error_message}>{dateError}</div>
           <label className={styles.label}>Project members:</label>
@@ -215,7 +216,7 @@ function EventModal(props) {
           <label className={styles.label}>Milestones:</label>
           <div className={styles.milestones}>{mapMilestones()}</div>
           <div className={styles.input_group}>
-            <input type="text" className={milestoneError?styles.error_input:''} value={milestoneInput} onChange={e=>{
+            <input type="text" className={`${styles.input_group_input} ${milestoneError?styles.error_input:''}`} value={milestoneInput} onChange={e=>{
               setMilestoneInput(e.target.value);
               setMilestoneError('');
             }}></input>

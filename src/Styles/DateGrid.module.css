@@ -13,6 +13,9 @@ td {
   width: 100%;
   border-collapse: collapse;
 }
+tr {
+  width: 100%;
+}
 
 .table_main {
   table-layout: fixed;
@@ -26,9 +29,7 @@ td {
   width: 100%;
 }
 
-.width_max {
-  width: 100%;
-}
+
 
 .event {
   padding: 3px;
@@ -47,6 +48,7 @@ td {
 }
 
 .cell_date {
+  width: 100%;
   font-weight: 300;
   text-align: left;
   padding: 4px;

@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  flex-basis: 0;
+  min-width: 0;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.child {
+  margin: 0 3px;
+  min-width: 0;
+  flex-basis: 0;
+  flex-grow: 2;
+}
+
+.am_button {
+  margin: 0;
+  margin-left: 3px;
+  height: 34px;
+  min-width: 0;
+  flex-basis: 0;
+  flex-grow: 2;
+  background-color: #5dabf5;
+}
+
+.pm_button {
+  margin: 0;
+  margin-left: 3px;
+  height: 34px;
+  min-width: 0;
+  flex-basis: 0;
+  flex-grow: 2;
+  background-color: #f7665c;
+}

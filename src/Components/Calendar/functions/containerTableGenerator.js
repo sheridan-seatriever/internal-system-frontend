@@ -20,7 +20,7 @@ const containerTableGenerator = (eventTable, dateRange, dayRange) => {
           htmlRowArray.push(<td key={nextId()}></td>);
         }
       }
-      return <tr key={nextId()} className={styles.width_max}>{htmlRowArray}</tr>;
+      return <tr key={nextId()}>{htmlRowArray}</tr>;
     }
     const htmlTableArray = [];
     eventTable.map(row=>{
