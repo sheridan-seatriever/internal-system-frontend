@@ -1,18 +1,9 @@
-/* Test obvious change */
 .container {
     z-index: 10;
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
-    border-bottom: 1px solid #d6d6d6;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .175);
-    background-color: #fff;
-}
-
-.banner {
-    height: 6px;
-    background-color: #007cba;
 }
 
 .logo_container {
@@ -30,6 +21,7 @@
     height: 50px;
     display: flex;
     align-items: center;
+    background-color: #000;
 }
 
 .user_menu_button {

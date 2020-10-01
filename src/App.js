@@ -13,7 +13,7 @@ function App() {
     dispatch(setUser(user));
   }
 
-  if(user&&user.token) {
+  if(true) {
     return (
       <Main>
         <StudioPlanner />

@@ -28,7 +28,7 @@ function Calendar() {
       'August',
       'September',
       'October',
-      'November', 
+      'November',
       'December'
     ]
     return months[monthInt];
@@ -61,27 +61,29 @@ function Calendar() {
   const date = new Date();
 
   return(
-    <div className={styles.calendar}>
-      <div className={styles.header}>
-        <div className={styles.button_group}>
-          <button className={styles.button} onClick={()=>decrementMonth(month, setMonth, year, setYear)}>&lt;</button>
-          <button className={styles.button} onClick={()=>incrementMonth(month, setMonth, year, setYear)}>&gt;</button>
-          <button className={styles.button} onClick={()=>setDateToCurrentDay()}>Today</button>
-          <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} startDate={`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}>
-            <button className={`${styles.button} ${styles.add_new_button}`} onClick={()=>setModalOpen(!modalOpen)}>Add New</button>
-          </EventModal>
+      <div className={"container animated both zoomIn bg"}><span></span>
+        <div className={styles.calendar}>
+          <div className={styles.header}>
+            <div className={styles.button_group}>
+              <button className={styles.button} onClick={()=>decrementMonth(month, setMonth, year, setYear)}>&lt;</button>
+              <button className={styles.button} onClick={()=>incrementMonth(month, setMonth, year, setYear)}>&gt;</button>
+              <button className={styles.button} onClick={()=>setDateToCurrentDay()}>Today</button>
+              <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} startDate={`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}>
+                <button className={`${styles.button} ${styles.add_new_button}`} onClick={()=>setModalOpen(!modalOpen)}>Add New</button>
+              </EventModal>
+            </div>
+            <div className={styles.button_group}>
+              <h3>{getMonth(month) + ' ' + year}</h3>
+            </div>
+            <div className={styles.button_group}>
+              <button className={styles.button} onClick={()=>setYear(year-1)}>Prev Year</button>
+              <button className={styles.button} onClick={()=>setYear(year+1)}>Next Year</button>
+            </div>
+          </div>
+          <DateGrid year={year} month={month}/>
         </div>
-        <div className={styles.button_group}>
-          <h3>{getMonth(month) + ' ' + year}</h3>
-        </div>
-        <div className={styles.button_group}>
-          <button className={styles.button} onClick={()=>setYear(year-1)}>Prev Year</button>
-          <button className={styles.button} onClick={()=>setYear(year+1)}>Next Year</button>
-        </div>
-      </div>
-      <DateGrid year={year} month={month}/>
     </div>
   )
 }
 
-export default Calendar 
+export default Calendar

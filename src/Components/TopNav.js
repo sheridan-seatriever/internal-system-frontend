@@ -24,11 +24,11 @@ function TopNav() {
         <div className={styles.logo_container}>
           <img className={styles.logo} alt='seatriever logo' src='/images/Seatriever_Logo.png' height='30' />
         </div>
-        <Modal callback={()=>setModalOpen(false)}> 
-          <button className={styles.user_menu_button} onClick={()=>setModalOpen(!modalOpen)}>{user.forename}</button>
+        <Modal callback={()=>setModalOpen(false)}>
+          <button className={styles.user_menu_button} onClick={()=>setModalOpen(!modalOpen)}></button>
           <div className={`${styles.modal} ${modalOpen?styles.open:''}`}>
             <div className={styles.modal_header}>
-              <h3>{user.forename + ' ' + user.surname}</h3>
+              <h3>Test</h3>
               <button className={styles.button} onClick={logout}>Log out</button>
             </div>
           </div>

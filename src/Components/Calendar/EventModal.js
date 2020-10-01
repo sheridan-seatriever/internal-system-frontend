@@ -26,7 +26,7 @@ function EventModal(props) {
   const [endDateInput, setEndDateInput] = useState(props.startDate);
   const [startTimeInput, setStartTimeInput] = useState('09:00:00');
   const [endTimeInput, setEndTimeInput] = useState('05:00:00');
-  
+
   const submit = async e => {
     //validate
     e.preventDefault();
@@ -42,7 +42,7 @@ function EventModal(props) {
       offset = endDate.getTimezoneOffset();
       offset = Math.abs(offset / 60);
       endDate.setHours(endDate.getHours() + offset);
-    
+
     const res = await axios.post('http://localhost:3001/project/create', {
       title,
       members: teamMembers,
@@ -79,7 +79,7 @@ function EventModal(props) {
               setUsers([...users, member]);
               const index = teamMembers.indexOf(member);
               setTeamMembers([...teamMembers.slice(0,index), ...teamMembers.slice(index+1, teamMembers.length)])
-            }}>Remove</button>
+          }}>&#10005;</button>
           </div>
         )
       })
@@ -95,7 +95,7 @@ function EventModal(props) {
             <button className={`${styles.button} ${styles.delete}`} type="button" onClick={()=>{
               const index = milestones.indexOf(milestone);
               setMilestones([...milestones.slice(0,index), ...milestones.slice(index+1, milestones.length)]);
-            }}>Remove</button>
+            }}>&#10005;</button>
           </div>
         )
       })
@@ -106,7 +106,7 @@ function EventModal(props) {
   return (
     <Modal callback={props.closeModal} open={props.modalOpen}>
       {props.children}
-      <div className={`${`${styles.modal} ${styles.transform}`} ${props.modalOpen?styles.open:''}`} >
+      <div className={`${`${styles.modal} ${'animated zoomIn bg-blue'} ${styles.transform}`} ${props.modalOpen?styles.open:''}`}  >
         <div className={styles.modal_header}>Add new project</div>
         <form onSubmit={e=>submit(e)} className={styles.inner}>
           <div className={styles.input_group}>
@@ -130,15 +130,17 @@ function EventModal(props) {
             <div className={styles.team_members}>{mapUsers()}</div>
             <div className={styles.team_members}>{mapTeamMembers()}</div>
           </div>
-          <label className={styles.label}>Milestones:</label>
-          <div className={styles.milestones}>{mapMilestones()}</div>
-          <div className={styles.input_group}>
-            <input type="text" value={milestoneInput} onChange={e=>setMilestoneInput(e.target.value)}></input>
-            <button type="button" className={styles.button} onClick={()=>{
-              //validate
-              setMilestones([...milestones, {description: milestoneInput, completed: false}]);
-              setMilestoneInput('');
-            }}>Add</button>
+          <div className={'acf-field acf-input'}>
+              <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
+              <div className={styles.milestones}>{mapMilestones()}</div>
+              <div className={styles.input_group}>
+                <input type="text" value={milestoneInput} onChange={e=>setMilestoneInput(e.target.value)}></input>
+                <button type="button" className={styles.button} onClick={()=>{
+                  //validate
+                  setMilestones([...milestones, {description: milestoneInput, completed: false}]);
+                  setMilestoneInput('');
+                }}>Add</button>
+              </div>
           </div>
           <div className={styles.button_group}>
             <button className={styles.button} type="submit">Submit</button>
