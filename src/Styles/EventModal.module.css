@@ -7,6 +7,12 @@
   background-color: rgba(77, 77, 77, 0.103);
 }
 
+.loading {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+}
+
 .modal {
   position: fixed;
   left: 50%;

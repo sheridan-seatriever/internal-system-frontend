@@ -7,3 +7,7 @@
   background-color: rgba(0, 0, 0, 0.212);
   z-index: 2;
 }
+
+.closed {
+  display: none;
+}

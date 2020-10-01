@@ -13,6 +13,7 @@ import _ from 'lodash';
 function DateGrid({year, month, setModalStartDate, setModalOpen}) {
 
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getDaysInMonth = () => {
     const date = new Date(year, month, 32).getDate();
@@ -33,6 +34,7 @@ function DateGrid({year, month, setModalStartDate, setModalOpen}) {
   }
 
   useEffect(() => {
+    setLoading(true);
     let daysInPrevMonth = getDaysInPrevMonth();
     let firstMonday = getFirstMonday();
     const daysInMonth = getDaysInMonth();
@@ -57,6 +59,7 @@ function DateGrid({year, month, setModalStartDate, setModalOpen}) {
     const fetchData = async () => {
       const events = (await axios.get(`http://localhost:8080/testsite/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
       setEvents(events);
+      setLoading(false);
     }
     fetchData()
   }, [year, month])
@@ -125,7 +128,10 @@ function DateGrid({year, month, setModalStartDate, setModalOpen}) {
     dateRows.push(containerTableGenerator(eventTable, dateRangeWeeks[i], dayRangeWeeks[i]));
   }
 
-  return(
+  if(loading) {
+    return <div className={styles.loading}>loading</div>
+  } else {
+    return(
       <table className={styles.table_main}>
         <thead>
           <tr>
@@ -142,7 +148,8 @@ function DateGrid({year, month, setModalStartDate, setModalOpen}) {
           {dateRows}
         </tbody>
       </table>
-  )
+    )
+  }
 }
 
 export default DateGrid;

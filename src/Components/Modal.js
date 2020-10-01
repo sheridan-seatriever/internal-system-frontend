@@ -8,7 +8,7 @@ function Modal(props) {
 
   return (
     <div>
-      <div className={`${props.open?styles.overlay:''}`}></div>
+      <div className={`${props.open?styles.overlay:styles.closed}`}></div>
       <div ref={wrapperRef}>{props.children}</div>
     </div>
   );

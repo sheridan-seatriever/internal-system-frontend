@@ -24,6 +24,12 @@ tr {
   border: 1px solid #d6d6d6;
 }
 
+.loading {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+}
+
 .day_row {
   min-height: 50px;
   width: 100%;

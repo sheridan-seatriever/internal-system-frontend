@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 function EventModal(props) {
   const [users, setUsers] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [usersInput, setUsersInput] = useState(null);
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
@@ -20,6 +21,7 @@ function EventModal(props) {
       const users = await axios.get('http://localhost:8080/testsite/wp-json/system-api/v1/users_studio');
       setUsers(users.data);
       setUsersInput(users.data);
+      setLoading(false);
     }
     fetchData();
   }, [])
@@ -214,7 +216,6 @@ function EventModal(props) {
       })
     }
   }
-
 
   return (
     <Modal callback={closeModalResetState} open={props.modalOpen}>
