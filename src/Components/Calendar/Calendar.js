@@ -58,8 +58,6 @@ function Calendar() {
     setYear(date.getFullYear())
   }
 
-  const date = new Date();
-
   return(
     <div className={styles.calendar}>
       <div className={styles.header}>

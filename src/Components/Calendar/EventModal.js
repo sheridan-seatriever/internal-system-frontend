@@ -34,6 +34,7 @@ function EventModal(props) {
   const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
   const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
+  const [timeError, setTimeError] = useState('');
   
   const submit = async e => {
     e.preventDefault();
@@ -70,6 +71,29 @@ function EventModal(props) {
     }
     if(!validateDates(startDateInput, endDateInput)) {
       valid = false;
+    }
+    if(!validateTime(startTimeInput)) {
+      valid = false;
+    } else if(!validateTime(endTimeInput)) {
+      valid = false;
+    }
+    return valid;
+  }
+
+  const validateTime = time => {
+    let valid = true;
+    if(time.hour===''||time.minute==='') {
+      setTimeError('Please enter a valid start and end time');
+      valid = false;
+    } if(isNaN(parseInt(time.hour))||isNaN(parseInt(time.minute))) {
+      setTimeError('Please enter a valid start and end time');
+      valid = false;
+    } else if(time.hour>12||time.hour<1) {
+      setTimeError('Please enter a valid start and end time');
+      valid = false;
+    } else if(time.minute>59||time.minute<0) {
+      setTimeError('Please enter a valid start and end time');
+      valid = true;
     }
     return valid;
   }
@@ -142,6 +166,7 @@ function EventModal(props) {
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{user.user_name}</div>
             <button className={styles.button} type="button" onClick={()=>{
+              setTeamMembersError('');
               setTeamMembers([...teamMembers, user]);
               const index = usersInput.indexOf(user);
               setUsersInput([...usersInput.slice(0,index), ...usersInput.slice(index+1,usersInput.length)]);
@@ -192,21 +217,31 @@ function EventModal(props) {
       <div className={`${`${styles.modal} ${styles.transform}`} ${props.modalOpen?styles.open:''}`} >
         <div className={styles.modal_header}>Add new project</div>
         <form onSubmit={e=>submit(e)} className={styles.inner}>
-          <input placeholder="Project title" className={titleError?styles.error_input:''} value={title} onChange={e=>setTitle(e.target.value)}></input>
+          <input placeholder="Project title" className={`${styles.title} ${titleError?styles.error_input:''}`} value={title} onChange={e=>{
+            setTitleError('');
+            setTitle(e.target.value);
+          }}></input>
           <div className={styles.error_message}>{titleError}</div>
           <div className={styles.input_group}>
             <label className={styles.label}>Start:</label>
-            <DatePicker selected={startDateInput} onChange={date=>setStartDateInput(date)}/>
+            <DatePicker selected={startDateInput} onChange={date=>{
+              setDateError('');
+              setStartDateInput(date);
+            }}/>
             <label className={styles.time_label}>At:</label>
-            <TimePicker time={startTimeInput} setTime={setStartTimeInput} />
+            <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
           </div>
           <div className={styles.input_group}>
             <label className={styles.label}>End:&nbsp;&nbsp;</label>
-            <DatePicker selected={endDateInput} onChange={date=>setEndDateInput(date)}/>
+            <DatePicker selected={endDateInput} onChange={date=>{
+              setDateError('');
+              setEndDateInput(date);
+            }}/>
             <label className={styles.time_label}>At:</label>
-            <TimePicker time={endTimeInput} setTime={setEndTimeInput} />
+            <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
           </div>
           <div className={styles.error_message}>{dateError}</div>
+          <div className={styles.error_message}>{timeError}</div>
           <label className={styles.label}>Project members:</label>
           <div className={styles.team_members_container}>
             <div className={styles.team_members}>{mapUsersInput()}</div>
@@ -217,8 +252,8 @@ function EventModal(props) {
           <div className={styles.milestones}>{mapMilestones()}</div>
           <div className={styles.input_group}>
             <input type="text" className={`${styles.input_group_input} ${milestoneError?styles.error_input:''}`} value={milestoneInput} onChange={e=>{
-              setMilestoneInput(e.target.value);
               setMilestoneError('');
+              setMilestoneInput(e.target.value);
             }}></input>
             <button type="button" className={styles.button} onClick={()=>{
               if(validateMilestone(milestoneInput)) {

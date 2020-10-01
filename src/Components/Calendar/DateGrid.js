@@ -55,10 +55,7 @@ function DateGrid({year, month}) {
 
     //get dates starting from first monday and ending on last additional day
     const fetchData = async () => {
-      console.log(startDate);
-      console.log(endDate)
       const events = (await axios.get(`http://localhost:8080/testsite/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
-      console.log(events);
       setEvents(events);
     }
     fetchData()

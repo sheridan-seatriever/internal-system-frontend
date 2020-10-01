@@ -1,13 +1,15 @@
 import React,{useState} from 'react';
 import styles from '../Styles/TimePicker.module.css';
 
-const TimePicker = ({time, setTime}) => {
+const TimePicker = ({time, setTime, onChange}) => {
 
   const hourChange = value => {
+    onChange();
     setTime({...time, hour: value});
   }
 
   const minuteChange = value => {
+    onChange();
     setTime({...time, minute: value});
   }
 

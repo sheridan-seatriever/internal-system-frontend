@@ -120,7 +120,7 @@
 
 
 input {
-  margin-bottom: 3px;
+  margin-bottom: 0px;
 }
 
 .input_group {
@@ -146,4 +146,8 @@ input {
 .error_input {
   border-color: #eb4034;
   background-color: rgb(232, 240, 254);
+}
+
+.title {
+  margin-bottom: 3px;
 }
