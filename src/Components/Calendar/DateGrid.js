@@ -10,7 +10,7 @@ import nextId from "react-id-generator";
 import _ from 'lodash';
 
 
-function DateGrid({year, month}) {
+function DateGrid({year, month, setModalStartDate, setModalOpen}) {
 
   const [events, setEvents] = useState([]);
 
@@ -88,7 +88,10 @@ function DateGrid({year, month}) {
       if(day===currentDay&&month===currentMonth-1) {
         return <div key={nextId()} className={`${styles.day} ${styles.currentDay}`}></div>
       } else {
-        return <div key={nextId()} className={styles.day}></div>
+        return <div key={nextId()} onClick={()=>{
+          setModalOpen(true);
+          setModalStartDate(new Date(year, month, day));
+        }} className={styles.day}></div>
       }
     }));
   }

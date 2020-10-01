@@ -12,6 +12,8 @@ import "react-datepicker/dist/react-datepicker.css";
 function EventModal(props) {
   const [users, setUsers] = useState(null);
   const [usersInput, setUsersInput] = useState(null);
+  const [startDateInput, setStartDateInput] = useState(new Date());
+  const [endDateInput, setEndDateInput] = useState(new Date());
 
   useEffect(() => {
     async function fetchData() {
@@ -22,6 +24,10 @@ function EventModal(props) {
     fetchData();
   }, [])
 
+  useEffect(() => {
+    setStartDateInput(props.modalStartDate);
+  }, [props.modalStartDate])
+
   const [teamMembers, setTeamMembers] = useState([]);
   const [teamMembersError, setTeamMembersError] = useState('');
   const [milestones, setMilestones] = useState([]);
@@ -29,8 +35,7 @@ function EventModal(props) {
   const [milestoneError, setMilestoneError] = useState('');
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
-  const [startDateInput, setStartDateInput] = useState(new Date());
-  const [endDateInput, setEndDateInput] = useState(new Date());
+  
   const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
   const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});

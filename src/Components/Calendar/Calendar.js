@@ -13,6 +13,7 @@ function Calendar() {
     return date.getFullYear();
   }
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalStartDate, setModalStartDate] = useState(null);
   const [month, setMonth] = useState(getCurrentMonth())
   const [year, setYear] = useState(getCurrentYear());
 
@@ -65,7 +66,7 @@ function Calendar() {
           <button className={styles.button} onClick={()=>decrementMonth(month, setMonth, year, setYear)}>&lt;</button>
           <button className={styles.button} onClick={()=>incrementMonth(month, setMonth, year, setYear)}>&gt;</button>
           <button className={styles.button} onClick={()=>setDateToCurrentDay()}>Today</button>
-          <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen}>
+          <EventModal onClick={console.log('hello')} closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} modalStartDate={modalStartDate}>
             <button className={`${styles.button} ${styles.add_new_button}`} onClick={()=>setModalOpen(!modalOpen)}>Add New</button>
           </EventModal>
         </div>
@@ -77,7 +78,7 @@ function Calendar() {
           <button className={styles.button} onClick={()=>setYear(year+1)}>Next Year</button>
         </div>
       </div>
-      <DateGrid year={year} month={month}/>
+      <DateGrid year={year} month={month} setModalOpen={setModalOpen} setModalStartDate={setModalStartDate}/>
     </div>
   )
 }
