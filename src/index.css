@@ -1,1 +1,75 @@
 @import url('http://system.seatriever.com/wp-content/themes/seatriever_systems/style.css');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+.react-datepicker {
+    font-family: 'Rajdhani', sans-serif !important;
+}
+
+.react-datepicker__navigation {
+    background: none !important;
+    line-height: 1.7rem !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    position: absolute !important;
+    top: 10px !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: 0.45rem solid transparent !important;
+    z-index: 1 !important;
+    height: 10px !important;
+    width: 10px !important;
+    text-indent: -999em !important;
+    overflow: hidden !important;
+
+}
+
+.react-datepicker__navigation--previous {
+    border-right-color: #ccc !important;
+}
+
+.react-datepicker__navigation--next {
+    border-left-color: #ccc !important;
+}
+
+.remove, .add {
+    background-color: rgb(120, 26, 26) !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 10px !important;
+    color: #fff !important;
+    border: none !important;
+    text-align: center !important;
+    line-height: 20px !important;
+    padding: 0px !important;
+    padding-top: 1px !important;
+    letter-spacing: 0px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.add {
+    background-color: rgb(74, 153, 3) !important;
+    font-size: 20px !important;
+}
+
+.remove:hover {
+    background-color: rgb(162, 23, 23) !important;
+}
+
+.add:hover {
+    background-color: rgb(93, 190, 7) !important;
+}
+
+.error:empty {
+    display: none;
+}
+
+.error {
+    background-color: rgb(120, 26, 26);
+    border: solid 1px rgb(162, 23, 23);
+    padding: 10px;
+}
+
+.titleError {
+    margin-left: 10px;
+}

@@ -36,12 +36,12 @@ function EventModal(props) {
   const [milestoneError, setMilestoneError] = useState('');
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
-  
+
   const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
   const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
   const [timeError, setTimeError] = useState('');
-  
+
   const submit = async e => {
     e.preventDefault();
     if(validateSubmit()) {
@@ -70,7 +70,7 @@ function EventModal(props) {
     setTeamMembersError('');
     setDateError('');
     if(!validateTitle(title)) {
-      valid = false; 
+      valid = false;
     }
     if(!validateTeamMembers(teamMembers)) {
       valid = false;
@@ -130,7 +130,7 @@ function EventModal(props) {
       valid = false;
       setMilestoneError('Must be 100 characters or less');
     }
-    return valid; 
+    return valid;
   }
 
   const validateTitle = title => {
@@ -156,7 +156,7 @@ function EventModal(props) {
     setMilestones([]);
     setTeamMembers([]);
     setUsersInput(users);
-    
+
     setTitleError('');
     setTeamMembersError('');
     setMilestoneError('');
@@ -171,12 +171,12 @@ function EventModal(props) {
         return (
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{user.user_name}</div>
-            <button className={styles.button} type="button" onClick={()=>{
+            <button className={styles.button + ' add'} type="button" onClick={()=>{
               setTeamMembersError('');
               setTeamMembers([...teamMembers, user]);
               const index = usersInput.indexOf(user);
               setUsersInput([...usersInput.slice(0,index), ...usersInput.slice(index+1,usersInput.length)]);
-            }}>Add</button>
+          }}>+</button>
           </div>
         )
       })
@@ -189,11 +189,11 @@ function EventModal(props) {
         return (
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{member.user_name}</div>
-            <button className={styles.button} type="button" onClick={()=>{
+            <button className={styles.button + ' remove'} type="button" onClick={()=>{
               setUsersInput([...usersInput, member]);
               const index = teamMembers.indexOf(member);
               setTeamMembers([...teamMembers.slice(0,index), ...teamMembers.slice(index+1, teamMembers.length)])
-            }}>Remove</button>
+          }}>&#10005;</button>
           </div>
         )
       })
@@ -206,10 +206,10 @@ function EventModal(props) {
         return (
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{milestone}</div>
-            <button className={styles.button} type="button" onClick={()=>{
+            <button className={styles.button + ' remove'} type="button" onClick={()=>{
               const index = milestones.indexOf(milestone);
               setMilestones([...milestones.slice(0,index), ...milestones.slice(index+1, milestones.length)]);
-            }}>Remove</button>
+          }}>&#10005;</button>
           </div>
         )
       })
@@ -224,12 +224,11 @@ function EventModal(props) {
         <div className={styles.modal_header}>Add new project</div>
         <form onSubmit={e=>submit(e)} className={styles.inner}>
           <div className={styles.input_group}>
-            <label className={styles.label}>Project title:</label>
             <input value={title} onChange={e=>{
               setTitle(e.target.value);
               setTitleError('');
-            }}></input>
-            <div>{titleError}</div>
+          }} placeholder="Enter the Project Title"></input>
+            <div className={'error titleError'}>{titleError}</div>
           </div>
           <div className={styles.input_group}>
             <label className={styles.label}>Start:</label>
@@ -245,23 +244,25 @@ function EventModal(props) {
           </div>
           <div>{dateError}</div>
           <div>{timeError}</div>
-          <label className={styles.label}>Project members:</label>
-          <div className={styles.team_members_container}>
-            <div className={styles.team_members}>{mapUsersInput()}</div>
-            <div className={styles.team_members}>{mapTeamMembers()}</div>
+          <div className={'acf-field acf-input bottom-space-20'}>
+              <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
+              <div className={styles.team_members_container}>
+                <div className={styles.team_members}>{mapUsersInput()}</div>
+                <div className={styles.team_members}>{mapTeamMembers()}</div>
+              </div>
           </div>
-          <div>{teamMembersError}</div>
+          <div className={'error bottom-space-10'}>{teamMembersError}</div>
           <div className={'acf-field acf-input'}>
               <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
               <div className={styles.milestones}>{mapMilestones()}</div>
               <div className={styles.input_group}>
-                <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}}></input>
-                <button type="button" className={styles.button} onClick={()=>{
+                <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}} placeholder="Enter new Milestone"></input>
+                <button type="button" className={styles.button + ' add'} onClick={()=>{
                   if(validateMilestone(milestoneInput)) {
                     setMilestones([...milestones, milestoneInput]);
                     setMilestoneInput('');
-                  } 
-                }}>Add</button>
+                  }
+              }}>+</button>
               </div>
               <div>{milestoneError}</div>
           </div>

@@ -49,6 +49,7 @@
   height: 100%;
   display: flex;
   margin-bottom: 6px;
+  align-items: stretch;
 }
 
 .team_members {
@@ -56,10 +57,8 @@
   border: 1px solid #293669;
   border-radius: 5px;
   padding: 4px;
-  overflow-y: scroll;
   margin-right: 6px;
   min-height: 60px;
-  max-height: 150px;
 }
 
 .milestones {
@@ -74,6 +73,7 @@
   color: #fff;
   background-color:  #293669;
 }
+
 .button:hover {
   background-color: #007cba;
   color: #fff;
