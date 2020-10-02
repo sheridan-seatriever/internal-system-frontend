@@ -10,7 +10,7 @@ import nextId from "react-id-generator";
 import _ from 'lodash';
 
 
-function DateGrid({year, month}) {
+function DateGrid({year, month, setModalStartDate, setModalOpen}) {
 
   const [events, setEvents] = useState([]);
 
@@ -57,7 +57,7 @@ function DateGrid({year, month}) {
     const fetchData = async () => {
       console.log(startDate);
       console.log(endDate)
-      const events = (await axios.get(`http://localhost:8080/testsite/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
+      const events = (await axios.get(`http://system.seatriever.com/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
       console.log(events);
       setEvents(events);
     }
@@ -75,7 +75,10 @@ function DateGrid({year, month}) {
   if(firstMonday==='1') {
     rows = Math.ceil((daysInMonth)/7);
     dateRange = _.range(1, daysInMonth+1);
-    dayRange = _.range(1, daysInMonth+1).map(day=><div key={nextId()} className={styles.day}></div>);
+    dayRange = _.range(1, daysInMonth+1).map(day=><div onClick={()=>{
+      setModalOpen(true);
+      setModalStartDate(new Date(year, month, day));
+    }} key={nextId()} className={styles.day}></div>);
     // while(dayRange.length%rows!==0) {
     //   dayRange.push(<div key={nextId()} className={`${styles.day} ${styles.not_current_month}`}></div>);
     // }
@@ -89,9 +92,15 @@ function DateGrid({year, month}) {
     const currentMonth = moment(new Date()).format('M');
     dayRange = dayRange.concat(_.range(1, daysInMonth+1).map(day=>{
       if(day===currentDay&&month===currentMonth-1) {
-        return <div key={nextId()} className={`${styles.day} ${styles.currentDay}`}></div>
+        return <div key={nextId()} onClick={()=>{
+          setModalOpen(true);
+          setModalStartDate(new Date(year, month, day));
+        }} className={`${styles.day} ${styles.currentDay}`}></div>
       } else {
-        return <div key={nextId()} className={styles.day}></div>
+        return <div key={nextId()} onClick={()=>{
+          setModalOpen(true);
+          setModalStartDate(new Date(year, month, day));
+        }} className={styles.day}></div>
       }
     }));
   }

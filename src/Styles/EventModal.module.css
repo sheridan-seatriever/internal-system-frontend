@@ -52,7 +52,7 @@
 }
 
 .team_members {
-  flex-grow: 1;
+  flex-basis: 50%;
   border: 1px solid #293669;
   border-radius: 5px;
   padding: 4px;
