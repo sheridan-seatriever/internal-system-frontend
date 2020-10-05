@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../Styles/DateGrid.module.css';
+import styles from '../DateGrid.module.css';
 import nextId from "react-id-generator";
 
 const containerTableGenerator = (eventTable, dateRange, dayRange) => {

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styles from '../../Styles/Calendar.module.css';
+import styles from './Calendar.module.css';
 import DateGrid from './DateGrid';
 import EventModal from './EventModal';
 

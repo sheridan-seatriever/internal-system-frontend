@@ -1,11 +1,11 @@
 import React,{useState, useEffect} from 'react';
-import styles from '../../Styles/EventModal.module.css';
+import styles from './EventModal.module.css';
 import moment from 'moment';
 import axios from 'axios';
 import nextId from "react-id-generator";
 import Modal from '../Modal';
 import DatePicker from 'react-datepicker';
-import TimePicker from '../TimePicker';
+import TimePicker from '../TimePicker/TimePicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 

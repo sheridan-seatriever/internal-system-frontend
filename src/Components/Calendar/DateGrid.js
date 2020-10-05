@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import styles from '../../Styles/DateGrid.module.css';
+import styles from './DateGrid.module.css';
 import sampleData from './sampleData.js';
 import axios from 'axios';
 import eventDataGenerator from './functions/eventDataGenerator';
