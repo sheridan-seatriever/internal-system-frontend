@@ -8,8 +8,10 @@ function Modal(props) {
 
   return (
     <div>
-      <div className={`${props.open?styles.overlay:''}`}></div>
-      <div ref={wrapperRef}>{props.children}</div>
+      <div className={`${props.open?styles.overlay:''} `}></div>
+      <div className={`${styles.position_container} ${props.open&&styles.open}`}>
+        <div ref={wrapperRef} className={`${styles.modal} ${'animated zoomIn bg-blue'} ${styles.transform}`}>{props.children}</div>
+      </div>
     </div>
   );
 }

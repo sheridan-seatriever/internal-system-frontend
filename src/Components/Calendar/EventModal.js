@@ -220,58 +220,56 @@ function EventModal(props) {
   return (
     <Modal callback={closeModalResetState} open={props.modalOpen}>
       {props.children}
-      <div className={`${`${styles.modal} ${'animated zoomIn bg-blue'} ${styles.transform}`} ${props.modalOpen?styles.open:''}`}  >
-        <div className={styles.modal_header}>Add new project</div>
-        <form onSubmit={e=>submit(e)} className={styles.inner}>
-          <div className={styles.input_group}>
-            <input value={title} onChange={e=>{
-              setTitle(e.target.value);
-              setTitleError('');
-          }} placeholder="Enter the Project Title"></input>
-            <div className={'error titleError'}>{titleError}</div>
-          </div>
-          <div className={styles.input_group}>
-            <label className={styles.label}>Start:</label>
-            <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
-            <label className={styles.time_label}>At:</label>
-            <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
-          </div>
-          <div className={styles.input_group}>
-            <label className={styles.label}>End:&nbsp;&nbsp;</label>
-            <DatePicker selected={endDateInput} onChange={date=>{setEndDateInput(date); setDateError('')}}/>
-            <label className={styles.time_label}>At:</label>
-            <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
-          </div>
-          <div>{dateError}</div>
-          <div>{timeError}</div>
-          <div className={'acf-field acf-input bottom-space-20'}>
-              <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
-              <div className={styles.team_members_container}>
-                <div className={styles.team_members}>{mapUsersInput()}</div>
-                <div className={styles.team_members}>{mapTeamMembers()}</div>
-              </div>
-          </div>
-          <div className={'error bottom-space-10'}>{teamMembersError}</div>
-          <div className={'acf-field acf-input'}>
-              <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
-              <div className={styles.milestones}>{mapMilestones()}</div>
-              <div className={styles.input_group}>
-                <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}} placeholder="Enter new Milestone"></input>
-                <button type="button" className={styles.button + ' add'} onClick={()=>{
-                  if(validateMilestone(milestoneInput)) {
-                    setMilestones([...milestones, milestoneInput]);
-                    setMilestoneInput('');
-                  }
-              }}>+</button>
-              </div>
-              <div>{milestoneError}</div>
-          </div>
-          <div className={styles.button_group}>
-            <button className={styles.button} type="submit">Submit</button>
-            <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>
-          </div>
-        </form>
-      </div>
+      <div className={styles.modal_header}>Add new project</div>
+      <form onSubmit={e=>submit(e)} className={styles.inner}>
+        <div className={styles.input_group}>
+          <input value={title} onChange={e=>{
+            setTitle(e.target.value);
+            setTitleError('');
+        }} placeholder="Enter the Project Title"></input>
+          <div className={'error titleError'}>{titleError}</div>
+        </div>
+        <div className={styles.input_group}>
+          <label className={styles.label}>Start:</label>
+          <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
+          <label className={styles.time_label}>At:</label>
+          <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
+        </div>
+        <div className={styles.input_group}>
+          <label className={styles.label}>End:&nbsp;&nbsp;</label>
+          <DatePicker selected={endDateInput} onChange={date=>{setEndDateInput(date); setDateError('')}}/>
+          <label className={styles.time_label}>At:</label>
+          <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
+        </div>
+        <div>{dateError}</div>
+        <div>{timeError}</div>
+        <div className={'acf-field acf-input bottom-space-20'}>
+            <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
+            <div className={styles.team_members_container}>
+              <div className={styles.team_members}>{mapUsersInput()}</div>
+              <div className={styles.team_members}>{mapTeamMembers()}</div>
+            </div>
+        </div>
+        <div className={'error bottom-space-10'}>{teamMembersError}</div>
+        <div className={'acf-field acf-input'}>
+            <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
+            <div className={styles.milestones}>{mapMilestones()}</div>
+            <div className={styles.input_group}>
+              <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}} placeholder="Enter new Milestone"></input>
+              <button type="button" className={styles.button + ' add'} onClick={()=>{
+                if(validateMilestone(milestoneInput)) {
+                  setMilestones([...milestones, milestoneInput]);
+                  setMilestoneInput('');
+                }
+            }}>+</button>
+            </div>
+            <div>{milestoneError}</div>
+        </div>
+        <div className={styles.button_group}>
+          <button className={styles.button} type="submit">Submit</button>
+          <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>
+        </div>
+      </form>
     </Modal>
   )
 }
