@@ -3,11 +3,11 @@ import styles from './EventModal.module.css';
 import moment from 'moment';
 import axios from 'axios';
 import nextId from "react-id-generator";
-import Modal from '../Modal';
+import Modal from '../../Modal';
 import DatePicker from 'react-datepicker';
-import TimePicker from '../TimePicker/TimePicker';
+import TimePicker from '../../TimePicker/TimePicker';
+import {validateDates, validateMilestone, validateTeamMembers, validateTime, validateTitle} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
-
 
 function EventModal(props) {
   const [users, setUsers] = useState(null);
@@ -36,7 +36,6 @@ function EventModal(props) {
   const [milestoneError, setMilestoneError] = useState('');
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
-
   const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
   const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
@@ -69,79 +68,19 @@ function EventModal(props) {
     setTitleError('');
     setTeamMembersError('');
     setDateError('');
-    if(!validateTitle(title)) {
+    if(!validateTitle(title, setTitleError)) {
       valid = false;
     }
-    if(!validateTeamMembers(teamMembers)) {
+    if(!validateTeamMembers(teamMembers, setTeamMembersError)) {
       valid = false;
     }
-    if(!validateDates(startDateInput, endDateInput)) {
+    if(!validateDates(startDateInput, endDateInput, setDateError)) {
       valid = false;
     }
-    if(!validateTime(startTimeInput)) {
+    if(!validateTime(startTimeInput, setTimeError)) {
       valid = false;
-    } else if(!validateTime(endTimeInput)) {
+    } else if(!validateTime(endTimeInput, setTimeError)) {
       valid = false;
-    }
-    return valid;
-  }
-
-  const validateTime = time => {
-    let valid = true;
-    if(time.hour===''||time.minute==='') {
-      setTimeError('Please enter a valid start and end time');
-      valid = false;
-    } if(isNaN(parseInt(time.hour))||isNaN(parseInt(time.minute))) {
-      setTimeError('Please enter a valid start and end time');
-      valid = false;
-    } else if(time.hour>12||time.hour<1) {
-      setTimeError('Please enter a valid start and end time');
-      valid = false;
-    } else if(time.minute>59||time.minute<0) {
-      setTimeError('Please enter a valid start and end time');
-      valid = true;
-    }
-    return valid;
-  }
-
-  const validateDates = (startDate, endDate) => {
-    let valid = true;
-    if(!startDate||!endDate) {
-      valid = false;
-      setDateError('Please enter a valid start and end date');
-    }
-    return valid;
-  }
-
-  const validateTeamMembers = teamMembers => {
-    let valid = true;
-    if(teamMembers.length<1) {
-      valid = false;
-      setTeamMembersError('Please select at least one project member');
-    }
-    return valid;
-  }
-
-  const validateMilestone = milestone => {
-    let valid = true;
-    if(milestone.length < 1) {
-      valid = false;
-    } else if(milestone.length > 100) {
-      valid = false;
-      setMilestoneError('Must be 100 characters or less');
-    }
-    return valid;
-  }
-
-  const validateTitle = title => {
-    let valid = true;
-    console.log('validate')
-    if(title.length < 1) {
-      valid = false;
-      setTitleError('Please enter a project title');
-    } else if(title.length > 50) {
-      valid = false;
-      setTitleError('Must be 50 characters or less');
     }
     return valid;
   }
@@ -162,8 +101,6 @@ function EventModal(props) {
     setMilestoneError('');
     setDateError('');
   }
-
-  //html
 
   const mapUsersInput = () => {
     if(usersInput) {
@@ -257,7 +194,7 @@ function EventModal(props) {
             <div className={styles.input_group}>
               <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}} placeholder="Enter new Milestone"></input>
               <button type="button" className={styles.button + ' add'} onClick={()=>{
-                if(validateMilestone(milestoneInput)) {
+                if(validateMilestone(milestoneInput, setMilestoneError)) {
                   setMilestones([...milestones, milestoneInput]);
                   setMilestoneInput('');
                 }
