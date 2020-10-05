@@ -1,6 +1,6 @@
 import React,{useRef} from 'react';
-import styles from '../Styles/Modal.module.css';
-import useOutsideAlerter from '../Hooks/useOutsideAlerter';
+import styles from './Modal.module.css';
+import useOutsideAlerter from './useOutsideAlerter';
 
 function Modal(props) {
   const wrapperRef = useRef(null);
