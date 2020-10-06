@@ -1,0 +1,44 @@
+.container {
+  overflow: hidden;
+  flex-basis: 0;
+  background-color: rgba(0,0,0,0.15);
+  transition: all .4s;
+  z-index: 5;
+}
+
+.open {
+  transform-origin: left;
+  transition: all .4s;
+  flex-basis: 33.3%;
+  padding: 16px;
+}
+
+.delete {
+  margin: 0;
+  margin-left: auto;
+  border-color: #af3535 !important;
+  color: #af3535 !important;
+}
+
+.button_group {
+  margin-top: 10px;
+  display: flex;
+}
+
+.input_group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.input {
+  width: 80%;
+}
+.input_group label {
+  margin-top: 4px;
+  font-size: .7rem;
+  width: 20%;
+}
+.input_large {
+  height: 100px;
+}

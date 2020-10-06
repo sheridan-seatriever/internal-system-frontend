@@ -1,12 +1,16 @@
 .calendar {
+  flex-basis: 66.6%;
+  flex-grow: 1;
   min-width: 700px;
   border-radius: 4px;
+  padding: 40px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  white-space: nowrap;
 }
 
 .day_header_container {

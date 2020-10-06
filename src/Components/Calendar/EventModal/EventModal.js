@@ -157,7 +157,7 @@ function EventModal(props) {
   return (
     <Modal callback={closeModalResetState} open={props.modalOpen}>
       {props.children}
-      <div className={styles.modal_header}>Add new project</div>
+      <h3 className={styles.modal_header}>Add new project</h3>
       <form onSubmit={e=>submit(e)} className={styles.inner}>
         <div className={styles.input_group}>
           <input value={title} onChange={e=>{
