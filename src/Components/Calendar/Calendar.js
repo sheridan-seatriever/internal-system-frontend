@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import styles from './Calendar.module.css';
 import DateGrid from './DateGrid';
-import EventModal from './EventModal';
 
-function Calendar() {
+function Calendar({modalOpen, setModalOpen, setModalStartDate}) {
   const getCurrentMonth = () => {
     const date = new Date();
     return date.getMonth();
@@ -12,8 +11,7 @@ function Calendar() {
     const date = new Date();
     return date.getFullYear();
   }
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalStartDate, setModalStartDate] = useState();
+  
   const [month, setMonth] = useState(getCurrentMonth())
   const [year, setYear] = useState(getCurrentYear());
 
@@ -70,7 +68,6 @@ function Calendar() {
             setModalStartDate(new Date());
             setModalOpen(!modalOpen);
           }}>Add New</button>
-          <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} modalStartDate={modalStartDate}/>
         </div>
         <div className={styles.button_group}>
           <h3>{getMonth(month) + ' ' + year}</h3>

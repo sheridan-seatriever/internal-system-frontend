@@ -10,19 +10,12 @@ import {validateDates, validateMilestone, validateTeamMembers, validateTime, val
 import "react-datepicker/dist/react-datepicker.css";
 
 function EventModal(props) {
-  const [users, setUsers] = useState(null);
-  const [usersInput, setUsersInput] = useState(null);
+  const [usersInput, setUsersInput] = useState([]);
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
 
   useEffect(() => {
-    async function fetchData() {
-      const users = await axios.get('http://system.seatriever.com/wp-json/system-api/v1/users_studio');
-      console.log(users)
-      setUsers(users.data);
-      setUsersInput(users.data);
-    }
-    fetchData();
+    setUsersInput(props.users);
   }, [])
 
   useEffect(() => {
@@ -94,8 +87,9 @@ function EventModal(props) {
     setMilestoneInput('');
     setMilestones([]);
     setTeamMembers([]);
-    setUsersInput(users);
-
+    setUsersInput(props.users);
+    setStartTimeInput({hour: 9, minute: '00', period: 'AM'})
+    setEndTimeInput({hour: 5, minute: '00', period: 'PM'})
     setTitleError('');
     setTeamMembersError('');
     setMilestoneError('');
@@ -178,29 +172,35 @@ function EventModal(props) {
           <label className={styles.time_label}>At:</label>
           <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
         </div>
-        <div>{dateError}</div>
-        <div>{timeError}</div>
-        <div className={'acf-field acf-input bottom-space-20'}>
-            <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
+        <div className="error">{dateError}</div>
+        <div className="error">{timeError}</div>
+
+        <div className={'acf-field acf-input top-space-10'}>
+          <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
+          {
+            props.loadingUsers?
+            <div>loading</div>:
             <div className={styles.team_members_container}>
               <div className={styles.team_members}>{mapUsersInput()}</div>
               <div className={styles.team_members}>{mapTeamMembers()}</div>
             </div>
+          }
         </div>
-        <div className={'error bottom-space-10'}>{teamMembersError}</div>
-        <div className={'acf-field acf-input'}>
-            <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
-            <div className={styles.milestones}>{mapMilestones()}</div>
-            <div className={styles.input_group}>
-              <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}} placeholder="Enter new Milestone"></input>
-              <button type="button" className={styles.button + ' add'} onClick={()=>{
-                if(validateMilestone(milestoneInput, setMilestoneError)) {
-                  setMilestones([...milestones, milestoneInput]);
-                  setMilestoneInput('');
-                }
-            }}>+</button>
-            </div>
-            <div>{milestoneError}</div>
+        <div className="error">{props.fetchUsersError}</div>
+        <div className="error">{teamMembersError}</div>
+        <div className={'acf-field acf-input top-space-10'}>
+          <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
+          <div className={styles.milestones}>{mapMilestones()}</div>
+          <div className={styles.input_group}>
+            <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}} placeholder="Enter new Milestone"></input>
+            <button type="button" className={styles.button + ' add'} onClick={()=>{
+              if(validateMilestone(milestoneInput, setMilestoneError)) {
+                setMilestones([...milestones, milestoneInput]);
+                setMilestoneInput('');
+              }
+          }}>+</button>
+          </div>
+          <div className="error">{milestoneError}</div>
         </div>
         <div className={styles.button_group}>
           <button className={styles.button} type="submit">Submit</button>

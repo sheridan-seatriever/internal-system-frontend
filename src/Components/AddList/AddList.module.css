@@ -1,15 +1,5 @@
-.outer {
-  display: flex;
-  width: 100%;
-}
-.outer label {
-  width: 20%;
-  margin-top: 4px;
-  font-size: .7rem;
-}
-
 .inner {
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
