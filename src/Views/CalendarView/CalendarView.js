@@ -4,27 +4,17 @@ import axios from 'axios';
 import Calendar from '../../Components/Calendar';
 import EventSidebar from '../../Components/Calendar/EventSidebar';
 import EventModal from '../../Components/Calendar/EventModal';
+import DateGrid from '../../Components/Calendar/DateGrid';
 
 const CalendarView = () => {
   const [events, setEvents] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartDate, setModalStartDate] = useState();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [projectMangager, setProjectMangager] = useState('');
-  const [assignedTo, setAssignedTo] = useState([]);
   const [users, setUsers] = useState([]);
   const [fetchUsersError, setFetchUsersError] = useState('');
   const [loadingUsers, setLoadingUsers] = useState(true);
-
-  const set = {
-    setSidebarOpen,
-    setTitle,
-    setDescription,
-    setProjectMangager,
-    setAssignedTo,
-  }
+  const [currentEventID, setCurrentEventID] = useState('');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -40,12 +30,43 @@ const CalendarView = () => {
     fetchUsers();
   }, [])
 
+  const renderDateGrid = (year, month) => {
+    return (
+      <DateGrid 
+        year={year} 
+        month={month}
+        setModalOpen={setModalOpen}
+        setModalStartDate={setModalStartDate}
+        setSidebarOpen={setSidebarOpen}
+        events={events} 
+        setEvents={setEvents} 
+        setCurrentEventID={setCurrentEventID}
+      />)}
+
   return(
     <div className={styles.container}>
-      <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} modalStartDate={modalStartDate} users={users} setModalStartDate={setModalStartDate} fetchUsersError={fetchUsersError} loadingUsers={loadingUsers} events={events} setEvents={setEvents}/>
-      <EventSidebar open={sidebarOpen} title={title} description={description} projectMangager={projectMangager} assignedTo={assignedTo} users={users} set={set} fetchUsersError={fetchUsersError} loadingUsers={loadingUsers} setEvents={setEvents}/>
-      <Calendar modalOpen={modalOpen} setModalOpen={setModalOpen} setModalStartDate={setModalStartDate} events={events} setEvents={setEvents}/>
-      <button onClick={()=>setSidebarOpen(!sidebarOpen)}>open</button>
+      <EventModal 
+        closeModal={()=>{setModalOpen(false)}} 
+        modalOpen={modalOpen} 
+        modalStartDate={modalStartDate} 
+        users={users} 
+        setModalStartDate={setModalStartDate} 
+        fetchUsersError={fetchUsersError} 
+        loadingUsers={loadingUsers} 
+        events={events} 
+        setEvents={setEvents}/>
+      <EventSidebar 
+        open={sidebarOpen}
+        users={users} 
+        fetchUsersError={fetchUsersError} 
+        loadingUsers={loadingUsers} 
+        setEvents={setEvents}
+        currentEvent={events.find(element=>element.project_id===currentEventID)}/>
+      <Calendar 
+        modalOpen={modalOpen} 
+        setModalOpen={setModalOpen} 
+        setModalStartDate={setModalStartDate} 
+        renderDateGrid={(year, month) => renderDateGrid(year, month)} />
     </div>
   )
 }

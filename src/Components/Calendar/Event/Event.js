@@ -1,10 +1,14 @@
 import React,{useState} from 'react';
 import styles from './Event.module.css';
 
-const Event = ({project_title, colspan}) => {
+const Event = ({id, title, colspan, setSidebarOpen, setCurrentEventID}) => {
+  const onClick = () => {
+    setSidebarOpen(true);
+    setCurrentEventID(id);
+  }
   return (
-    <td className={styles.event} colSpan={colspan}>
-      <div className={styles.event_inner}>{project_title}</div>
+    <td className={styles.event} colSpan={colspan} onClick={onClick}>
+      <div className={styles.event_inner}>{title}</div>
     </td>
   )
 }

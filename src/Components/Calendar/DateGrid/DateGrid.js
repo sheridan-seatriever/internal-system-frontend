@@ -10,7 +10,7 @@ import nextId from "react-id-generator";
 import _ from 'lodash';
 
 
-function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEvents}) {
+function DateGrid({year, month, setModalStartDate, setModalOpen, setSidebarOpen, events, setEvents, setCurrentEventID}) {
 
   const getDaysInMonth = () => {
     const date = new Date(year, month, 32).getDate();
@@ -52,6 +52,7 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
     //get dates starting from first monday and ending on last additional day
     const fetchData = async () => {
       const events = (await axios.get(`http://system.seatriever.com/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
+      console.log(events);
       setEvents(events);
     }
     fetchData()
@@ -121,7 +122,7 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
   for(let i=0;i<rows;i++) {
     // EVENT DATA GOES HERE
     const eventTable = generateEventPositions(eventRangeWeeks[i]);
-    dateRows.push(containerTableGenerator(eventTable, dateRangeWeeks[i], dayRangeWeeks[i]));
+    dateRows.push(containerTableGenerator(eventTable, dateRangeWeeks[i], dayRangeWeeks[i], setSidebarOpen, setCurrentEventID));
   }
 
   return(
