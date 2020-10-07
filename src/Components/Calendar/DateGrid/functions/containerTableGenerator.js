@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../DateGrid.module.css';
 import nextId from "react-id-generator";
+import Event from '../../Event';
 
 const containerTableGenerator = (eventTable, dateRange, dayRange) => {
     const htmlRowGenerator = row => {
@@ -12,7 +13,7 @@ const containerTableGenerator = (eventTable, dateRange, dayRange) => {
             htmlRowArray.push(<td key={nextId()}></td>);
           } else {
             const colspan = tempRow[0].endInt - tempRow[0].startInt;
-            htmlRowArray.push(<td key={nextId()} className={styles.event} colSpan={colspan}><div className={styles.event_inner}>{tempRow[0].project_title}</div></td>);
+            htmlRowArray.push(<Event project_title={tempRow[0].project_title} colspan={colspan} />)
             i+=(colspan-1);
             tempRow.shift();
           }

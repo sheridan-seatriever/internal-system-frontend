@@ -29,7 +29,6 @@ const CalendarView = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const users = (await axios.get('http://system.seatriever.com/wp-json/system-api/v1/users_studio')).data;
-      console.log(users)
       if(users&&Array.isArray(users)) {
         setUsers(users);
         setLoadingUsers(false);

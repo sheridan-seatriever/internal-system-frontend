@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from 'react';
 import styles from './DateGrid.module.css';
-import sampleData from './sampleData.js';
+import sampleData from '../sampleData.js';
 import axios from 'axios';
 import eventDataGenerator from './functions/eventDataGenerator';
-import eventTableGenerator from './functions/eventTableGenerator';
+import generateEventPositions from './functions/generateEventPositions';
 import containerTableGenerator from './functions/containerTableGenerator';
 import moment from 'moment';
 import nextId from "react-id-generator";
@@ -52,7 +52,6 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
     //get dates starting from first monday and ending on last additional day
     const fetchData = async () => {
       const events = (await axios.get(`http://system.seatriever.com/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
-      console.log(events);
       setEvents(events);
     }
     fetchData()
@@ -73,9 +72,6 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
       setModalOpen(true);
       setModalStartDate(new Date(year, month, day));
     }} key={nextId()} className={styles.day}></div>);
-    // while(dayRange.length%rows!==0) {
-    //   dayRange.push(<div key={nextId()} className={`${styles.day} ${styles.not_current_month}`}></div>);
-    // }
   } else {
     const additional = (daysInPrevMonth-firstMonday)+1;
     rows = Math.ceil((additional+daysInMonth)/7);
@@ -124,7 +120,7 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
   let dateRows = [];
   for(let i=0;i<rows;i++) {
     // EVENT DATA GOES HERE
-    const eventTable = eventTableGenerator(eventRangeWeeks[i]); //change to eventRangeWeeks in production
+    const eventTable = generateEventPositions(eventRangeWeeks[i]);
     dateRows.push(containerTableGenerator(eventTable, dateRangeWeeks[i], dayRangeWeeks[i]));
   }
 

@@ -30,23 +30,6 @@ td {
   width: 100%;
 }
 
-.event {
-  padding: 3px;
-  position: relative;
-  z-index: 1;
-}
-
-.event_inner {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 4px;
-  font-size: .8rem;
-  background-color: #61bd4f;
-  border-radius: 4px;
-  color: #fff;
-}
-
 .cell_date {
   font-weight: 300;
   text-align: left;
