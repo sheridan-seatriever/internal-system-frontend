@@ -6,8 +6,8 @@ import eventDataGenerator from './functions/eventDataGenerator';
 import generateEventPositions from './functions/generateEventPositions';
 import containerTableGenerator from './functions/containerTableGenerator';
 import moment from 'moment';
-import nextId from "react-id-generator";
 import _ from 'lodash';
+import Day from './Day';
 
 
 function DateGrid({year, month, setModalStartDate, setModalOpen, setSidebarOpen, events, setEvents, setCurrentEventID}) {
@@ -68,29 +68,20 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, setSidebarOpen,
   if(firstMonday==='1') {
     rows = Math.ceil((daysInMonth)/7);
     dateRange = _.range(1, daysInMonth+1);
-    dayRange = _.range(1, daysInMonth+1).map(day=><div onClick={()=>{
-      setModalOpen(true);
-      setModalStartDate(new Date(year, month, day));
-    }} key={nextId()} className={styles.day}></div>);
+    dayRange = _.range(1, daysInMonth+1).map(day=><Day currentDay={false} notCurrentMonth={false} onClick={()=>{setModalOpen(true);setModalStartDate(new Date(year, month, day))}}/>);
   } else {
     const additional = (daysInPrevMonth-firstMonday)+1;
     rows = Math.ceil((additional+daysInMonth)/7);
     dateRange = _.range(firstMonday, daysInPrevMonth+1);
-    dayRange = dateRange.map(day=><div key={nextId()} className={`${styles.day} ${styles.not_current_month}`}></div>);
+    dayRange = dateRange.map(day=><Day currentDay={false} notCurrentMonth={true} onClick={()=>{setModalOpen(true);setModalStartDate(new Date(year, month, day))}}/>);
     dateRange = dateRange.concat(_.range(1, daysInMonth+1));
     const currentDay = moment(new Date()).format('D');
     const currentMonth = moment(new Date()).format('M');
     dayRange = dayRange.concat(_.range(1, daysInMonth+1).map(day=>{
       if(day===currentDay&&month===currentMonth-1) {
-        return <div key={nextId()} onClick={()=>{
-          setModalOpen(true);
-          setModalStartDate(new Date(year, month, day));
-        }} className={`${styles.day} ${styles.currentDay}`}></div>
+        return <Day currentDay={true} notCurrentMonth={false} onClick={()=>{setModalOpen(true);setModalStartDate(new Date(year, month, day))}}/>;
       } else {
-        return <div key={nextId()} onClick={()=>{
-          setModalOpen(true);
-          setModalStartDate(new Date(year, month, day));
-        }} className={styles.day}></div>
+        return <Day currentDay={false} notCurrentMonth={false} onClick={()=>{setModalOpen(true);setModalStartDate(new Date(year, month, day))}}/>;
       }
     }));
   }
@@ -102,7 +93,7 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, setSidebarOpen,
   }
 
   while(dayRange.length%7!==0) {
-    dayRange.push(<div key={nextId()} className={`${styles.day} ${styles.not_current_month}`}></div>);
+    dayRange.push(<Day currentDay={false} notCurrentMonth={true} onClick={()=>{setModalOpen(true);setModalStartDate(new Date(year, month))}}/>);
   }
 
   const dateRangeWeeks = [];
