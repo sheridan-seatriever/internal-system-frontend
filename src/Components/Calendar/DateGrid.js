@@ -10,9 +10,7 @@ import nextId from "react-id-generator";
 import _ from 'lodash';
 
 
-function DateGrid({year, month, setModalStartDate, setModalOpen}) {
-
-  const [events, setEvents] = useState([]);
+function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEvents}) {
 
   const getDaysInMonth = () => {
     const date = new Date(year, month, 32).getDate();
@@ -39,24 +37,20 @@ function DateGrid({year, month, setModalStartDate, setModalOpen}) {
     const additionalDaysStart = (daysInPrevMonth-firstMonday.format('D'))+1;
     const rows = Math.ceil((additionalDaysStart+daysInMonth)/7);
     const totalDays = (rows*7);
-
     let startDate = firstMonday.toDate();
     //disables DST conversion
       let offset = startDate.getTimezoneOffset();
       offset = Math.abs(offset / 60);
       startDate.setHours(startDate.getHours() + offset);
     let endDate = firstMonday.add(totalDays, 'd').subtract(1,'seconds').toDate();
-    //disables DST conversion
       offset = endDate.getTimezoneOffset();
       offset = Math.abs(offset / 60);
       endDate.setHours(endDate.getHours() + offset);
+    //-----------------------
     startDate = moment(startDate).format('YYYYMMDD');
     endDate = moment(endDate).format('YYYYMMDD');
-
     //get dates starting from first monday and ending on last additional day
     const fetchData = async () => {
-      console.log(startDate);
-      console.log(endDate)
       const events = (await axios.get(`http://system.seatriever.com/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
       console.log(events);
       setEvents(events);

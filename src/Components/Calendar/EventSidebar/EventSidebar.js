@@ -1,10 +1,17 @@
 import React from 'react';
 import styles from './EventSidebar.module.css';
+import axios from 'axios';
 import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 
 
-const EventSidebar = ({open, loading, title, description, projectManager, assignedTo, users, deleteProject, set, fetchUsersError, loadingUsers}) => {
+const EventSidebar = ({open, loading, title, description, projectManager, assignedTo, users, set, fetchUsersError, loadingUsers, setEvents}) => {
+
+
+  const deleteProject = () => {
+    //axios.
+  }
+
   return (
     <div className={`${styles.container} ${open&&styles.open}`}>
       {loading?<div>loading</div>:<> 
@@ -26,7 +33,7 @@ const EventSidebar = ({open, loading, title, description, projectManager, assign
             <div>loading</div>:
             <>
               <div className={styles.input_group_inner}>
-                <SearchInput id="users_datalist" data={users}/>
+                <SearchInput id="users_datalist" data={users} item_id={'user_id'} item_property={'user_name'}/>
               </div>
             </>
           }
@@ -38,7 +45,7 @@ const EventSidebar = ({open, loading, title, description, projectManager, assign
           loadingUsers? 
           <div>loading</div>:
           <div className={styles.input_group_inner}>
-            <AddList selectedData={assignedTo} data={users}/>
+            <AddList selectedData={assignedTo} data={users} item_id={'user_id'} item_property={'user_name'}/>
           </div>
         }
         </div>

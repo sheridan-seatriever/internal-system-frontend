@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './AddList.module.css';
 import SearchInput from '../SearchInput';
 
-const AddList = ({data, selectedData}) => {
+const AddList = ({data, selectedData, item_id, item_property}) => {
 
   const mapSelectedData = selectedData => {
     if(selectedData&&Array.isArray(selectedData)) {
@@ -23,7 +23,7 @@ const AddList = ({data, selectedData}) => {
         {mapSelectedData(selectedData)}
       </div>
       <div className={styles.input_group}>
-        <SearchInput id="list_id" data={data} />
+        <SearchInput id="list_id" data={data} item_id={item_id} item_property={item_property} />
         <button type="button" className={`${styles.no_wrap} ${'acf-button button button-primary'}`}>+ ADD PERSON</button>
       </div>
     </div>

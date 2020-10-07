@@ -6,6 +6,7 @@ import EventSidebar from '../../Components/Calendar/EventSidebar';
 import EventModal from '../../Components/Calendar/EventModal';
 
 const CalendarView = () => {
+  const [events, setEvents] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartDate, setModalStartDate] = useState();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,7 +28,8 @@ const CalendarView = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const users = await axios.get('http://system.seatriever.com/wp-json/system-api/v1/users_studio');
+      const users = (await axios.get('http://system.seatriever.com/wp-json/system-api/v1/users_studio')).data;
+      console.log(users)
       if(users&&Array.isArray(users)) {
         setUsers(users);
         setLoadingUsers(false);
@@ -41,9 +43,9 @@ const CalendarView = () => {
 
   return(
     <div className={styles.container}>
-      <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} modalStartDate={modalStartDate} users={users} setModalStartDate={setModalStartDate} fetchUsersError={fetchUsersError} loadingUsers={loadingUsers}/>
-      <EventSidebar open={sidebarOpen} title={title} description={description} projectMangager={projectMangager} assignedTo={assignedTo} users={users} set={set} fetchUsersError={fetchUsersError} loadingUsers={loadingUsers}/>
-      <Calendar  modalOpen={modalOpen} setModalOpen={setModalOpen} setModalStartDate={setModalStartDate}/>
+      <EventModal closeModal={()=>{setModalOpen(false)}} modalOpen={modalOpen} modalStartDate={modalStartDate} users={users} setModalStartDate={setModalStartDate} fetchUsersError={fetchUsersError} loadingUsers={loadingUsers} events={events} setEvents={setEvents}/>
+      <EventSidebar open={sidebarOpen} title={title} description={description} projectMangager={projectMangager} assignedTo={assignedTo} users={users} set={set} fetchUsersError={fetchUsersError} loadingUsers={loadingUsers} setEvents={setEvents}/>
+      <Calendar modalOpen={modalOpen} setModalOpen={setModalOpen} setModalStartDate={setModalStartDate} events={events} setEvents={setEvents}/>
       <button onClick={()=>setSidebarOpen(!sidebarOpen)}>open</button>
     </div>
   )

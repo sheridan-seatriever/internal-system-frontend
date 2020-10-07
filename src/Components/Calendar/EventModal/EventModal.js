@@ -33,25 +33,37 @@ function EventModal(props) {
   const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
   const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
   const [timeError, setTimeError] = useState('');
+  const [submitError, setSubmitError] = useState('');
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const submit = async e => {
     e.preventDefault();
     if(validateSubmit()) {
+      setLoadingSubmit(true);
       //disables DST conversion
         let offset = startDateInput.getTimezoneOffset();
         offset = Math.abs(offset / 60);
         startDateInput.setHours(startDateInput.getHours() + offset);
-      //disables DST conversion
         offset = endDateInput.getTimezoneOffset();
         offset = Math.abs(offset / 60);
         endDateInput.setHours(endDateInput.getHours() + offset);
-      const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', {
-        title,
+      //-----------------------
+      const event = {
+        project_title: title,
         milestones,
         members: teamMembers,
-        startDate: moment(startDateInput).format('YYYYMMDD'),
-        endDate: moment(endDateInput).format('YYYYMMDD'),
-      });
+        project_start_date: moment(startDateInput).format('YYYYMMDD'),
+        project_end_date: moment(endDateInput).format('YYYYMMDD')
+      }
+
+      try {
+        const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
+        closeModalResetState();
+        props.setEvents([...props.events, event]);
+      } catch {
+        setSubmitError('Error, could not create project');
+      }
+      setLoadingSubmit(false);
     }
   }
 
@@ -94,6 +106,7 @@ function EventModal(props) {
     setTeamMembersError('');
     setMilestoneError('');
     setDateError('');
+    setSubmitError('');
   }
 
   const mapUsersInput = () => {
@@ -203,9 +216,10 @@ function EventModal(props) {
           <div className="error">{milestoneError}</div>
         </div>
         <div className={styles.button_group}>
-          <button className={styles.button} type="submit">Submit</button>
+          <button className={styles.button} type="submit">{loadingSubmit?'loading':'Submit'}</button>
           <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>
         </div>
+        <div className="error">{submitError}</div>
       </form>
     </Modal>
   )
