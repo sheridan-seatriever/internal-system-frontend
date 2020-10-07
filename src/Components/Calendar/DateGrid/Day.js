@@ -1,6 +1,6 @@
 import React from 'react';
 import nextId from "react-id-generator";
-import styles from '../DateGrid.module.css';
+import styles from './DateGrid.module.css';
 
 const Day = ({notCurrentMonth, currentDay, onClick}) => {
 
