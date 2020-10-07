@@ -16,9 +16,16 @@
   padding: 16px;
 }
 
+.cancel {
+  margin: 0;
+  margin-left: 4px;
+  color: #777 !important;
+  border-color: #777 !important;
+}
+
 .delete {
   margin: 0;
-  margin-left: auto;
+  margin-left: 4px;
   border-color: #af3535 !important;
   color: #af3535 !important;
 }
@@ -26,6 +33,7 @@
 .button_group {
   margin-top: 10px;
   display: flex;
+  flex-direction: row-reverse;
 }
 
 .input_group {

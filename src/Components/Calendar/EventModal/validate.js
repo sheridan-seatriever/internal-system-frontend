@@ -47,7 +47,6 @@
 
   export const validateTitle = (title, setTitleError) => {
     let valid = true;
-    console.log('validate')
     if(title.length < 1) {
       valid = false;
       setTitleError('Please enter a project title');

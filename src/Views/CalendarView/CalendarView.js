@@ -15,6 +15,7 @@ const CalendarView = () => {
   const [fetchUsersError, setFetchUsersError] = useState('');
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [currentEventID, setCurrentEventID] = useState('');
+  console.log(events);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -56,10 +57,12 @@ const CalendarView = () => {
         events={events} 
         setEvents={setEvents}/>
       <EventSidebar 
-        open={sidebarOpen}
+        currentEventID={currentEventID}
+        setCurrentEventID={setCurrentEventID}
         users={users} 
         fetchUsersError={fetchUsersError} 
-        loadingUsers={loadingUsers} 
+        loadingUsers={loadingUsers}
+        events={events}
         setEvents={setEvents}
         currentEvent={events.find(element=>element.project_id===currentEventID)}/>
       <Calendar 

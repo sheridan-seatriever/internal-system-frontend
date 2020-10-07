@@ -4,25 +4,39 @@ import axios from 'axios';
 import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 
-const EventSidebar = ({open, users,fetchUsersError, loadingUsers, setEvents, currentEvent}) => {
+const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError, loadingUsers, events, setEvents, currentEvent}) => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [manager, setManager] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
-  
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if(currentEvent) {
       setTitle(currentEvent.project_title);
+    } else {
+      setTitle('');
     }
-  }, [currentEvent])
+  }, [currentEventID])
 
-  const deleteProject = () => {
-    //axios.
+  const deleteProject = async () => {
+    setLoading(true);
+    try {
+      await axios.delete(`http://system.seatriever.com/wp-json/system-api/v1/delete_studio_project?project_id=${currentEvent.project_id}`);
+      let updatedEvents = [...events];
+      updatedEvents.splice(events.indexOf(currentEvent));
+      setEvents(updatedEvents);
+      setCurrentEventID('');
+    } catch(err) {
+      setError('Error, could not delete event');
+    }
+    setLoading(false);
   }
 
   return (
-    <div className={`${styles.container} ${open&&styles.open}`}>
+    <div className={`${styles.container} ${currentEventID&&styles.open}`}>
       <div className={styles.input_group}>
         <label>Project Title</label>
         <div className={styles.input_group_inner}>
@@ -59,6 +73,7 @@ const EventSidebar = ({open, users,fetchUsersError, loadingUsers, setEvents, cur
       </div>
       <div className="error">{fetchUsersError}</div>
       <div className={styles.button_group}>
+        <button type="button" className={`${styles.cancel}`} onClick={()=>setCurrentEventID('')}>CANCEL</button>
         <button type="button" className={`${styles.delete}`} onClick={deleteProject}>DELETE PROJECT</button>
       </div>
     </div>
