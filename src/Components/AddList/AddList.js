@@ -1,8 +1,8 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styles from './AddList.module.css';
 import SearchInput from '../SearchInput';
 
-const AddList = ({data, selectedData, item_id, item_property}) => {
+const AddList = ({data, selectedData, setSelectedData, item_id, item_property}) => {
 
   const mapSelectedData = selectedData => {
     if(selectedData&&Array.isArray(selectedData)) {

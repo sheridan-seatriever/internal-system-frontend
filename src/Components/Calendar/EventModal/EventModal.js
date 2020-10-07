@@ -6,6 +6,7 @@ import nextId from "react-id-generator";
 import Modal from '../../Modal';
 import DatePicker from 'react-datepicker';
 import TimePicker from '../../TimePicker/TimePicker';
+import AddList from '../../AddList';
 import {validateDates, validateMilestone, validateTeamMembers, validateTime, validateTitle} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -16,7 +17,7 @@ function EventModal(props) {
 
   useEffect(() => {
     setUsersInput(props.users);
-  }, [])
+  }, [props.users]);
 
   useEffect(() => {
     setStartDateInput(props.modalStartDate);
@@ -192,7 +193,7 @@ function EventModal(props) {
         <div className={'acf-field acf-input top-space-10'}>
           <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
           {
-            props.loadingUsers?
+            !props.users&&!props.fetchUsersError?
             <div>loading</div>:
             <div className={styles.team_members_container}>
               <div className={styles.team_members}>{mapUsersInput()}</div>

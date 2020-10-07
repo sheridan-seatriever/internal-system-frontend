@@ -11,7 +11,7 @@ const Day = ({notCurrentMonth, currentDay, onClick}) => {
   }
 
   return (
-    <div className={`${styles.day} ${notCurrentMonth&&styles.notCurrentMonth} ${currentDay&&styles.current_day}`} key={nextId()} onClick={handleClick}/>
+    <div className={`${styles.day} ${notCurrentMonth&&styles.not_current_month} ${currentDay&&styles.current_day}`} key={nextId()} onClick={handleClick}/>
   )
 }
 

@@ -54,7 +54,7 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, setSidebarOpen,
       const events = (await axios.get(`http://system.seatriever.com/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
       setEvents(events);
     }
-    fetchData()
+    fetchData();
   }, [year, month])
 
 

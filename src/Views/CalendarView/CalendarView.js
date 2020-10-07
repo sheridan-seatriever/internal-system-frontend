@@ -11,7 +11,7 @@ const CalendarView = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartDate, setModalStartDate] = useState();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(null);
   const [fetchUsersError, setFetchUsersError] = useState('');
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [currentEventID, setCurrentEventID] = useState('');
