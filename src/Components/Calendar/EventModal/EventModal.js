@@ -58,6 +58,7 @@ function EventModal(props) {
 
       try {
         const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
+        event.project_id = res.data;
         closeModalResetState();
         props.setEvents([...props.events, event]);
       } catch {
