@@ -3,7 +3,7 @@ import styles from './AddList.module.css';
 import nextId from 'react-id-generator';
 import SearchInput from '../SearchInput';
 
-const AddList = ({data, selectedData, setSelectedData}) => {
+const AddList = ({data, selectedData, setSelectedData, validate}) => {
 
   const [input, setInput] = useState('');
 
@@ -21,7 +21,11 @@ const AddList = ({data, selectedData, setSelectedData}) => {
   }
 
   const add = () => {
-    
+    console.log(input)
+    if(validate(input)) {
+      setSelectedData([...selectedData, input]);
+      setInput('');
+    }
   }  
   
   const remove = item => {
@@ -41,12 +45,7 @@ const AddList = ({data, selectedData, setSelectedData}) => {
           <SearchInput id="list_id" data={data} input={input} setInput={setInput}/>:
           <input className={styles.input} input={input} value={input} onChange={e=>setInput(e.target.value)} />
         }
-        <button type="button" className={`${'acf-button button button-primary add'}`} onClick={()=>{
-          if(input) {
-            setSelectedData([...selectedData, input]);
-            setInput('');
-          }
-        }}>+</button>
+        <button type="button" className={`${'acf-button button button-primary add'}`} onClick={add}>+</button>
       </div>
     </div>
   )

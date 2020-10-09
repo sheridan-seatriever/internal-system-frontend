@@ -7,11 +7,10 @@ import Modal from '../../Modal';
 import DatePicker from 'react-datepicker';
 import TimePicker from '../../TimePicker/TimePicker';
 import AddList from '../../AddList';
-import {validateDates, validateMilestone, validateTeamMembers, validateTime, validateTitle} from './validate';
+import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateMilestoneInput} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
 
 function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
-  const [assignedTo, setAssignedTo] = useState([]);
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
 
@@ -19,10 +18,9 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     setStartDateInput(modalStartDate);
   }, [modalStartDate])
 
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [teamMembersError, setTeamMembersError] = useState('');
+  const [assignedTo, setAssignedTo] = useState([]);
+  const [assignedToError, setAssignedToError] = useState('');
   const [milestones, setMilestones] = useState([]);
-  const [milestoneInput, setMilestoneInput] = useState('');
   const [milestoneError, setMilestoneError] = useState('');
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
@@ -45,36 +43,39 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         offset = Math.abs(offset / 60);
         endDateInput.setHours(endDateInput.getHours() + offset);
       //-----------------------
+      const members = users.filter(user=>assignedTo.indexOf(user.user_name)!==-1);
+
       const event = {
         project_title: title,
         milestones,
-        members: teamMembers,
+        members,
         project_start_date: moment(startDateInput).format('YYYYMMDD'),
         project_end_date: moment(endDateInput).format('YYYYMMDD')
       }
 
-      try {
-        const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
-        event.project_id = res.data;
-        closeModalResetState();
-        setEvents([...events, event]);
-      } catch {
-        setSubmitError('Error, could not create project');
-      }
+      console.log(event)
+
+      // try {
+      //   const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
+      //   event.project_id = res.data;
+      //   closeModalResetState();
+      //   setEvents([...events, event]);
+      // } catch {
+      //   setSubmitError('Error, could not create project');
+      // }
       setLoadingSubmit(false);
     }
   }
 
-  //validation
   const validateSubmit = () => {
     let valid = true;
     setTitleError('');
-    setTeamMembersError('');
+    setAssignedToError('');
     setDateError('');
     if(!validateTitle(title, setTitleError)) {
       valid = false;
     }
-    if(!validateTeamMembers(teamMembers, setTeamMembersError)) {
+    if(!validateAssignedTo(assignedTo, setAssignedToError)) {
       valid = false;
     }
     if(!validateDates(startDateInput, endDateInput, setDateError)) {
@@ -88,21 +89,18 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     return valid;
   }
 
-  //functions
   const closeModalResetState = () => {
     closeModal();
     setTitle('');
     setStartDateInput(new Date());
     setEndDateInput(new Date());
-    setMilestoneInput('');
     setMilestones([]);
-    setTeamMembers([]);
+    setMilestoneError('');
     setAssignedTo([]);
+    setAssignedToError('');
     setStartTimeInput({hour: 9, minute: '00', period: 'AM'})
     setEndTimeInput({hour: 5, minute: '00', period: 'PM'})
     setTitleError('');
-    setTeamMembersError('');
-    setMilestoneError('');
     setDateError('');
     setSubmitError('');
   }
@@ -139,14 +137,14 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
           {
             !users&&!fetchUsersError?
             <div>loading</div>:
-            <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo} />
+            <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo} validate={input=>validateAssignedToInput(input, setAssignedToError, users.map(user=>user.user_name))}/>
           }
         </div>
         <div className="error">{fetchUsersError}</div>
-        <div className="error">{teamMembersError}</div>
+        <div className="error">{assignedToError}</div>
         <div className={'acf-field acf-input top-space-10'}>
           <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
-          <AddList data={null} selectedData={milestones} setSelectedData={setMilestones}/>
+          <AddList data={null} selectedData={milestones} setSelectedData={setMilestones} validate={input=>validateMilestoneInput(input, setMilestoneError)}/>
           <div className="error">{milestoneError}</div>
         </div>
         <div className={styles.button_group}>
