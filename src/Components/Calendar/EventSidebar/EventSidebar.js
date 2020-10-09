@@ -55,7 +55,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
           <div>loading</div>:
           <>
             <div className={styles.input_group_inner}>
-              <SearchInput id="users_datalist" data={users} item_id={'user_id'} item_property={'user_name'}/>
+              <SearchInput id="users_datalist" data={users}/>
             </div>
           </>
         }
@@ -67,7 +67,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
         loadingUsers? 
         <div>loading</div>:
         <div className={styles.input_group_inner}>
-          <AddList selectedData={assignedTo} data={users} item_id={'user_id'} item_property={'user_name'}/>
+          <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo}/>
         </div>
       }
       </div>

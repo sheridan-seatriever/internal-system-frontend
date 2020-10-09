@@ -3,7 +3,7 @@ import styles from '../DateGrid.module.css';
 import nextId from "react-id-generator";
 import Event from '../../Event';
 
-const containerTableGenerator = (eventTable, dateRange, dayRange, setSidebarOpen, setCurrentEventID) => {
+const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEventID) => {
     const htmlRowGenerator = row => {
       let tempRow = [...row];
       const htmlRowArray = [];
@@ -13,7 +13,7 @@ const containerTableGenerator = (eventTable, dateRange, dayRange, setSidebarOpen
             htmlRowArray.push(<td key={nextId()}></td>);
           } else {
             const colspan = tempRow[0].endInt - tempRow[0].startInt;
-            htmlRowArray.push(<Event key={nextId()} id={tempRow[0].project_id} title={tempRow[0].project_title} colspan={colspan} setSidebarOpen={setSidebarOpen} setCurrentEventID={setCurrentEventID}/>)
+            htmlRowArray.push(<Event key={nextId()} id={tempRow[0].project_id} title={tempRow[0].project_title} colspan={colspan} setCurrentEventID={setCurrentEventID}/>)
             i+=(colspan-1);
             tempRow.shift();
           }

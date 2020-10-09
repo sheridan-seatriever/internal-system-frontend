@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './SearchInput.module.css';
 import nextId from "react-id-generator";
 
-const SearchInput = ({data, value, setValue}) => {
+const SearchInput = ({data, input, setInput}) => {
 
   const id = nextId();
 
@@ -14,7 +14,7 @@ const SearchInput = ({data, value, setValue}) => {
 
   return (
     <div className={styles.container}>
-      <input list={id} value={value} onChange={e=>{setValue(e.target.value)}}/>
+      <input list={id} value={input} onChange={e=>{setInput(e.target.value)}}/>
       <datalist id={id}>
         <option value=""/>
         {mapData(data)}

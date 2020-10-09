@@ -16,10 +16,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const [endDateInput, setEndDateInput] = useState(new Date());
 
   useEffect(() => {
-    setAssignedTo(users);
-  }, [users]);
-
-  useEffect(() => {
     setStartDateInput(modalStartDate);
   }, [modalStartDate])
 
@@ -101,7 +97,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     setMilestoneInput('');
     setMilestones([]);
     setTeamMembers([]);
-    setAssignedTo(users);
+    setAssignedTo([]);
     setStartTimeInput({hour: 9, minute: '00', period: 'AM'})
     setEndTimeInput({hour: 5, minute: '00', period: 'PM'})
     setTitleError('');
@@ -110,59 +106,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     setDateError('');
     setSubmitError('');
   }
-
-  const mapassignedTo = () => {
-    if(assignedTo) {
-      return assignedTo.map(user=>{
-        return (
-          <div key={nextId()} className={styles.user_container}>
-            <div className={styles.user}>{user.user_name}</div>
-            <button className={styles.button + ' add'} type="button" onClick={()=>{
-              setTeamMembersError('');
-              setTeamMembers([...teamMembers, user]);
-              const index = assignedTo.indexOf(user);
-              console.log(index)
-              setAssignedTo([...assignedTo.slice(0,index), ...assignedTo.slice(index+1,assignedTo.length)]);
-          }}>+</button>
-          </div>
-        )
-      })
-    }
-  }
-
-  const mapTeamMembers = () => {
-    if(teamMembers) {
-      return teamMembers.map(member=>{
-        return (
-          <div key={nextId()} className={styles.user_container}>
-            <div className={styles.user}>{member.user_name}</div>
-            <button className={styles.button + ' remove'} type="button" onClick={()=>{
-              setAssignedTo([...assignedTo, member]);
-              const index = teamMembers.indexOf(member);
-              setTeamMembers([...teamMembers.slice(0,index), ...teamMembers.slice(index+1, teamMembers.length)])
-          }}>&#10005;</button>
-          </div>
-        )
-      })
-    }
-  }
-
-    const mapMilestones = () => {
-    if(milestones) {
-      return milestones.map(milestone=>{
-        return (
-          <div key={nextId()} className={styles.user_container}>
-            <div className={styles.user}>{milestone}</div>
-            <button className={styles.button + ' remove'} type="button" onClick={()=>{
-              const index = milestones.indexOf(milestone);
-              setMilestones([...milestones.slice(0,index), ...milestones.slice(index+1, milestones.length)]);
-          }}>&#10005;</button>
-          </div>
-        )
-      })
-    }
-  }
-
 
   return (
     <Modal callback={closeModalResetState} open={modalOpen}>
@@ -196,23 +139,14 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
           {
             !users&&!fetchUsersError?
             <div>loading</div>:
-            <AddList data={users} selectedData={['hello', 'hello', 'hello']} setSelectedData={setAssignedTo} />
+            <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo} />
           }
         </div>
         <div className="error">{fetchUsersError}</div>
         <div className="error">{teamMembersError}</div>
         <div className={'acf-field acf-input top-space-10'}>
           <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
-          <div className={styles.milestones}>{mapMilestones()}</div>
-          <div className={styles.input_group}>
-            <input type="text" value={milestoneInput} onChange={e=>{setMilestoneInput(e.target.value); setMilestoneError('')}} placeholder="Enter new Milestone"></input>
-            <button type="button" className={styles.button + ' add'} onClick={()=>{
-              if(validateMilestone(milestoneInput, setMilestoneError)) {
-                setMilestones([...milestones, milestoneInput]);
-                setMilestoneInput('');
-              }
-          }}>+</button>
-          </div>
+          <AddList data={null} selectedData={milestones} setSelectedData={setMilestones}/>
           <div className="error">{milestoneError}</div>
         </div>
         <div className={styles.button_group}>
