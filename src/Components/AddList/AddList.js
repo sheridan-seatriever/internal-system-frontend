@@ -1,8 +1,8 @@
-import React,{useState} from 'react';
+import React from 'react';
 import styles from './AddList.module.css';
 import SearchInput from '../SearchInput';
 
-const AddList = ({data, selectedData, setSelectedData, item_id, item_property}) => {
+const AddList = ({data, selectedData, setSelectedData}) => {
 
   const mapSelectedData = selectedData => {
     if(selectedData&&Array.isArray(selectedData)) {
@@ -23,8 +23,8 @@ const AddList = ({data, selectedData, setSelectedData, item_id, item_property}) 
         {mapSelectedData(selectedData)}
       </div>
       <div className={styles.input_group}>
-        <SearchInput id="list_id" data={data} item_id={item_id} item_property={item_property} />
-        <button type="button" className={`${styles.no_wrap} ${'acf-button button button-primary'}`}>+ ADD PERSON</button>
+        <SearchInput id="list_id" data={data} />
+        <button type="button" className={`${'acf-button button button-primary add'}`}>+</button>
       </div>
     </div>
   )

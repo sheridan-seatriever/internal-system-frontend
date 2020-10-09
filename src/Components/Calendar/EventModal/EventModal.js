@@ -10,18 +10,18 @@ import AddList from '../../AddList';
 import {validateDates, validateMilestone, validateTeamMembers, validateTime, validateTitle} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
 
-function EventModal(props) {
-  const [usersInput, setUsersInput] = useState([]);
+function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
+  const [assignedTo, setAssignedTo] = useState([]);
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
 
   useEffect(() => {
-    setUsersInput(props.users);
-  }, [props.users]);
+    setAssignedTo(users);
+  }, [users]);
 
   useEffect(() => {
-    setStartDateInput(props.modalStartDate);
-  }, [props.modalStartDate])
+    setStartDateInput(modalStartDate);
+  }, [modalStartDate])
 
   const [teamMembers, setTeamMembers] = useState([]);
   const [teamMembersError, setTeamMembersError] = useState('');
@@ -61,7 +61,7 @@ function EventModal(props) {
         const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
         event.project_id = res.data;
         closeModalResetState();
-        props.setEvents([...props.events, event]);
+        setEvents([...events, event]);
       } catch {
         setSubmitError('Error, could not create project');
       }
@@ -94,14 +94,14 @@ function EventModal(props) {
 
   //functions
   const closeModalResetState = () => {
-    props.closeModal();
+    closeModal();
     setTitle('');
     setStartDateInput(new Date());
     setEndDateInput(new Date());
     setMilestoneInput('');
     setMilestones([]);
     setTeamMembers([]);
-    setUsersInput(props.users);
+    setAssignedTo(users);
     setStartTimeInput({hour: 9, minute: '00', period: 'AM'})
     setEndTimeInput({hour: 5, minute: '00', period: 'PM'})
     setTitleError('');
@@ -111,17 +111,18 @@ function EventModal(props) {
     setSubmitError('');
   }
 
-  const mapUsersInput = () => {
-    if(usersInput) {
-      return usersInput.map(user=>{
+  const mapassignedTo = () => {
+    if(assignedTo) {
+      return assignedTo.map(user=>{
         return (
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{user.user_name}</div>
             <button className={styles.button + ' add'} type="button" onClick={()=>{
               setTeamMembersError('');
               setTeamMembers([...teamMembers, user]);
-              const index = usersInput.indexOf(user);
-              setUsersInput([...usersInput.slice(0,index), ...usersInput.slice(index+1,usersInput.length)]);
+              const index = assignedTo.indexOf(user);
+              console.log(index)
+              setAssignedTo([...assignedTo.slice(0,index), ...assignedTo.slice(index+1,assignedTo.length)]);
           }}>+</button>
           </div>
         )
@@ -136,7 +137,7 @@ function EventModal(props) {
           <div key={nextId()} className={styles.user_container}>
             <div className={styles.user}>{member.user_name}</div>
             <button className={styles.button + ' remove'} type="button" onClick={()=>{
-              setUsersInput([...usersInput, member]);
+              setAssignedTo([...assignedTo, member]);
               const index = teamMembers.indexOf(member);
               setTeamMembers([...teamMembers.slice(0,index), ...teamMembers.slice(index+1, teamMembers.length)])
           }}>&#10005;</button>
@@ -164,8 +165,8 @@ function EventModal(props) {
 
 
   return (
-    <Modal callback={closeModalResetState} open={props.modalOpen}>
-      {props.children}
+    <Modal callback={closeModalResetState} open={modalOpen}>
+      {children}
       <h3 className={styles.modal_header}>Add new project</h3>
       <form onSubmit={e=>submit(e)} className={styles.inner}>
         <div className={styles.input_group}>
@@ -193,15 +194,12 @@ function EventModal(props) {
         <div className={'acf-field acf-input top-space-10'}>
           <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
           {
-            !props.users&&!props.fetchUsersError?
+            !users&&!fetchUsersError?
             <div>loading</div>:
-            <div className={styles.team_members_container}>
-              <div className={styles.team_members}>{mapUsersInput()}</div>
-              <div className={styles.team_members}>{mapTeamMembers()}</div>
-            </div>
+            <AddList data={users} selectedData={['hello', 'hello', 'hello']} setSelectedData={setAssignedTo} />
           }
         </div>
-        <div className="error">{props.fetchUsersError}</div>
+        <div className="error">{fetchUsersError}</div>
         <div className="error">{teamMembersError}</div>
         <div className={'acf-field acf-input top-space-10'}>
           <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>

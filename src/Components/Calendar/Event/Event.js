@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import styles from './Event.module.css';
 
 const Event = ({id, title, colspan, setSidebarOpen, setCurrentEventID}) => {

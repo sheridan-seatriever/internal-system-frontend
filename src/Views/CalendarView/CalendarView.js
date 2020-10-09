@@ -10,12 +10,10 @@ const CalendarView = () => {
   const [events, setEvents] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartDate, setModalStartDate] = useState();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [users, setUsers] = useState(null);
   const [fetchUsersError, setFetchUsersError] = useState('');
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [currentEventID, setCurrentEventID] = useState('');
-  console.log(events);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -38,7 +36,6 @@ const CalendarView = () => {
         month={month}
         setModalOpen={setModalOpen}
         setModalStartDate={setModalStartDate}
-        setSidebarOpen={setSidebarOpen}
         events={events} 
         setEvents={setEvents} 
         setCurrentEventID={setCurrentEventID}

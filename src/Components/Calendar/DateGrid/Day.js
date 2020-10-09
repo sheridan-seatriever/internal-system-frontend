@@ -1,5 +1,4 @@
 import React from 'react';
-import nextId from "react-id-generator";
 import styles from './DateGrid.module.css';
 
 const Day = ({notCurrentMonth, currentDay, onClick}) => {
@@ -11,7 +10,7 @@ const Day = ({notCurrentMonth, currentDay, onClick}) => {
   }
 
   return (
-    <div className={`${styles.day} ${notCurrentMonth&&styles.not_current_month} ${currentDay&&styles.current_day}`} key={nextId()} onClick={handleClick}/>
+    <div className={`${styles.day} ${notCurrentMonth&&styles.not_current_month} ${currentDay&&styles.current_day}`} onClick={handleClick}/>
   )
 }
 
