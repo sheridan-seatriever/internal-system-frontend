@@ -68,10 +68,16 @@
     background-color: rgb(120, 26, 26);
     border: solid 1px rgb(162, 23, 23);
     padding: 10px;
-    margin-top: 10px;
 }
 
 .titleError {
     margin-left: 10px;
 }
 
+.no_wrap {
+  white-space: nowrap;
+}
+
+.form_element {
+  margin: 5px 0;
+}

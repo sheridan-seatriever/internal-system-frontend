@@ -10,7 +10,7 @@ const CalendarView = () => {
   const [events, setEvents] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartDate, setModalStartDate] = useState();
-  const [users, setUsers] = useState(null);
+  const [users, setUsers] = useState([]);
   const [fetchUsersError, setFetchUsersError] = useState('');
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [currentEventID, setCurrentEventID] = useState('');

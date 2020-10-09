@@ -102,8 +102,8 @@
 .input_group {
   display: flex;
   align-items: center;
-  margin-top: 6px;
 }
+
 .input_group input {
   margin: 0;
   flex-grow: 1;

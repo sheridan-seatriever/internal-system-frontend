@@ -55,7 +55,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
           <div>loading</div>:
           <>
             <div className={styles.input_group_inner}>
-              <SearchInput id="users_datalist" data={users}/>
+              <SearchInput data={users} placeholder="Add users"/>
             </div>
           </>
         }

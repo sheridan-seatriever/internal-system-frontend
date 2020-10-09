@@ -7,7 +7,8 @@ import Modal from '../../Modal';
 import DatePicker from 'react-datepicker';
 import TimePicker from '../../TimePicker/TimePicker';
 import AddList from '../../AddList';
-import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateMilestoneInput} from './validate';
+import SearchInput from '../../SearchInput';
+import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateMilestoneInput, validateProjectManager} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
 
 function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
@@ -18,16 +19,18 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     setStartDateInput(modalStartDate);
   }, [modalStartDate])
 
-  const [assignedTo, setAssignedTo] = useState([]);
-  const [assignedToError, setAssignedToError] = useState('');
-  const [milestones, setMilestones] = useState([]);
-  const [milestoneError, setMilestoneError] = useState('');
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
+  const [projectManager, setProjectManager] = useState('');
+  const [projectManagerError, setProjectManagerError] = useState('');
   const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
   const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
   const [timeError, setTimeError] = useState('');
+  const [assignedTo, setAssignedTo] = useState([]);
+  const [assignedToError, setAssignedToError] = useState('');
+  const [milestones, setMilestones] = useState([]);
+  const [milestoneError, setMilestoneError] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
@@ -44,7 +47,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         endDateInput.setHours(endDateInput.getHours() + offset);
       //-----------------------
       const members = users.filter(user=>assignedTo.indexOf(user.user_name)!==-1);
-
       const event = {
         project_title: title,
         milestones,
@@ -52,46 +54,34 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         project_start_date: moment(startDateInput).format('YYYYMMDD'),
         project_end_date: moment(endDateInput).format('YYYYMMDD')
       }
-
-      console.log(event)
-
-      // try {
-      //   const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
-      //   event.project_id = res.data;
-      //   closeModalResetState();
-      //   setEvents([...events, event]);
-      // } catch {
-      //   setSubmitError('Error, could not create project');
-      // }
+      try {
+        const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
+        event.project_id = res.data;
+        closeModalResetState();
+        setEvents([...events, event]);
+      } catch {
+        setSubmitError('Error, could not create project');
+      }
       setLoadingSubmit(false);
     }
   }
 
   const validateSubmit = () => {
     let valid = true;
-    setTitleError('');
-    setAssignedToError('');
-    setDateError('');
-    if(!validateTitle(title, setTitleError)) {
-      valid = false;
-    }
-    if(!validateAssignedTo(assignedTo, setAssignedToError)) {
-      valid = false;
-    }
-    if(!validateDates(startDateInput, endDateInput, setDateError)) {
-      valid = false;
-    }
-    if(!validateTime(startTimeInput, setTimeError)) {
-      valid = false;
-    } else if(!validateTime(endTimeInput, setTimeError)) {
-      valid = false;
-    }
+    if(!validateTitle(title, setTitleError)) valid = false;
+    if(!validateProjectManager(projectManager, setProjectManagerError)) valid = false;
+    if(!validateAssignedTo(assignedTo, setAssignedToError)) valid = false;
+    if(!validateDates(startDateInput, endDateInput, setDateError)) valid = false;
+    if(!validateTime(startTimeInput, setTimeError)) valid = false; 
+    if(!validateTime(endTimeInput, setTimeError)) valid = false;
     return valid;
   }
 
   const closeModalResetState = () => {
     closeModal();
     setTitle('');
+    setProjectManager('');
+    setProjectManagerError('');
     setStartDateInput(new Date());
     setEndDateInput(new Date());
     setMilestones([]);
@@ -110,20 +100,24 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
       {children}
       <h3 className={styles.modal_header}>Add new project</h3>
       <form onSubmit={e=>submit(e)} className={styles.inner}>
-        <div className={styles.input_group}>
+        <div className={`${styles.input_group} ${'form_element'}`}>
           <input value={title} onChange={e=>{
             setTitle(e.target.value);
             setTitleError('');
         }} placeholder="Enter the Project Title"></input>
-          <div className={'error titleError'}>{titleError}</div>
+          <div className={'error titleError no_wrap'}>{titleError}</div>
         </div>
-        <div className={styles.input_group}>
+        <div className={`${styles.input_group} ${'form_element'}`}>
+          <SearchInput data={users.map(user=>user.user_name)} placeholder="Add project manager" input={projectManager} setInput={setProjectManager} setError={setProjectManagerError} />
+          <div className={'error titleError no_wrap'}>{projectManagerError}</div>
+        </div>
+        <div className={`${styles.input_group} ${'form_element'}`}>
           <label className={styles.label}>Start:</label>
           <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
           <label className={styles.time_label}>At:</label>
           <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
         </div>
-        <div className={styles.input_group}>
+        <div className={`${styles.input_group} ${'form_element'}`}>
           <label className={styles.label}>End:&nbsp;&nbsp;</label>
           <DatePicker selected={endDateInput} onChange={date=>{setEndDateInput(date); setDateError('')}}/>
           <label className={styles.time_label}>At:</label>
@@ -131,20 +125,22 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         </div>
         <div className="error">{dateError}</div>
         <div className="error">{timeError}</div>
-
-        <div className={'acf-field acf-input top-space-10'}>
+        
+        <div className={'acf-field acf-input form_element'}>
           <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
           {
             !users&&!fetchUsersError?
             <div>loading</div>:
-            <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo} validate={input=>validateAssignedToInput(input, setAssignedToError, users.map(user=>user.user_name))}/>
+            <>
+              <AddList data={users.map(user=>user.user_name)} placeholder="Add user" selectedData={assignedTo} setSelectedData={setAssignedTo} setError={setAssignedToError} validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users.map(user=>user.user_name))}/>
+              <div className="error">{fetchUsersError}</div>
+              <div className="error">{assignedToError}</div>
+            </>
           }
         </div>
-        <div className="error">{fetchUsersError}</div>
-        <div className="error">{assignedToError}</div>
-        <div className={'acf-field acf-input top-space-10'}>
+        <div className={'acf-field acf-input form_element'}>
           <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
-          <AddList data={null} selectedData={milestones} setSelectedData={setMilestones} validate={input=>validateMilestoneInput(input, setMilestoneError)}/>
+          <AddList data={null} placeholder={"Add milestone"} selectedData={milestones} setSelectedData={setMilestones} setError={setMilestoneError} validate={input=>validateMilestoneInput(input, setMilestoneError)}/>
           <div className="error">{milestoneError}</div>
         </div>
         <div className={styles.button_group}>

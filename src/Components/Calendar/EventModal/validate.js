@@ -16,6 +16,7 @@
   }
 
   export const validateDates = (startDate, endDate, setDateError) => {
+    setDateError('');
     if(!startDate||!endDate) {
       setDateError('Please enter a valid start and end date');
       return false;
@@ -24,14 +25,16 @@
   }
 
   export const validateAssignedTo = (assignedTo, setAssignedToError) => {
+    setAssignedToError('');
     if(assignedTo.length<1) {
-      setAssignedToError('Please select at least one project member');
+      setAssignedToError('Please select at least one member');
       return false;
     }
     return true;
   }
 
   export const validateTitle = (title, setTitleError) => {
+    setTitleError('');
     if(title.length < 1) {
       setTitleError('Please enter a project title');
       return false;
@@ -42,12 +45,15 @@
     return true;
   }
 
-  export const validateAssignedToInput = (assignedToInput, setAssignedToError, data) => {
+  export const validateAssignedToInput = (assignedToInput, assignedTo, setAssignedToError, data) => {
     setAssignedToError('');
     if(!assignedToInput) {
       return false
-    } else if (data.indexOf(assignedToInput)===-1) {
+    } else if(data.indexOf(assignedToInput)===-1) {
       setAssignedToError("Could not find user: " + assignedToInput);
+      return false;
+    } else if(assignedTo.indexOf(assignedToInput)!==-1) {
+      setAssignedToError(`User "${assignedTo}" already selected`);
       return false;
     }
     return true;
@@ -57,9 +63,18 @@
     setMilestoneError('');
     if(!milestoneInput){
       return false;
-    } else if(milestoneInput.length > 100) {
-      setMilestoneError('Must be 100 characters or less');
+    } else if(milestoneInput.length > 300) {
+      setMilestoneError('Must be 300 characters or less');
       return false
+    }
+    return true;
+  }
+
+  export const validateProjectManager = (projectManager, setProjectManagerError) => {
+    setProjectManagerError('');
+    if(!projectManager) {
+      setProjectManagerError('Please enter a project manager');
+      return false;
     }
     return true;
   }
