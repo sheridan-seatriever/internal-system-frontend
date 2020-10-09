@@ -66,7 +66,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
       {
         loadingUsers? 
         <div>loading</div>:
-        <div className={styles.input_group_inner}>
+        <div className={`${'acf-field acf-input'} ${styles.input_group_inner}`}>
           <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo}/>
         </div>
       }
