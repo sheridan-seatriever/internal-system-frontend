@@ -10,6 +10,7 @@ import SearchInput from '../../SearchInput';
 import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateMilestoneInput, validateProjectManager} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
 import {cloneDeep} from 'lodash';
+import to24Hour from './to24Hour';
 
 function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
   const [startDateInput, setStartDateInput] = useState(new Date());
@@ -25,8 +26,8 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const [projectManager, setProjectManager] = useState('');
   const [projectManagerError, setProjectManagerError] = useState('');
   const [dateError, setDateError] = useState('');
-  const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
-  const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
+  const [startTimeInput, setStartTimeInput] = useState({hour: '9', minute: '00', period: 'AM'});
+  const [endTimeInput, setEndTimeInput] = useState({hour: '5', minute: '00', period: 'PM'});
   const [timeError, setTimeError] = useState('');
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
@@ -52,18 +53,19 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         endDateInput.setHours(endDateInput.getHours() + offset);
       //-----------------------
       const project_assigned_to = users.filter(user=>assignedTo.indexOf(user.user_name)!==-1);
+      const start_time = to24Hour(startTimeInput);
+      const end_time = to24Hour(endTimeInput);
       let event = {
         project_title: title,
         project_manager: projectManager,
-        project_start_date: moment(startDateInput).format('YYYYMMDD'),
-        project_end_date: moment(endDateInput).format('YYYYMMDD'),
+        project_start_date: moment(startDateInput).format('YYYY-MM-DD ' + start_time),
+        project_end_date: moment(endDateInput).format('YYYY-MM-DD ' + end_time),
         project_description: description,
         project_assigned_to,
         project_milestones: milestones,
       }
       try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
-        console.log(res)
         event.project_id = res.data;
         let newEvents = cloneDeep(events);
         newEvents.push(event);
