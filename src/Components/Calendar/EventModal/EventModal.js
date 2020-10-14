@@ -27,6 +27,8 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const [startTimeInput, setStartTimeInput] = useState({hour: 9, minute: '00', period: 'AM'});
   const [endTimeInput, setEndTimeInput] = useState({hour: 5, minute: '00', period: 'PM'});
   const [timeError, setTimeError] = useState('');
+  const [description, setDescription] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
   const [assignedTo, setAssignedTo] = useState([]);
   const [assignedToError, setAssignedToError] = useState('');
   const [milestones, setMilestones] = useState([]);
@@ -46,17 +48,20 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         offset = Math.abs(offset / 60);
         endDateInput.setHours(endDateInput.getHours() + offset);
       //-----------------------
-      const members = users.filter(user=>assignedTo.indexOf(user.user_name)!==-1);
-      const event = {
+      const project_assigned_to = users.filter(user=>assignedTo.indexOf(user.user_name)!==-1);
+      let event = {
         project_title: title,
-        milestones,
-        members,
+        project_manager: projectManager,
         project_start_date: moment(startDateInput).format('YYYYMMDD'),
-        project_end_date: moment(endDateInput).format('YYYYMMDD')
+        project_end_date: moment(endDateInput).format('YYYYMMDD'),
+        project_description: description,
+        project_assigned_to,
+        project_milestones: milestones,
       }
       try {
-        const res = await axios.post('http://system.seatriever.com/wp-json/system-api/v1/create_studio_project', event);
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
         event.project_id = res.data;
+        console.log(res.data)
         closeModalResetState();
         setEvents([...events, event]);
       } catch {
@@ -80,18 +85,21 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const closeModalResetState = () => {
     closeModal();
     setTitle('');
+    setTitleError('');
     setProjectManager('');
     setProjectManagerError('');
     setStartDateInput(new Date());
     setEndDateInput(new Date());
+    setDateError('');
+    setDescription('');
+    setDescriptionError('');
     setMilestones([]);
     setMilestoneError('');
     setAssignedTo([]);
     setAssignedToError('');
     setStartTimeInput({hour: 9, minute: '00', period: 'AM'})
     setEndTimeInput({hour: 5, minute: '00', period: 'PM'})
-    setTitleError('');
-    setDateError('');
+    setTimeError('');
     setSubmitError('');
   }
 
@@ -101,7 +109,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
       <h3 className={styles.modal_header}>Add new project</h3>
       <form onSubmit={e=>submit(e)} className={styles.inner}>
         <div className={`${styles.input_group} ${'form_element'}`}>
-          <input value={title} onChange={e=>{
+          <input className={styles.input} value={title} onChange={e=>{
             setTitle(e.target.value);
             setTitleError('');
         }} placeholder="Enter the Project Title"></input>
@@ -125,24 +133,28 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         </div>
         <div className="error">{dateError}</div>
         <div className="error">{timeError}</div>
-        
-        <div className={'acf-field acf-input form_element'}>
-          <div className={'acf-label'}><label className={styles.label}>Assign To:</label></div>
+        <div  className={'form_element label_group'}>
+          <label className={styles.label}>Description:</label>
+          <textarea className={styles.text_area} value={description} onChange={e=>setDescription(e.target.value)} />
+          <div className={'error titleError no_wrap'}>{descriptionError}</div>
+        </div>
+        <div className={'form_element label_group'}>
+        <label className={`${styles.label} ${'acf-label'}`}>Assign To:</label>
           {
             !users&&!fetchUsersError?
             <div>loading</div>:
             <>
               <AddList data={users.map(user=>user.user_name)} placeholder="Add user" selectedData={assignedTo} setSelectedData={setAssignedTo} setError={setAssignedToError} validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users.map(user=>user.user_name))}/>
-              <div className="error">{fetchUsersError}</div>
-              <div className="error">{assignedToError}</div>
             </>
           }
         </div>
-        <div className={'acf-field acf-input form_element'}>
-          <div className={'acf-label'}><label className={styles.label}>Project Milestones</label></div>
+        <div className="error">{fetchUsersError}</div>
+        <div className="error">{assignedToError}</div>
+        <div className={'form_element label_group'}>
+        <label className={`${styles.label} ${'acf-label'}`}>Project Milestones:</label>
           <AddList data={null} placeholder={"Add milestone"} selectedData={milestones} setSelectedData={setMilestones} setError={setMilestoneError} validate={input=>validateMilestoneInput(input, setMilestoneError)}/>
-          <div className="error">{milestoneError}</div>
         </div>
+        <div className="error">{milestoneError}</div>
         <div className={styles.button_group}>
           <button className={styles.button} type="submit">{loadingSubmit?'loading':'Submit'}</button>
           <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>

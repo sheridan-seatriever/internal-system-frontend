@@ -18,7 +18,8 @@
 
 .cancel {
   margin: 0;
-  margin-left: 4px;
+  width: 100px;
+  margin-left: auto;
   color: #777 !important;
   border-color: #777 !important;
 }
@@ -28,6 +29,10 @@
   margin-left: 4px;
   border-color: #af3535 !important;
   color: #af3535 !important;
+}
+
+.button_primary {
+  margin: 0;
 }
 
 .button_group {
@@ -43,7 +48,7 @@
 }
 
 .input_group_inner {
-  width: 80%;
+  padding-bottom: 0;
 }
 
 .input {

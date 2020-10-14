@@ -13,7 +13,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
         return (
           <div key={nextId()} className={styles.row}>
             <div>{item}</div>
-            <button type="button" className={styles.remove} onClick={item=>remove(item)}>-</button>
+            <button type="button" className={`${'remove'} ${styles.button}`} onClick={item=>remove(item)}>-</button>
           </div>
         )
       })
@@ -21,7 +21,6 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
   }
 
   const add = () => {
-    console.log(input)
     if(validate(input)) {
       setSelectedData([...selectedData, input]);
       setInput('');
@@ -36,7 +35,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
 
 
   return (
-    <div className={styles.inner}>
+    <div className={`${'acf-field acf-input'} ${styles.inner}`}>
       <div className={styles.team_members_container}>
         {mapSelectedData(selectedData)}
       </div>

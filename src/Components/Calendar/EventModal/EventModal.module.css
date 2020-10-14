@@ -10,7 +10,7 @@
 }
 
 .inner {
-  width: 600px;
+  width: 800px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -104,11 +104,6 @@
   align-items: center;
 }
 
-.input_group input {
-  margin: 0;
-  flex-grow: 1;
-}
-.input_group label {
-  margin: 0;
-  margin-right: 6px;
+.input { 
+  width: 100%;
 }

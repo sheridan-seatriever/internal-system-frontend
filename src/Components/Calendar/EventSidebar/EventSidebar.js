@@ -24,7 +24,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
   const deleteProject = async () => {
     setLoading(true);
     try {
-      await axios.delete(`http://system.seatriever.com/wp-json/system-api/v1/delete_studio_project?project_id=${currentEvent.project_id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}projects?project_id=${currentEvent.project_id}`);
       let updatedEvents = [...events];
       updatedEvents.splice(events.indexOf(currentEvent));
       setEvents(updatedEvents);
@@ -37,44 +37,37 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
 
   return (
     <div className={`${styles.container} ${currentEventID&&styles.open}`}>
-      <div className={styles.input_group}>
-        <label>Project Title</label>
-        <div className={styles.input_group_inner}>
-          <input className={styles.input} value={title} onChange={e=>setTitle(e.target.value)}/>
-        </div>
+      <div className={styles.button_group}>
+        <button type="button" className={`${styles.cancel}`} onClick={()=>setCurrentEventID('')}>CANCEL</button>
       </div>
-      <div className={styles.input_group}>
-        <label>Project Description</label>
-        <div className={styles.input_group_inner}>
-          <textarea className={`${styles.input} ${styles.input_large}`} value={description} onChange={e=>setDescription(e.target.value)}></textarea>
-        </div>
+      <div className={'form_element label_group'}>
+        <label>Project Title:</label>
+        <input className={styles.input} value={title} onChange={e=>setTitle(e.target.value)}/>
       </div>
-      <div className={styles.input_group}>
-        <label>Project Manager</label>
+      <div className={'form_element label_group'}>
+        <label>Project Description:</label>
+        <textarea className={`${styles.input} ${styles.input_large}`} value={description} onChange={e=>setDescription(e.target.value)}></textarea>
+      </div>
+      <div className={'form_element label_group'}>
+        <label>Project Manager:</label>
         {loadingUsers?
           <div>loading</div>:
-          <>
-            <div className={styles.input_group_inner}>
-              <SearchInput data={users} placeholder="Add users"/>
-            </div>
-          </>
+          <SearchInput data={users} placeholder="Add users"/>
         }
       </div>
       <div className="error">{fetchUsersError}</div>
-      <div className={styles.input_group}>
-      <label>Assigned To</label>
+      <div className={'form_element label_group'}>
+      <label>Assigned To:</label>
       {
         loadingUsers? 
         <div>loading</div>:
-        <div className={`${'acf-field acf-input'} ${styles.input_group_inner}`}>
-          <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo}/>
-        </div>
+        <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo}/>
       }
       </div>
       <div className="error">{fetchUsersError}</div>
       <div className={styles.button_group}>
-        <button type="button" className={`${styles.cancel}`} onClick={()=>setCurrentEventID('')}>CANCEL</button>
         <button type="button" className={`${styles.delete}`} onClick={deleteProject}>DELETE PROJECT</button>
+        <button type="button" className={`${'button-primary'} ${styles.button_primary}`} onClick={deleteProject}>UPDATE PROJECT</button>
       </div>
     </div>
   )

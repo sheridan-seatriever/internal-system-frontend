@@ -52,8 +52,9 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
     endDate = moment(endDate).format('YYYYMMDD');
     //get dates starting from first monday and ending on last additional day
     const fetchData = async () => {
-      const events = (await axios.get(`http://system.seatriever.com/wp-json/system-api/v1/studio_projects?startDate=${startDate}&endDate=${endDate}`)).data;
+      const events = (await axios.get(`${process.env.REACT_APP_API_URL}projects_between?start_date=${startDate}&end_date=${endDate}`)).data;
       setEvents(events);
+      console.log(events)
     }
     fetchData();
   }, [year, month])
