@@ -15,6 +15,8 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
 
+  console.log(users)
+
   useEffect(() => {
     setStartDateInput(modalStartDate);
   }, [modalStartDate])
@@ -29,8 +31,10 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const [timeError, setTimeError] = useState('');
   const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const [assignedToInput, setAssignedToInput] = useState('');
   const [assignedTo, setAssignedTo] = useState([]);
   const [assignedToError, setAssignedToError] = useState('');
+  const [milestoneInput, setMilestoneInput] = useState('');
   const [milestones, setMilestones] = useState([]);
   const [milestoneError, setMilestoneError] = useState('');
   const [submitError, setSubmitError] = useState('');
@@ -73,7 +77,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const validateSubmit = () => {
     let valid = true;
     if(!validateTitle(title, setTitleError)) valid = false;
-    if(!validateProjectManager(projectManager, setProjectManagerError)) valid = false;
+    if(!validateProjectManager(projectManager, setProjectManagerError, users)) valid = false;
     if(!validateAssignedTo(assignedTo, setAssignedToError)) valid = false;
     if(!validateDates(startDateInput, endDateInput, setDateError)) valid = false;
     if(!validateTime(startTimeInput, setTimeError)) valid = false; 
@@ -92,8 +96,10 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     setDateError('');
     setDescription('');
     setDescriptionError('');
+    setMilestoneInput('');
     setMilestones([]);
     setMilestoneError('');
+    setAssignedToInput('');
     setAssignedTo([]);
     setAssignedToError('');
     setStartTimeInput({hour: 9, minute: '00', period: 'AM'})
@@ -143,7 +149,16 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
             !users&&!fetchUsersError?
             <div>loading</div>:
             <>
-              <AddList data={users.map(user=>user.user_name)} placeholder="Add user" selectedData={assignedTo} setSelectedData={setAssignedTo} setError={setAssignedToError} validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users.map(user=>user.user_name))}/>
+              <AddList 
+                data={users.map(user=>user.user_name)} 
+                placeholder="Add user" 
+                selectedData={assignedTo} 
+                setSelectedData={setAssignedTo} 
+                setError={setAssignedToError} 
+                validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users.map(user=>user.user_name))}
+                input={assignedToInput}
+                setInput={setAssignedToInput}
+              />
             </>
           }
         </div>
@@ -151,7 +166,16 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         <div className="error">{assignedToError}</div>
         <div className={'form_element label_group'}>
         <label className={`${styles.label} ${'acf-label'}`}>Project Milestones:</label>
-          <AddList data={null} placeholder={"Add milestone"} selectedData={milestones} setSelectedData={setMilestones} setError={setMilestoneError} validate={input=>validateMilestoneInput(input, setMilestoneError)}/>
+          <AddList 
+            data={null}
+            placeholder={"Add milestone"} 
+            selectedData={milestones} 
+            setSelectedData={setMilestones} 
+            setError={setMilestoneError} 
+            validate={input=>validateMilestoneInput(input, setMilestoneError)}
+            input={milestoneInput}
+            setInput={setMilestoneInput}
+          />
         </div>
         <div className="error">{milestoneError}</div>
         <div className={styles.button_group}>

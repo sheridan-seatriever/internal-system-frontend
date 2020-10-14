@@ -17,14 +17,14 @@ const CalendarView = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const users = (await axios.get(`${process.env.REACT_APP_API_URL}users_all`)).data;
-      if(users&&Array.isArray(users)) {
+      try {
+        const users = (await axios.get(`${process.env.REACT_APP_API_URL}users_all`)).data;
         setUsers(users);
-        setLoadingUsers(false);
-      } else {
-        setFetchUsersError('Error, could not find users');
-        setLoadingUsers(false);
       }
+      catch(err) {
+        setFetchUsersError('Error, could not find users');
+      }
+      setLoadingUsers(false);
     }
     fetchUsers();
   }, [])

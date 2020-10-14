@@ -1,11 +1,10 @@
-import React,{useState} from 'react';
+import React,{} from 'react';
 import styles from './AddList.module.css';
 import nextId from 'react-id-generator';
 import SearchInput from '../SearchInput';
 
-const AddList = ({data, placeholder, selectedData, setSelectedData, validate, setError}) => {
+const AddList = ({data, placeholder, selectedData, setSelectedData, validate, setError, input, setInput}) => {
 
-  const [input, setInput] = useState('');
 
   const mapSelectedData = selectedData => {
     if(selectedData&&Array.isArray(selectedData)) {
@@ -17,6 +16,15 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
           </div>
         )
       })
+    }
+  }
+
+  const addEnter = e => {
+    if(e.key === 'Enter') {
+      if(input) {
+        e.preventDefault();
+        add();
+      }
     }
   }
 
@@ -41,8 +49,8 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
       </div>
       <div className={styles.input_group}>
         {data?
-          <SearchInput placeholder={placeholder} data={data} input={input} setInput={setInput} setError={setError}/>:
-          <input placeholder={placeholder} className={styles.input} input={input} value={input} onChange={e=>{setInput(e.target.value); setError('')}} />
+          <SearchInput placeholder={placeholder} data={data} input={input} setInput={setInput} setError={setError} onKeyPress={e=>addEnter(e)}/>:
+          <input placeholder={placeholder} className={styles.input} input={input} value={input} onChange={e=>{setInput(e.target.value); setError('')}} onKeyPress={e=>addEnter(e)}/>
         }
         <button type="button" className={`${'acf-button button button-primary add'} ${styles.button}`} onClick={add}>+</button>
       </div>

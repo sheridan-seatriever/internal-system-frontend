@@ -1,7 +1,6 @@
 const eventTableGenerator = (eventData) => {
   if(eventData) {
 
-    console.log('eventData: ', eventData)
 
     const tableRowArray = [];
 

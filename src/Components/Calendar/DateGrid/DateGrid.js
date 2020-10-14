@@ -114,7 +114,6 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
   let dateRows = [];
   for(let i=0;i<rows;i++) {
     const eventTable = generateEventPositions(eventRangeWeeks[i]);
-    console.log('eventTable: ',eventTable);
     dateRows.push(containerTableGenerator(eventTable, datesInEachWeek[i], dayRangeWeeks[i], setCurrentEventID));
   }
 

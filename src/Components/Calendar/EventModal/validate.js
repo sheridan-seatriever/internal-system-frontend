@@ -45,11 +45,12 @@
     return true;
   }
 
-  export const validateAssignedToInput = (assignedToInput, assignedTo, setAssignedToError, data) => {
+  export const validateAssignedToInput = (assignedToInput, assignedTo, setAssignedToError, users) => {
     setAssignedToError('');
+    const userNames = users.map(user=>user.user_name);
     if(!assignedToInput) {
       return false
-    } else if(data.indexOf(assignedToInput)===-1) {
+    } else if(userNames.indexOf(assignedToInput)===-1) {
       setAssignedToError("Could not find user: " + assignedToInput);
       return false;
     } else if(assignedTo.indexOf(assignedToInput)!==-1) {
@@ -70,10 +71,14 @@
     return true;
   }
 
-  export const validateProjectManager = (projectManager, setProjectManagerError) => {
+  export const validateProjectManager = (projectManager, setProjectManagerError, users) => {
     setProjectManagerError('');
+    const userNames = users.map(user=>user.user_name);
     if(!projectManager) {
       setProjectManagerError('Please enter a project manager');
+      return false;
+    } else if(userNames.indexOf(projectManager)===-1) {
+      setProjectManagerError("Could not find user: " + projectManager);
       return false;
     }
     return true;

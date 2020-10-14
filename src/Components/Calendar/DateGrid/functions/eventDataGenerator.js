@@ -1,7 +1,6 @@
 import {cloneDeep} from 'lodash';
 
 const eventDataGenerator = (year, month, datesInEachweek, events) => {
-  console.log('events: ', events)
   const eventRangeWeeks = [];
 
   datesInEachweek.map((week, index)=>{
@@ -20,7 +19,6 @@ const eventDataGenerator = (year, month, datesInEachweek, events) => {
     }
 
     events.map(event=>{
-      console.log('EVENT: ', event)
       const startDate = new Date(event.project_start_date);
       const endDate = new Date(event.project_end_date);
       if(!(
