@@ -2,10 +2,12 @@ import React from 'react';
 import styles from '../DateGrid.module.css';
 import nextId from "react-id-generator";
 import Event from '../../Event';
+import {cloneDeep} from 'lodash';
 
 const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEventID) => {
+    //generates a colspan for each Event and pushes empty td if no Event
     const htmlRowGenerator = row => {
-      let tempRow = [...row];
+      let tempRow = cloneDeep(row);
       const htmlRowArray = [];
       for(let i=0;i<7;i++){
         if(tempRow[0]) {
@@ -23,6 +25,7 @@ const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEven
       }
       return <tr key={nextId()} className={styles.width_max}>{htmlRowArray}</tr>;
     }
+    ////////////////////////////////////////////////
     const htmlTableArray = [];
     eventTable.map(row=>{
       htmlTableArray.push(htmlRowGenerator(row));

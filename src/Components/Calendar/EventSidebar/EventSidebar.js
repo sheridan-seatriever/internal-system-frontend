@@ -3,6 +3,7 @@ import styles from './EventSidebar.module.css';
 import axios from 'axios';
 import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
+import {cloneDeep} from 'lodash';
 
 const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError, loadingUsers, events, setEvents, currentEvent}) => {
 
@@ -25,7 +26,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
     setLoading(true);
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}projects?project_id=${currentEvent.project_id}`);
-      let updatedEvents = [...events];
+      let updatedEvents = cloneDeep(events);
       updatedEvents.splice(events.indexOf(currentEvent));
       setEvents(updatedEvents);
       setCurrentEventID('');

@@ -61,7 +61,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
       try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
         event.project_id = res.data;
-        console.log(res.data)
         closeModalResetState();
         setEvents([...events, event]);
       } catch {
