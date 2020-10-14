@@ -2,7 +2,6 @@ import React,{useState, useEffect} from 'react';
 import styles from './EventModal.module.css';
 import moment from 'moment';
 import axios from 'axios';
-import nextId from "react-id-generator";
 import Modal from '../../Modal';
 import DatePicker from 'react-datepicker';
 import TimePicker from '../../TimePicker/TimePicker';
@@ -10,15 +9,15 @@ import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateMilestoneInput, validateProjectManager} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
+import {cloneDeep} from 'lodash';
 
 function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
 
-  console.log(users)
-
   useEffect(() => {
     setStartDateInput(modalStartDate);
+    setEndTimeInput(modalStartDate);
   }, [modalStartDate])
 
   const [title, setTitle] = useState('');
@@ -64,9 +63,12 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
       }
       try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
+        console.log(res)
         event.project_id = res.data;
+        let newEvents = cloneDeep(events);
+        newEvents.push(event);
+        setEvents(newEvents);
         closeModalResetState();
-        setEvents([...events, event]);
       } catch {
         setSubmitError('Error, could not create project');
       }
@@ -155,7 +157,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
                 selectedData={assignedTo} 
                 setSelectedData={setAssignedTo} 
                 setError={setAssignedToError} 
-                validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users.map(user=>user.user_name))}
+                validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users)}
                 input={assignedToInput}
                 setInput={setAssignedToInput}
               />
