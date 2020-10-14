@@ -17,7 +17,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
 
   useEffect(() => {
     setStartDateInput(modalStartDate);
-    setEndTimeInput(modalStartDate);
+    setEndDateInput(modalStartDate);
   }, [modalStartDate])
 
   const [title, setTitle] = useState('');
