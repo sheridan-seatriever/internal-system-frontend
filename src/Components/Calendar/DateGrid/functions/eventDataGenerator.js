@@ -1,7 +1,9 @@
-const eventDataGenerator = (year, month, dateRangeWeeks, events) => {
+import {cloneDeep} from 'lodash';
+
+const eventDataGenerator = (year, month, datesInEachweek, events) => {
   const eventRangeWeeks = [];
 
-  dateRangeWeeks.map((week, index)=>{
+  datesInEachweek.map((week, index)=>{
     const eventDataWeek = [];
     let startRange = new Date(year, month, week[0]);
     let endRange = new Date(year, month, week[6]);
@@ -10,22 +12,21 @@ const eventDataGenerator = (year, month, dateRangeWeeks, events) => {
         startRange = new Date(year, month-1, week[0]);
       }
     }
-    if(index===dateRangeWeeks.length-1) {
+    if(index===datesInEachweek.length-1) {
       if(week[6]<7) {
         endRange = new Date(year, month+1, week[6]);
       }
     }
 
     events.map(event=>{
-      const startDate = new Date(event.project_start_date, parseInt(event.project_start_date), event.project_start_date);
-      const endDate = new Date(event.project_end_date, parseInt(event.project_end_date), event.project_end_date);
+      const startDate = new Date(event.project_start_date);
+      const endDate = new Date(event.project_end_date);
       if(!(
         (startDate.getTime()<startRange.getTime()&&endDate.getTime()<startRange.getTime())||
         (startDate.getTime()>endRange.getTime()&&endDate.getTime()>endRange.getTime())
       )) {
-        //add startInt and endInt
 
-        let newEvent = {...event};
+        let newEvent = cloneDeep(event);
         
         newEvent.startInt = null;
         newEvent.endInt = null;
@@ -44,6 +45,7 @@ const eventDataGenerator = (year, month, dateRangeWeeks, events) => {
     })
     eventRangeWeeks.push(eventDataWeek);
   })
+  console.log(eventRangeWeeks)
   return eventRangeWeeks;
 }
 
