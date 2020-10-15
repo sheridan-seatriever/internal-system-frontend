@@ -27,7 +27,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}projects?project_id=${currentEvent.project_id}`);
       let updatedEvents = cloneDeep(events);
-      updatedEvents.splice(events.indexOf(currentEvent));
+      updatedEvents = updatedEvents.filter(event=>event.project_id!==currentEventID);
       setEvents(updatedEvents);
       setCurrentEventID('');
     } catch(err) {

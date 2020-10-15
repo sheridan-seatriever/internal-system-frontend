@@ -12,6 +12,7 @@ import nextId from 'react-id-generator';
 
 
 function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEvents, setCurrentEventID}) {
+  console.log('events: ', events);
 
   const getDaysInMonth = () => {
     const date = new Date(year, month, 32).getDate();

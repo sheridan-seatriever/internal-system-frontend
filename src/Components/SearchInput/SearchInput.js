@@ -8,7 +8,7 @@ const SearchInput = ({data, input, setInput, placeholder, setError, onKeyPress})
 
   const mapData = data => {
     if(data && Array.isArray(data)) {
-      return data.map(item => <option key={nextId()} value={item} />);
+      return data.map(item => <option key={nextId()} value={item}/>);
     }
   }
 

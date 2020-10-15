@@ -75,7 +75,7 @@
     setProjectManagerError('');
     const userNames = users.map(user=>user.user_name);
     if(!projectManager) {
-      setProjectManagerError('Please enter a project manager');
+      setProjectManagerError('Please select a project manager');
       return false;
     } else if(userNames.indexOf(projectManager)===-1) {
       setProjectManagerError("Could not find user: " + projectManager);
