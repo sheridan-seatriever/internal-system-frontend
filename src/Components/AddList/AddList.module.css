@@ -6,9 +6,11 @@
   justify-content: space-between;
 }
 
-.team_members_container {
+.selected_data_container {
   min-height: 30px;
   max-height: 100px;
+  overflow-y: auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -30,6 +32,11 @@
 
 .text_area {
   width: 100%;
+}
+
+.selected_item {
+  max-width: 90%;
+  overflow: hidden;
 }
 
 .button {

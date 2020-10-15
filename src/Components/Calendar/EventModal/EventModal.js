@@ -131,13 +131,13 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
           <div className={'error titleError no_wrap'}>{projectManagerError}</div>
         </div>
         <div className={`${styles.input_group} ${'form_element'}`}>
-          <label className={styles.label}>Start:</label>
+          <label className={styles.date_label}>Start:</label>
           <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
           <label className={styles.time_label}>At:</label>
           <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
         </div>
         <div className={`${styles.input_group} ${'form_element'}`}>
-          <label className={styles.label}>End:&nbsp;&nbsp;</label>
+          <label className={styles.date_label}>End:</label>
           <DatePicker selected={endDateInput} onChange={date=>{setEndDateInput(date); setDateError('')}}/>
           <label className={styles.time_label}>At:</label>
           <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
@@ -145,16 +145,16 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         <div className="error">{dateError}</div>
         <div className="error">{timeError}</div>
         <div  className={'form_element label_group'}>
-          <label className={styles.label}>Description:</label>
-          <textarea className={styles.text_area} value={description} onChange={e=>setDescription(e.target.value)} />
+          <label className='label_group_label'>Description:</label>
+          <textarea className={`${styles.text_area} ${'label_group_content'}`} value={description} onChange={e=>setDescription(e.target.value)} />
           <div className={'error titleError no_wrap'}>{descriptionError}</div>
         </div>
         <div className={'form_element label_group'}>
-        <label className={`${styles.label} ${'acf-label'}`}>Assign To:</label>
+        <label className='acf-label label_group_label'>Assign To:</label>
           {
             !users&&!fetchUsersError?
             <div>loading</div>:
-            <>
+            <div className='label_group_content'>
               <AddList 
                 data={users.map(user=>user.user_name)} 
                 placeholder="Add user" 
@@ -165,23 +165,25 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
                 input={assignedToInput}
                 setInput={setAssignedToInput}
               />
-            </>
+            </div>
           }
         </div>
         <div className="error">{fetchUsersError}</div>
         <div className="error">{assignedToError}</div>
         <div className={'form_element label_group'}>
-        <label className={`${styles.label} ${'acf-label'}`}>Project Milestones:</label>
-          <AddList 
-            data={null}
-            placeholder={"Add milestone"} 
-            selectedData={milestones} 
-            setSelectedData={setMilestones} 
-            setError={setMilestoneError} 
-            validate={input=>validateMilestoneInput(input, setMilestoneError)}
-            input={milestoneInput}
-            setInput={setMilestoneInput}
-          />
+        <label className='acf-label label_group_label'>Project Milestones:</label>
+          <div className='label_group_content'>
+            <AddList 
+              data={null}
+              placeholder={"Add milestone"} 
+              selectedData={milestones} 
+              setSelectedData={setMilestones} 
+              setError={setMilestoneError} 
+              validate={input=>validateMilestoneInput(input, setMilestoneError)}
+              input={milestoneInput}
+              setInput={setMilestoneInput}
+            />
+          </div>
         </div>
         <div className="error">{milestoneError}</div>
         <div className={styles.button_group}>

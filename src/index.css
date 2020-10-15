@@ -89,7 +89,11 @@
   align-items: center;
   width: 100%;
 }
-.label_group label {
+.label_group_label {
   font-size: .8rem;
-  width: 25%;
+  flex-basis: 20%;
+}
+.label_group_content {
+  flex-basis: 80%;
+  overflow: hidden;
 }

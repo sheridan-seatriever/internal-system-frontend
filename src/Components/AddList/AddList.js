@@ -11,7 +11,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
       return selectedData.map(item => {
         return (
           <div key={nextId()} className={styles.row}>
-            <div>{item}</div>
+            <div className={styles.selected_item}>{item}</div>
             <button type="button" className={`${'remove'} ${styles.button}`} onClick={item=>remove(item)}>-</button>
           </div>
         )
@@ -45,7 +45,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
 
   return (
     <div className={`${'acf-field acf-input'} ${styles.inner}`}>
-      <div className={styles.team_members_container}>
+      <div className={styles.selected_data_container}>
         {mapSelectedData(selectedData)}
       </div>
       <div className={styles.input_group}>

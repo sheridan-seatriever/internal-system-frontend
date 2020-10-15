@@ -60,12 +60,14 @@
   align-self: flex-end;
 }
 
-.label {
-  margin-top: 6px;
-}
 .time_label {
-  margin-top: 6px;
   padding-left: 6px;
+  margin-right: 6px;
+}
+
+.date_label {
+  width: 44px;
+  margin-right: 6px;
 }
 
 .user {
@@ -105,5 +107,9 @@
 }
 
 .input { 
+  width: 100%;
+}
+
+.text_area {
   width: 100%;
 }
