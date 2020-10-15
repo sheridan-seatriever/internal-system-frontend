@@ -20,6 +20,9 @@
     if(!startDate||!endDate) {
       setDateError('Please enter a valid start and end date');
       return false;
+    } else if(startDate.getTime()>endDate.getTime()) {
+      setDateError('End date must come after start date');
+      return false;
     }
     return true;
   }

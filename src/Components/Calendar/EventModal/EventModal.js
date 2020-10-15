@@ -83,7 +83,9 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     if(!validateTitle(title, setTitleError)) valid = false;
     if(!validateProjectManager(projectManager, setProjectManagerError, users)) valid = false;
     if(!validateAssignedTo(assignedTo, setAssignedToError)) valid = false;
-    if(!validateDates(startDateInput, endDateInput, setDateError)) valid = false;
+    const startDate = new Date(moment(startDateInput).format('YYYY-MM-DD ' + to24Hour(startTimeInput)));
+    const endDate = new Date(moment(endDateInput).format('YYYY-MM-DD ' + to24Hour(endTimeInput)));
+    if(!validateDates(startDate, endDate, setDateError)) valid = false;
     if(!validateTime(startTimeInput, setTimeError)) valid = false; 
     if(!validateTime(endTimeInput, setTimeError)) valid = false;
     return valid;
