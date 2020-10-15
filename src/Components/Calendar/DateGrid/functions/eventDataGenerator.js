@@ -38,8 +38,9 @@ const eventDataGenerator = (year, month, datesInEachweek, events) => {
         if(endDate.getTime()>endRange.getTime()) {
           newEvent.endInt = 7;
         } else {
-          newEvent.endInt = week.indexOf(endDate.getDate()+1);
+          newEvent.endInt = week.indexOf(endDate.getDate()) + 1;
         }
+        console.log('event: ', newEvent)
         eventDataWeek.push(newEvent);
       }
     })
