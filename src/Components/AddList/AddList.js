@@ -37,6 +37,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
   
   const remove = item => {
     const newData = [...selectedData]
+    setError('');
     newData.splice(selectedData.indexOf(item));
     setSelectedData(newData);
   }
