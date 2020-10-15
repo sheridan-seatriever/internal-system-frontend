@@ -11,6 +11,7 @@ import {validateDates, validateAssignedTo, validateTime, validateTitle, validate
 import "react-datepicker/dist/react-datepicker.css";
 import {cloneDeep} from 'lodash';
 import to24Hour from './to24Hour';
+import Select from 'react-select';
 
 function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
   const [startDateInput, setStartDateInput] = useState(new Date());
@@ -23,7 +24,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
 
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
-  const [projectManager, setProjectManager] = useState('');
+  const [projectManager, setProjectManager] = useState('dddddddddd');
   const [projectManagerError, setProjectManagerError] = useState('');
   const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState({hour: '9', minute: '00', period: 'AM'});
@@ -92,6 +93,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   }
 
   const closeModalResetState = () => {
+    console.log('closing')
     closeModal();
     setTitle('');
     setTitleError('');
@@ -127,11 +129,14 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
           <div className={'error titleError no_wrap'}>{titleError}</div>
         </div>
         <div className={`${styles.input_group} ${'form_element'}`}>
-          <SearchInput data={users.map(user=>user.user_name)} placeholder="Add project manager" input={projectManager} setInput={setProjectManager} setError={setProjectManagerError} />
+          <div className={styles.input}>
+            <Select className="acf-field acf-input" placeholder="Select a project manager" options={users.map(user=>{return ({label: user.user_name, value: user.user_id})})} value={projectManager} onChange={()=>setProjectManager(projectManager)} />
+          </div>
           <div className={'error titleError no_wrap'}>{projectManagerError}</div>
         </div>
+
         <div className={`${styles.input_group} ${'form_element'}`}>
-          <label className={styles.date_label}>Start:</label>
+          <label className={styles.date_label}>{projectManager}</label>
           <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
           <label className={styles.time_label}>At:</label>
           <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
@@ -146,7 +151,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         <div className="error">{timeError}</div>
         <div  className={'form_element label_group'}>
           <label className='label_group_label'>Description:</label>
-          <textarea className={`${styles.text_area} ${'label_group_content'}`} value={description} onChange={e=>setDescription(e.target.value)} />
+          <textarea className={`${styles.input} ${'label_group_content'}`} value={description} onChange={e=>setDescription(e.target.value)} />
           <div className={'error titleError no_wrap'}>{descriptionError}</div>
         </div>
         <div className={'form_element label_group'}>

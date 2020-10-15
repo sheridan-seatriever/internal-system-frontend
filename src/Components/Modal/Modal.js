@@ -4,7 +4,7 @@ import useOutsideAlerter from './useOutsideAlerter';
 
 function Modal(props) {
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, props.callback);
+  useOutsideAlerter(wrapperRef, props.callback, props.open);
 
   return (
     <div>

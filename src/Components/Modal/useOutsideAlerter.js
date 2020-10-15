@@ -1,12 +1,12 @@
 import {useEffect} from 'react';
 
-function Modal(ref, callback) {
+function Modal(ref, callback, open) {
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (ref.current && !ref.current.contains(event.target) && open) {
         callback();
       }
     }

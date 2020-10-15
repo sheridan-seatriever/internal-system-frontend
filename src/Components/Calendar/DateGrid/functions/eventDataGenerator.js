@@ -40,7 +40,6 @@ const eventDataGenerator = (year, month, datesInEachweek, events) => {
         } else {
           newEvent.endInt = week.indexOf(endDate.getDate()) + 1;
         }
-        console.log('event: ', newEvent)
         eventDataWeek.push(newEvent);
       }
     })
