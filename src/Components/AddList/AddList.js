@@ -28,7 +28,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
     }
   }
 
-  const add = () => {
+  const add = input => {
     if(validate(input)) {
       setSelectedData([...selectedData, input]);
       setInput('');
@@ -42,7 +42,6 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
     setSelectedData(newData);
   }
 
-
   return (
     <div className={`${'acf-field acf-input'} ${styles.inner}`}>
       <div className={styles.selected_data_container}>
@@ -50,7 +49,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
       </div>
       <div className={styles.input_group}>
         {data?
-          <SearchInput data={data} input={input} setInput={setInput} placeholder={placeholder}/>:
+          <SearchInput data={data} input={input} setInput={setInput} placeholder={placeholder} selectCallback={add}/>:
           <input placeholder={placeholder} className={styles.input} input={input} value={input} onChange={e=>{setInput(e.target.value); setError('')}} onKeyPress={e=>addEnter(e)}/>
         }
         <button type="button" className={`${'acf-button button button-primary add'} ${styles.button}`} onClick={add}>+</button>

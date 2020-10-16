@@ -3,7 +3,7 @@ import styles from './SearchInput.module.css';
 import {cloneDeep} from 'lodash';
 import useOutsideAlerter from '../../Functions/useOutsideAlerter';
 
-const SearchInput = ({data, input, setInput, placeholder=''}) => {
+const SearchInput = ({data, input, setInput, placeholder='', selectCallback}) => {
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dropdown, setDropdown] = useState([]);
@@ -67,6 +67,9 @@ const SearchInput = ({data, input, setInput, placeholder=''}) => {
 
   const handleClick = index => {
     setInput(dataCopy[index].name);
+    if(selectCallback) {
+      selectCallback(dataCopy[index].name);
+    }
     setOpen(false);
   }
 

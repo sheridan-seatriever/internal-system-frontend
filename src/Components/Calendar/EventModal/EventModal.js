@@ -148,7 +148,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         <div className="error">{timeError}</div>
         <div  className={'form_element label_group'}>
           <label className='label_group_label'>Description:</label>
-          <textarea className={`${styles.input} ${'label_group_content'}`} value={description} onChange={e=>setDescription(e.target.value)} />
+          <textarea className={`${'label_group_content'}`} value={description} onChange={e=>setDescription(e.target.value)} />
           <div className={'error titleError no_wrap'}>{descriptionError}</div>
         </div>
         <div className={'form_element label_group'}>
