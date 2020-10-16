@@ -11,7 +11,6 @@ import {validateDates, validateAssignedTo, validateTime, validateTitle, validate
 import "react-datepicker/dist/react-datepicker.css";
 import {cloneDeep} from 'lodash';
 import to24Hour from './to24Hour';
-import Select from 'react-select';
 
 function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
   const [startDateInput, setStartDateInput] = useState(new Date());
@@ -24,7 +23,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
 
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
-  const [projectManager, setProjectManager] = useState('dddddddddd');
+  const [projectManager, setProjectManager] = useState('');
   const [projectManagerError, setProjectManagerError] = useState('');
   const [dateError, setDateError] = useState('');
   const [startTimeInput, setStartTimeInput] = useState({hour: '9', minute: '00', period: 'AM'});
@@ -93,7 +92,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   }
 
   const closeModalResetState = () => {
-    console.log('closing')
     closeModal();
     setTitle('');
     setTitleError('');
@@ -130,13 +128,12 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         </div>
         <div className={`${styles.input_group} ${'form_element'}`}>
           <div className={styles.input}>
-            <Select className="acf-field acf-input" placeholder="Select a project manager" options={users.map(user=>{return ({label: user.user_name, value: user.user_id})})} value={projectManager} onChange={()=>setProjectManager(projectManager)} />
+            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} />
           </div>
           <div className={'error titleError no_wrap'}>{projectManagerError}</div>
         </div>
-
         <div className={`${styles.input_group} ${'form_element'}`}>
-          <label className={styles.date_label}>{projectManager}</label>
+          <label className={styles.date_label}>Start:</label>
           <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
           <label className={styles.time_label}>At:</label>
           <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
@@ -161,7 +158,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
             <div>loading</div>:
             <div className='label_group_content'>
               <AddList 
-                data={users.map(user=>user.user_name)} 
+                data={users.map(user=>({name: user.user_name, id: user.user_id}))} 
                 placeholder="Add user" 
                 selectedData={assignedTo} 
                 setSelectedData={setAssignedTo} 

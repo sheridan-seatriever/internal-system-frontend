@@ -1,5 +1,6 @@
 .container {
   flex-grow: 1;
+  margin-right: 8px;
   width: 100%;
 }
 
@@ -7,8 +8,20 @@
   width: 100%;
 }
 
-.option_div {
-  background-color: aqua;
+.dropdown {
   width: 100%;
-  height: 100%;
+}
+
+.closed {
+  display: none;
+}
+
+.selected {
+  padding: 10px;
+  color: #222;
+  background-color: aliceblue;
+}
+
+.not_selected {
+  padding: 10px;
 }

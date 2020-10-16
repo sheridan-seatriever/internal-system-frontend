@@ -11,6 +11,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
   const [description, setDescription] = useState('');
   const [manager, setManager] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
+  const [assignedToInput, setAssignedToInput] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +56,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
           <label>Project Manager:</label>
           {loadingUsers?
             <div>loading</div>:
-            <SearchInput data={users} placeholder="Add users"/>
+            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={manager} setInput={setManager} />
           }
         </div>
         <div className="error">{fetchUsersError}</div>
@@ -64,7 +65,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
         {
           loadingUsers? 
           <div>loading</div>:
-          <AddList data={users.map(user=>user.user_name)} selectedData={assignedTo} setSelectedData={setAssignedTo}/>
+          <AddList data={users.map(user=>({name: user.user_name, id: user.user_id}))} selectedData={assignedTo} setSelectedData={setAssignedTo} input={assignedToInput} setInput={setAssignedToInput}/>
         }
         </div>
         <div className="error">{fetchUsersError}</div>
