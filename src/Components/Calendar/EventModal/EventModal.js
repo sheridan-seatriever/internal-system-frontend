@@ -55,9 +55,11 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
       const project_assigned_to = users.filter(user=>assignedTo.indexOf(user.user_name)!==-1);
       const start_time = to24Hour(startTimeInput);
       const end_time = to24Hour(endTimeInput);
+      const project_manager = users.find(user=>user.user_name===projectManager);
+      console.log(project_manager);
       let event = {
         project_title: title,
-        project_manager: projectManager,
+        project_manager,
         project_start_date: moment(startDateInput).format('YYYY-MM-DD ' + start_time),
         project_end_date: moment(endDateInput).format('YYYY-MM-DD ' + end_time),
         project_description: description,
@@ -66,6 +68,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
       }
       try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
+        console.log(res);
         event.project_id = res.data;
         let newEvents = cloneDeep(events);
         newEvents.push(event);

@@ -118,22 +118,22 @@ function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEven
   }
 
   return(
-      <table className={styles.table_main}>
-        <thead>
-          <tr>
-            <th className={styles.day_header}>Monday</th>
-            <th className={styles.day_header}>Tuesday</th>
-            <th className={styles.day_header}>Wednesday</th>
-            <th className={styles.day_header}>Thursday</th>
-            <th className={styles.day_header}>Friday</th>
-            <th className={styles.day_header}>Saturday</th>
-            <th className={styles.day_header}>Sunday</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dateRows}
-        </tbody>
-      </table>
+    <table className={styles.table_main}>
+      <thead>
+        <tr>
+          <th className={styles.day_header}>Monday</th>
+          <th className={styles.day_header}>Tuesday</th>
+          <th className={styles.day_header}>Wednesday</th>
+          <th className={styles.day_header}>Thursday</th>
+          <th className={styles.day_header}>Friday</th>
+          <th className={styles.day_header}>Saturday</th>
+          <th className={styles.day_header}>Sunday</th>
+        </tr>
+      </thead>
+      <tbody>
+        {dateRows}
+      </tbody>
+    </table>
   )
 }
 

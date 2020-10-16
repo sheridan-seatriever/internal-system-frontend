@@ -19,11 +19,12 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
     }
   }
 
-  const addEnter = e => {
+  const addEnter = (e, input) => {
+    console.log('enter');
     if(e.key === 'Enter') {
       if(input) {
         e.preventDefault();
-        add();
+        add(input);
       }
     }
   }
@@ -42,6 +43,14 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
     setSelectedData(newData);
   }
 
+  const selectCallback = (e, input) => {
+    if(e&&e.key&&e.key==='Enter') {
+      addEnter(e, input);
+    } else {
+      add(input);
+    }
+  }
+
   return (
     <div className={`${'acf-field acf-input'} ${styles.inner}`}>
       <div className={styles.selected_data_container}>
@@ -49,10 +58,10 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
       </div>
       <div className={styles.input_group}>
         {data?
-          <SearchInput data={data} input={input} setInput={setInput} placeholder={placeholder} selectCallback={add}/>:
+          <SearchInput data={data} input={input} setInput={setInput} placeholder={placeholder} selectCallback={selectCallback}/>:
           <>
             <input placeholder={placeholder} className={styles.input} input={input} value={input} onChange={e=>{setInput(e.target.value); setError('')}} onKeyPress={e=>addEnter(e)}/>
-            <button type="button" className={`${'acf-button button button-primary add'} ${styles.button}`} onClick={add}>+</button>
+            <button type="button" className={`${'acf-button button button-primary add'} ${styles.button}`} onClick={()=>add(input)} onKeyPress={e=>addEnter(e)}>+</button>
           </>
         }
       </div>

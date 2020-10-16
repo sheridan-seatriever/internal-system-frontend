@@ -60,13 +60,12 @@ const CalendarView = () => {
         fetchUsersError={fetchUsersError} 
         loadingUsers={loadingUsers}
         events={events}
-        setEvents={setEvents}
-        currentEvent={events.find(element=>element.project_id===currentEventID)}/>
+        setEvents={setEvents}/>
       <Calendar 
         modalOpen={modalOpen} 
         setModalOpen={setModalOpen} 
         setModalStartDate={setModalStartDate} 
-        renderDateGrid={(year, month) => renderDateGrid(year, month)} />
+        renderDateGrid={(year, month) => renderDateGrid(year, month)}/>
     </div>
   )
 }
