@@ -84,7 +84,7 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback}) =>
   }
 
   return (
-    <div className={styles.container} onFocus={onFocus} onKeyDown={handleKeyPress} ref={wrapperRef}>
+    <div className={styles.container} onFocus={onFocus} onKeyDown={handleKeyPress}>
       <input value={input} onChange={e=>onChange(e)} placeholder={placeholder}/>
       <div className={`${open?styles.dropdown:styles.closed}`}>
         {dropdown}
