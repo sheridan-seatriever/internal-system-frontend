@@ -32,9 +32,9 @@ const SearchInput = ({data, input, setInput}) => {
     const mapData = dataCopy => {
       return dataCopy.map((item, index) => {
         if(index===selectedIndex) {
-          return <div className={styles.selected} onClick={()=>console.log(index)} onMouseOver={()=>handleMouseOver(index)} onMouseDown={()=>handleMouseDown(index)}>{item.name}</div>
+          return <div className={styles.selected} onClick={()=>console.log(index)} onMouseOver={()=>handleMouseOver(index)} onClick={()=>handleClick(index)}>{item.name}</div>
         } else {
-          return <div className={styles.not_selected} onClick={()=>console.log(index)} onMouseOver={()=>handleMouseOver(index)} onMouseDown={()=>handleMouseDown(index)}>{item.name}</div>
+          return <div className={styles.not_selected} onClick={()=>console.log(index)} onMouseOver={()=>handleMouseOver(index)} onClick={()=>handleClick(index)}>{item.name}</div>
         }
       });
     }
@@ -65,17 +65,15 @@ const SearchInput = ({data, input, setInput}) => {
     setSelectedIndex(index);
   }
 
-  const handleMouseDown = index => {
+  const handleClick = index => {
     setInput(dataCopy[index].name);
+    setOpen(false);
   }
 
   const onFocus = () => {
     setOpen(true);
   }
 
-  const onClick = () => {
-    setOpen(true);
-  }
 
   const onChange = e => {
     setInput(e.target.value);
@@ -83,7 +81,7 @@ const SearchInput = ({data, input, setInput}) => {
   }
 
   return (
-    <div className={styles.container} onFocus={onFocus} onClick={onClick} onKeyDown={handleKeyPress} ref={wrapperRef}>
+    <div className={styles.container} onFocus={onFocus} onKeyDown={handleKeyPress} ref={wrapperRef}>
       <input value={input} onChange={e=>onChange(e)}/>
       <div className={`${open?styles.dropdown:styles.closed}`}>
         {dropdown}
