@@ -128,7 +128,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         </div>
         <div className={`${styles.input_group} ${'form_element'}`}>
           <div className={styles.input}>
-            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} />
+            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} placeholder="Select a project manager" />
           </div>
           <div className={'error titleError no_wrap'}>{projectManagerError}</div>
         </div>

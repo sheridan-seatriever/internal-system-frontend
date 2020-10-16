@@ -50,7 +50,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
       </div>
       <div className={styles.input_group}>
         {data?
-          <SearchInput data={data} input={input} setInput={setInput}/>:
+          <SearchInput data={data} input={input} setInput={setInput} placeholder={placeholder}/>:
           <input placeholder={placeholder} className={styles.input} input={input} value={input} onChange={e=>{setInput(e.target.value); setError('')}} onKeyPress={e=>addEnter(e)}/>
         }
         <button type="button" className={`${'acf-button button button-primary add'} ${styles.button}`} onClick={add}>+</button>

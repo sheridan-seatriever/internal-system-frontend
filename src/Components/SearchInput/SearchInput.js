@@ -3,7 +3,7 @@ import styles from './SearchInput.module.css';
 import {cloneDeep} from 'lodash';
 import useOutsideAlerter from '../../Functions/useOutsideAlerter';
 
-const SearchInput = ({data, input, setInput}) => {
+const SearchInput = ({data, input, setInput, placeholder=''}) => {
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dropdown, setDropdown] = useState([]);
@@ -82,7 +82,7 @@ const SearchInput = ({data, input, setInput}) => {
 
   return (
     <div className={styles.container} onFocus={onFocus} onKeyDown={handleKeyPress} ref={wrapperRef}>
-      <input value={input} onChange={e=>onChange(e)}/>
+      <input value={input} onChange={e=>onChange(e)} placeholder={placeholder}/>
       <div className={`${open?styles.dropdown:styles.closed}`}>
         {dropdown}
       </div>

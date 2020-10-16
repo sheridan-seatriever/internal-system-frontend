@@ -1,7 +1,6 @@
 .container {
   position: relative;
   flex-grow: 1;
-  margin-right: 8px;
   width: 100%;
 }
 
