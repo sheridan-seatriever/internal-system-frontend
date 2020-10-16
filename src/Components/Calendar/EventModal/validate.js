@@ -57,7 +57,7 @@
       setAssignedToError("Could not find user: " + assignedToInput);
       return false;
     } else if(assignedTo.indexOf(assignedToInput)!==-1) {
-      setAssignedToError(`User "${assignedToInput}" already selected`);
+      setAssignedToError(`${assignedToInput} has already been selected`);
       return false;
     }
     return true;
