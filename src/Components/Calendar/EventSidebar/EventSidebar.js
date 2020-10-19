@@ -4,13 +4,15 @@ import axios from 'axios';
 import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 import {cloneDeep} from 'lodash';
+import {validateMilestoneInput, validateAssignedToInput} from './validate.js';
 
 const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError, loadingUsers, events, setEvents}) => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [manager, setManager] = useState('');
-  const [assignedTo, setAssignedTo] = useState('');
+  const [assignedTo, setAssignedTo] = useState([]);
+  const [assignedToError, setAssignedToError] = useState('');
   const [assignedToInput, setAssignedToInput] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,14 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
     const fetchData = async () => {
       try {
         const event = (await axios.get(`${process.env.REACT_APP_API_URL}projects_by_id?project_id=${currentEventID}`)).data;
-        console.log(event);
+        const project_manager = users.find(user=>user.user_id==event.manager_user_id);
+        let assigned_to = event.project_assigned_to.map(assignedUser=>users.find(user=>user.user_id===assignedUser.assigned_to_user_id));
+        assigned_to = assigned_to.map(user=>user.user_name)
+        setTitle(event.project_title);
+        setDescription(event.project_description);
+        setManager(project_manager.user_name);
+        setAssignedTo(assigned_to);
+        
       } catch(err) {
         console.log(err);
       }
@@ -71,10 +80,20 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
         {
           loadingUsers? 
           <div>loading</div>:
-          <AddList data={users.map(user=>({name: user.user_name, id: user.user_id}))} validate={()=>true} selectedData={assignedTo} setSelectedData={setAssignedTo} input={assignedToInput} setInput={setAssignedToInput}/>
+          <AddList
+            data={users.map(user=>({name: user.user_name, id: user.user_id}))} 
+            placeholder={'Add user'}
+            validate={()=>true} 
+            selectedData={assignedTo} 
+            setSelectedData={setAssignedTo}
+            validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users)}
+            setError={setAssignedToError} 
+            input={assignedToInput} 
+            setInput={setAssignedToInput}/>
         }
         </div>
         <div className="error">{fetchUsersError}</div>
+        <div className="error">{assignedToError}</div>
         <div className={styles.button_group}>
           <button type="button" className={`${styles.delete}`} onClick={deleteProject}>DELETE PROJECT</button>
           <button type="button" className={`${'button-primary'} ${styles.button_primary}`} onClick={deleteProject}>UPDATE PROJECT</button>

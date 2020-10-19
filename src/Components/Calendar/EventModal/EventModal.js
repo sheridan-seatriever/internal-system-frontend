@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import TimePicker from '../../TimePicker/TimePicker';
 import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
-import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateMilestoneInput, validateProjectManager} from './validate';
+import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateProjectManager} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
 import {cloneDeep} from 'lodash';
 import to24Hour from './to24Hour';
@@ -34,9 +34,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
   const [assignedToInput, setAssignedToInput] = useState('');
   const [assignedTo, setAssignedTo] = useState([]);
   const [assignedToError, setAssignedToError] = useState('');
-  const [milestoneInput, setMilestoneInput] = useState('');
-  const [milestones, setMilestones] = useState([]);
-  const [milestoneError, setMilestoneError] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
@@ -63,8 +60,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         project_start_date: moment(startDateInput).format('YYYY-MM-DD ' + start_time),
         project_end_date: moment(endDateInput).format('YYYY-MM-DD ' + end_time),
         project_description: description,
-        project_assigned_to,
-        project_milestones: milestones,
+        project_assigned_to
       }
       try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
@@ -105,9 +101,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
     setDateError('');
     setDescription('');
     setDescriptionError('');
-    setMilestoneInput('');
-    setMilestones([]);
-    setMilestoneError('');
     setAssignedToInput('');
     setAssignedTo([]);
     setAssignedToError('');
@@ -175,22 +168,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         </div>
         <div className="error">{fetchUsersError}</div>
         <div className="error">{assignedToError}</div>
-        <div className={'form_element label_group'}>
-        <label className='acf-label label_group_label'>Project Milestones:</label>
-          <div className='label_group_content'>
-            <AddList 
-              data={null}
-              placeholder={"Add milestone"} 
-              selectedData={milestones} 
-              setSelectedData={setMilestones} 
-              setError={setMilestoneError} 
-              validate={input=>validateMilestoneInput(input, setMilestoneError)}
-              input={milestoneInput}
-              setInput={setMilestoneInput}
-            />
-          </div>
-        </div>
-        <div className="error">{milestoneError}</div>
         <div className={styles.button_group}>
           <button className={styles.button} type="submit">{loadingSubmit?'loading':'Submit'}</button>
           <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>

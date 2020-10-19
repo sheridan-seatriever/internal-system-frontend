@@ -44,34 +44,38 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback}) =>
   }, [selectedIndex, dataCopy])
 
   const handleKeyPress = e => {
-    e.preventDefault();
+    
     if(e.key==='ArrowDown') {
+      e.preventDefault();
       if(selectedIndex+1>=dataCopy.length) {
         setSelectedIndex(0);
       } else {
         setSelectedIndex(selectedIndex+1);
       }
     } else if(e.key==='ArrowUp') {
+      e.preventDefault();
       if(selectedIndex-1<0) {
         setSelectedIndex(dataCopy.length-1);
       } else {
         setSelectedIndex(selectedIndex-1);
       }
-    } else if(selectCallback) {
-      if(dataCopy[selectedIndex]&&dataCopy[selectedIndex].name) {
-        selectCallback(e, dataCopy[selectedIndex].name);
-        setOpen(false);
-      }
     } else if(e.key==='Enter') {
-      if(dataCopy[selectedIndex]&&dataCopy[selectedIndex].name) {
-        setInput(dataCopy[selectedIndex].name);
-        setOpen(false);
+      e.preventDefault();
+      if(selectCallback) {
+        if(dataCopy[selectedIndex]&&dataCopy[selectedIndex].name) {
+          selectCallback(e, dataCopy[selectedIndex].name);
+          setOpen(false);
+        }
+      } else {
+        if(dataCopy[selectedIndex]&&dataCopy[selectedIndex].name) {
+          setInput(dataCopy[selectedIndex].name);
+          setOpen(false);
+        }
       }
     }
   }
 
   const handleMouseEnter = index => {
-    console.log('mouseover')
     setSelectedIndex(index);
   }
 
@@ -86,7 +90,6 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback}) =>
   const onFocus = () => {
     setOpen(true);
   }
-
 
   const onChange = e => {
     setOpen(true);

@@ -63,17 +63,6 @@
     return true;
   }
 
-  export const validateMilestoneInput = (milestoneInput, setMilestoneError) => {
-    setMilestoneError('');
-    if(!milestoneInput){
-      return false;
-    } else if(milestoneInput.length > 300) {
-      setMilestoneError('Must be 300 characters or less');
-      return false
-    }
-    return true;
-  }
-
   export const validateProjectManager = (projectManager, setProjectManagerError, users) => {
     setProjectManagerError('');
     const userNames = users.map(user=>user.user_name);

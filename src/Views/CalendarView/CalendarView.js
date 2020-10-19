@@ -40,7 +40,6 @@ const CalendarView = () => {
         setEvents={setEvents} 
         setCurrentEventID={setCurrentEventID}
       />)}
-
   return(
     <div className={styles.container}>
       <EventModal 

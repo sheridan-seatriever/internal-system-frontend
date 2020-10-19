@@ -2,6 +2,7 @@ import React,{} from 'react';
 import styles from './AddList.module.css';
 import nextId from 'react-id-generator';
 import SearchInput from '../SearchInput';
+import {cloneDeep} from 'lodash';
 
 const AddList = ({data, placeholder, selectedData, setSelectedData, validate, setError, input, setInput}) => {
 
@@ -12,7 +13,7 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
         return (
           <div key={nextId()} className={styles.row}>
             <div className={styles.selected_item}>{item}</div>
-            <button type="button" className={`${'remove'} ${styles.button}`} onClick={item=>remove(item)}>-</button>
+            <button type="button" className={`${'remove'} ${styles.button}`} onClick={()=>remove(item)}>-</button>
           </div>
         )
       })
@@ -20,7 +21,6 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
   }
 
   const addEnter = (e, input) => {
-    console.log('enter');
     if(e.key === 'Enter') {
       if(input) {
         e.preventDefault();
@@ -37,9 +37,9 @@ const AddList = ({data, placeholder, selectedData, setSelectedData, validate, se
   }  
   
   const remove = item => {
-    const newData = [...selectedData]
+    const newData = cloneDeep(selectedData);
     setError('');
-    newData.splice(selectedData.indexOf(item));
+    newData.splice(selectedData.indexOf(item),1);
     setSelectedData(newData);
   }
 
