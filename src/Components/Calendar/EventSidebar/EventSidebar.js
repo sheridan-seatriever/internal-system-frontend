@@ -19,7 +19,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
   const [assignedToError, setAssignedToError] = useState('');
   const [assignedToInput, setAssignedToInput] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
@@ -37,6 +37,7 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
       } catch(err) {
         setError('Error, could not get event details');
       }
+      setLoading(false);
     }
     if(currentEventID) {
       fetchCurrentEvent();
@@ -121,29 +122,22 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
         </div>
         <div className={'form_element'}>
           <label>Project Manager:</label>
-          {loadingUsers?
-            <div>loading</div>:
-            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} setError={setProjectManagerError}/>
-          }
+          <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} setError={setProjectManagerError}/>
           <div className="error form_element">{projectManagerError}</div>
         </div>
         <div className="error">{fetchUsersError}</div>
         <div className={'form_element'}>
         <label>Assigned To:</label>
-        {
-          loadingUsers? 
-          <div>loading</div>:
-          <AddList
-            data={users.map(user=>({name: user.user_name, id: user.user_id}))} 
-            placeholder={'Add user'}
-            validate={()=>true} 
-            selectedData={assignedTo} 
-            setSelectedData={setAssignedTo}
-            validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users)}
-            setError={setAssignedToError} 
-            input={assignedToInput} 
-            setInput={setAssignedToInput}/>
-        }
+        <AddList
+          data={users.map(user=>({name: user.user_name, id: user.user_id}))} 
+          placeholder={'Add user'}
+          validate={()=>true} 
+          selectedData={assignedTo} 
+          setSelectedData={setAssignedTo}
+          validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users)}
+          setError={setAssignedToError} 
+          input={assignedToInput} 
+          setInput={setAssignedToInput}/>
         </div>
         <div className="error">{fetchUsersError}</div>
         <div className="error">{assignedToError}</div>

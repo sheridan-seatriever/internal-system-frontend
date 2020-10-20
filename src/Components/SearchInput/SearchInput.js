@@ -60,6 +60,7 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback, set
       }
     } else if(e.key==='Enter') {
       e.preventDefault();
+      setError('');
       if(selectCallback) {
         if(dataCopy[selectedIndex]&&dataCopy[selectedIndex].name) {
           selectCallback(e, dataCopy[selectedIndex].name);
@@ -79,6 +80,7 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback, set
   }
 
   const handleClick = index => {
+    setError('');
     setInput(dataCopy[index].name);
     if(selectCallback) {
       selectCallback(null, dataCopy[index].name);
