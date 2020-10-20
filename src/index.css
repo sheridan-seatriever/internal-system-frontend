@@ -96,3 +96,20 @@
 .label_group_content {
   width: 80%;
 }
+
+.loading_icon {
+  animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin { 
+  80% { 
+    transform: rotate(360deg); 
+  }
+  100% { 
+    transform: rotate(360deg); 
+  }
+}
+
+.center {
+  display: flex;
+  align-items: center;
+}

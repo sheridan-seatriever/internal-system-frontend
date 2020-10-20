@@ -11,6 +11,7 @@ import {validateDates, validateAssignedTo, validateTime, validateTitle, validate
 import "react-datepicker/dist/react-datepicker.css";
 import {cloneDeep} from 'lodash';
 import to24Hour from './to24Hour';
+import loadingIcon from './loading.png';
 
 function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
   const [startDateInput, setStartDateInput] = useState(new Date());
@@ -168,8 +169,14 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         <div className="error">{fetchUsersError}</div>
         <div className="error">{assignedToError}</div>
         <div className={styles.button_group}>
-          <button className={styles.button} type="submit">{loadingSubmit?'loading':'Submit'}</button>
           <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>
+          <button className={`${styles.button} ${'center'}`} type="submit">Submit 
+            {
+              loadingSubmit &&
+              <div className={styles.loading_icon_container}>
+                <img className="loading_icon" src={loadingIcon} />
+              </div>
+            }</button>
         </div>
         <div className="error">{submitError}</div>
       </form>

@@ -74,7 +74,9 @@ const CalendarView = () => {
   }, [year, month])
 
   useEffect(() => {
-    fetchData(startDate, endDate);
+    if(startDate, endDate) {
+      fetchData(startDate, endDate);
+    }
   }, [startDate, endDate])
 
   return(
@@ -109,14 +111,14 @@ const CalendarView = () => {
         setMonth={setMonth}
       >
         <DateGrid 
-        year={year}
-        month={month}
-        setModalOpen={setModalOpen}
-        setModalStartDate={setModalStartDate}
-        events={events} 
-        setEvents={setEvents} 
-        setCurrentEventID={setCurrentEventID}
-      />
+          year={year}
+          month={month}
+          setModalOpen={setModalOpen}
+          setModalStartDate={setModalStartDate}
+          events={events} 
+          setEvents={setEvents} 
+          setCurrentEventID={setCurrentEventID}
+        />
       </Calendar>
     </div>
   )

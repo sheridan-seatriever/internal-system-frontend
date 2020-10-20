@@ -5,9 +5,11 @@ import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 import {cloneDeep} from 'lodash';
 import {validateAssignedToInput, validateAssignedTo, validateProjectManager, validateTitle} from './validate.js';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import loadingIcon from './loading.png';
 
-const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError, loadingUsers, events, setEvents}) => {
-
+const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError, loadingUsers, events, setEvents, fetchData}) => {
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
   const [description, setDescription] = useState('');
@@ -18,9 +20,11 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
   const [assignedToInput, setAssignedToInput] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCurrentEvent = async () => {
       try {
         const event = (await axios.get(`${process.env.REACT_APP_API_URL}projects_by_id?project_id=${currentEventID}`)).data;
         const project_manager = users.find(user=>user.user_id==event.manager_user_id);
@@ -35,13 +39,14 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
       }
     }
     if(currentEventID) {
-      fetchData();
+      fetchCurrentEvent();
     }
   }, [currentEventID])
 
   const submit = async () => {
     if(validateSubmit()) {
       setError('');
+      setLoadingSubmit(true);
       const project_manager = users.find(user=>user.user_name===projectManager);
       const project_assigned_to = assignedTo.map(assigned => users.find(user=>user.user_name===assigned));
       console.log(project_assigned_to);
@@ -53,10 +58,12 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
           project_manager,
           project_assigned_to
         });
-        
+        fetchData();
+        NotificationManager.success('Updated project', null, 2500);
       } catch(err) {
         setError('Error, could not update event details');
       }
+      setLoadingSubmit(false);
     }
   }
 
@@ -82,22 +89,23 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
   }
 
   const deleteProject = async () => {
-    setLoading(true);
+    console.log('eyy')
     try {
+      setLoadingDelete(true);
       await axios.delete(`${process.env.REACT_APP_API_URL}projects?project_id=${currentEventID}`);
-      let updatedEvents = cloneDeep(events);
-      updatedEvents = updatedEvents.filter(event=>event.project_id!==currentEventID);
-      setEvents(updatedEvents);
+      fetchData();
+      NotificationManager.success('Deleted project');
       setCurrentEventID('');
     } catch(err) {
       setError('Error, could not delete event');
     }
-    setLoading(false);
+    setLoadingDelete(false);
   }
 
   return (
     <>
       <div className={`${styles.buffer} ${currentEventID&&styles.open}`}></div>
+      <NotificationContainer />
       <div className={`${styles.container} ${currentEventID&&styles.open}`}>
         <div className={styles.button_group}>
           <button type="button" className={`${styles.cancel}`} onClick={closeAndResetState}>CANCEL</button>
@@ -140,8 +148,22 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
         <div className="error">{fetchUsersError}</div>
         <div className="error">{assignedToError}</div>
         <div className={styles.button_group}>
-          <button type="button" className={`${styles.delete}`} onClick={deleteProject}>DELETE PROJECT</button>
-          <button type="button" className={`${'button-primary'} ${styles.button_primary}`} onClick={submit}>UPDATE PROJECT</button>
+          <button type="button" className={`${styles.delete} ${'center'}`} onClick={deleteProject}>DELETE PROJECT
+            {
+              loadingDelete &&
+              <div className={styles.loading_icon_container}>
+                <img className="loading_icon" src={loadingIcon} />
+              </div>
+            }
+          </button>
+          <button type="button" className={`${'button-primary center'} ${styles.button_primary}`} onClick={submit}>UPDATE PROJECT 
+            {
+              loadingSubmit &&
+              <div className={styles.loading_icon_container}>
+                <img className="loading_icon" src={loadingIcon} />
+              </div>
+            }
+          </button>
         </div>
         <div className="error form_element">{error}</div>
       </div>

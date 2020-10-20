@@ -50,13 +50,11 @@
   color: #fff;
 }
 
-.cancel_button {
-  background-color: #777;
-  margin-left: 6px;
-}
 
 .button_group {
   margin-top: 8px;
+  display: flex;
+  flex-direction: row-reverse;
   align-self: flex-end;
 }
 
@@ -108,4 +106,16 @@
 
 .input { 
   width: 100%;
+}
+
+.loading_icon_container {
+  margin-left: 6px;
+  width: .8rem;
+  height: .8rem;
+}
+
+.cancel_button {
+  border-color: #777 !important;
+  color: #777 !important;
+  margin-left: 6px;
 }

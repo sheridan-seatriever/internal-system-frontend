@@ -76,3 +76,9 @@
 .input_large {
   height: 100px;
 }
+
+.loading_icon_container {
+  margin-left: 6px;
+  width: .8rem;
+  height: .8rem;
+}
