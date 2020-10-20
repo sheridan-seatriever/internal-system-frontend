@@ -4,7 +4,7 @@ import {cloneDeep} from 'lodash';
 import useOutsideAlerter from '../../Functions/useOutsideAlerter';
 import nextId from 'react-id-generator';
 
-const SearchInput = ({data, input, setInput, placeholder='', selectCallback}) => {
+const SearchInput = ({data, input, setInput, placeholder='', selectCallback, setError}) => {
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dropdown, setDropdown] = useState([]);
@@ -44,7 +44,6 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback}) =>
   }, [selectedIndex, dataCopy])
 
   const handleKeyPress = e => {
-    
     if(e.key==='ArrowDown') {
       e.preventDefault();
       if(selectedIndex+1>=dataCopy.length) {
@@ -93,6 +92,7 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback}) =>
 
   const onChange = e => {
     setOpen(true);
+    setError('');
     setInput(e.target.value);
   }
 

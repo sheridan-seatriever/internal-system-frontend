@@ -1,18 +1,7 @@
 import React, {useState} from 'react';
 import styles from './Calendar.module.css';
 
-function Calendar({renderDateGrid, modalOpen, setModalOpen, setModalStartDate}) {
-  const getCurrentMonth = () => {
-    const date = new Date();
-    return date.getMonth();
-  }
-  const getCurrentYear = () => {
-    const date = new Date();
-    return date.getFullYear();
-  }
-  
-  const [month, setMonth] = useState(getCurrentMonth())
-  const [year, setYear] = useState(getCurrentYear());
+function Calendar({children, modalOpen, setModalOpen, setModalStartDate, month, setMonth, year, setYear}) {
 
   const getMonth = monthInt => {
     const months = [
@@ -76,7 +65,7 @@ function Calendar({renderDateGrid, modalOpen, setModalOpen, setModalStartDate}) 
           <button className={styles.button} onClick={()=>setYear(year+1)}>Next Year</button>
         </div>
       </div>
-      {renderDateGrid(year, month)}
+      {children}
     </div>
   )
 }

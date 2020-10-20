@@ -4,13 +4,15 @@ import axios from 'axios';
 import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 import {cloneDeep} from 'lodash';
-import {validateMilestoneInput, validateAssignedToInput} from './validate.js';
+import {validateAssignedToInput, validateAssignedTo, validateProjectManager, validateTitle} from './validate.js';
 
 const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError, loadingUsers, events, setEvents}) => {
 
   const [title, setTitle] = useState('');
+  const [titleError, setTitleError] = useState('');
   const [description, setDescription] = useState('');
-  const [manager, setManager] = useState('');
+  const [projectManager, setProjectManager] = useState('');
+  const [projectManagerError, setProjectManagerError] = useState('');
   const [assignedTo, setAssignedTo] = useState([]);
   const [assignedToError, setAssignedToError] = useState('');
   const [assignedToInput, setAssignedToInput] = useState('');
@@ -23,20 +25,61 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
         const event = (await axios.get(`${process.env.REACT_APP_API_URL}projects_by_id?project_id=${currentEventID}`)).data;
         const project_manager = users.find(user=>user.user_id==event.manager_user_id);
         let assigned_to = event.project_assigned_to.map(assignedUser=>users.find(user=>user.user_id===assignedUser.assigned_to_user_id));
-        assigned_to = assigned_to.map(user=>user.user_name)
+        assigned_to = assigned_to.map(user=>user.user_name);
         setTitle(event.project_title);
         setDescription(event.project_description);
-        setManager(project_manager.user_name);
+        setProjectManager(project_manager.user_name);
         setAssignedTo(assigned_to);
-        
       } catch(err) {
-        console.log(err);
+        setError('Error, could not get event details');
       }
     }
     if(currentEventID) {
       fetchData();
     }
   }, [currentEventID])
+
+  const submit = async () => {
+    if(validateSubmit()) {
+      setError('');
+      const project_manager = users.find(user=>user.user_name===projectManager);
+      const project_assigned_to = assignedTo.map(assigned => users.find(user=>user.user_name===assigned));
+      console.log(project_assigned_to);
+      try {
+        const res = await axios.put(`${process.env.REACT_APP_API_URL}projects`,{
+          project_id: currentEventID,
+          project_title: title,
+          project_description: description,
+          project_manager,
+          project_assigned_to
+        });
+        
+      } catch(err) {
+        setError('Error, could not update event details');
+      }
+    }
+  }
+
+  const validateSubmit = () => {
+    let valid = true;
+    if(!validateTitle(title, setTitleError)) valid = false;
+    if(!validateProjectManager(projectManager, setProjectManagerError, users)) valid = false;
+    if(!validateAssignedTo(assignedTo, setAssignedToError)) valid = false;
+    return valid;
+  }
+
+  const closeAndResetState = () => {
+    setCurrentEventID('')
+    setTitle('');
+    setTitleError('');
+    setDescription('');
+    setProjectManager('');
+    setProjectManagerError('');
+    setAssignedTo([]);
+    setAssignedToError('');
+    setAssignedToInput('');
+    setError('');
+  }
 
   const deleteProject = async () => {
     setLoading(true);
@@ -57,11 +100,12 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
       <div className={`${styles.buffer} ${currentEventID&&styles.open}`}></div>
       <div className={`${styles.container} ${currentEventID&&styles.open}`}>
         <div className={styles.button_group}>
-          <button type="button" className={`${styles.cancel}`} onClick={()=>setCurrentEventID('')}>CANCEL</button>
+          <button type="button" className={`${styles.cancel}`} onClick={closeAndResetState}>CANCEL</button>
         </div>
         <div className={'form_element'}>
           <label>Project Title:</label>
-          <input className={styles.input} value={title} onChange={e=>setTitle(e.target.value)}/>
+          <input className={styles.input} value={title} onChange={e=>{setTitle(e.target.value); setTitleError('')}}/>
+          <div className="error form_element">{titleError}</div>
         </div>
         <div className={'form_element'}>
           <label>Project Description:</label>
@@ -71,8 +115,9 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
           <label>Project Manager:</label>
           {loadingUsers?
             <div>loading</div>:
-            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={manager} setInput={setManager} />
+            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} setError={setProjectManagerError}/>
           }
+          <div className="error form_element">{projectManagerError}</div>
         </div>
         <div className="error">{fetchUsersError}</div>
         <div className={'form_element'}>
@@ -96,8 +141,9 @@ const EventSidebar = ({currentEventID, setCurrentEventID, users, fetchUsersError
         <div className="error">{assignedToError}</div>
         <div className={styles.button_group}>
           <button type="button" className={`${styles.delete}`} onClick={deleteProject}>DELETE PROJECT</button>
-          <button type="button" className={`${'button-primary'} ${styles.button_primary}`} onClick={deleteProject}>UPDATE PROJECT</button>
+          <button type="button" className={`${'button-primary'} ${styles.button_primary}`} onClick={submit}>UPDATE PROJECT</button>
         </div>
+        <div className="error form_element">{error}</div>
       </div>
     </>
   )

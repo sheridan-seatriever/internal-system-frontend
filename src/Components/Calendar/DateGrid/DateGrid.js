@@ -9,62 +9,18 @@ import moment from 'moment';
 import _ from 'lodash';
 import Day from './Day';
 import nextId from 'react-id-generator';
+import {getDaysInPrevMonth, getDaysInMonth, getFirstMonday} from '../../../Functions/getDays';
 
-
-function DateGrid({year, month, setModalStartDate, setModalOpen, events, setEvents, setCurrentEventID}) {
-
-  const getDaysInMonth = () => {
-    const date = new Date(year, month, 32).getDate();
-    return 32-date;
-  }
-  const getDaysInPrevMonth = () => {
-    const date = new Date(year, month-1, 32).getDate();
-    return 32 - date;
-  }
-  const getFirstMonday = () => {
-    let day = new Date(year, month, 1);
-    day = moment(day);
-    if(!(moment(day).format('dddd')==='Monday')) {
-      day = new Date(year, (month-1), 1);
-      day = moment(day).endOf('month').startOf('isoweek');
-    }
-    return day;
-  }
-
-  useEffect(() => {
-    let daysInPrevMonth = getDaysInPrevMonth();
-    let firstMonday = getFirstMonday();
-    const daysInMonth = getDaysInMonth();
-    const additionalDaysStart = (daysInPrevMonth-firstMonday.format('D'))+1;
-    const rows = Math.ceil((additionalDaysStart+daysInMonth)/7);
-    const totalDays = (rows*7);
-    let startDate = firstMonday.toDate();
-    //disables DST conversion
-      let offset = startDate.getTimezoneOffset();
-      offset = Math.abs(offset / 60);
-      startDate.setHours(startDate.getHours() + offset);
-    let endDate = firstMonday.add(totalDays, 'd').subtract(1,'seconds').toDate();
-      offset = endDate.getTimezoneOffset();
-      offset = Math.abs(offset / 60);
-      endDate.setHours(endDate.getHours() + offset);
-    //-----------------------
-    startDate = moment(startDate).format('YYYYMMDD');
-    endDate = moment(endDate).format('YYYYMMDD');
-    const fetchData = async () => {
-      const events = (await axios.get(`${process.env.REACT_APP_API_URL}projects_between?start_date=${startDate}&end_date=${endDate}`)).data;
-      setEvents(events);
-    }
-    fetchData();
-  }, [year, month])
+const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setEvents, setCurrentEventID}) => {
 
   //dateRange is an array which contains the dates which will be displayed for the selected month
   let dateRange = [];
   //dayRange returns a Day component for each day in dateRange
   let dayRange = [];
 
-  let daysInPrevMonth = getDaysInPrevMonth();
-  let firstMonday = getFirstMonday().format('D');
-  const daysInMonth = getDaysInMonth();
+  let daysInPrevMonth = getDaysInPrevMonth(year, month);
+  let firstMonday = getFirstMonday(year, month).format('D');
+  const daysInMonth = getDaysInMonth(year, month);
   let rows = 0;
   if(firstMonday==='1') {
     rows = Math.ceil((daysInMonth)/7);

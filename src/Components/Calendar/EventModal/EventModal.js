@@ -53,7 +53,6 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
       const start_time = to24Hour(startTimeInput);
       const end_time = to24Hour(endTimeInput);
       const project_manager = users.find(user=>user.user_name===projectManager);
-      console.log(project_manager);
       let event = {
         project_title: title,
         project_manager,
@@ -124,7 +123,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         </div>
         <div className={`${styles.input_group} ${'form_element'}`}>
           <div className={styles.input}>
-            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} placeholder="Select a project manager" />
+            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} placeholder="Select a project manager" setError={setProjectManagerError}/>
           </div>
           <div className={'error titleError no_wrap'}>{projectManagerError}</div>
         </div>
