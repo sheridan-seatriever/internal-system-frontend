@@ -9,11 +9,12 @@ import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateProjectManager} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
-import {cloneDeep} from 'lodash';
-import to24Hour from './to24Hour';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import to24Hour from '../../../Functions/to24Hour';
 import loadingIcon from './loading.png';
 
-function EventModal({children, users, closeModal, modalStartDate, setEvents, events, modalOpen, fetchUsersError}) {
+function EventModal({children, users, closeModal, modalStartDate, modalOpen, fetchUsersError, fetchData}) {
   const [startDateInput, setStartDateInput] = useState(new Date());
   const [endDateInput, setEndDateInput] = useState(new Date());
 
@@ -63,12 +64,9 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
         project_assigned_to
       }
       try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
-        console.log(res);
-        event.project_id = res.data;
-        let newEvents = cloneDeep(events);
-        newEvents.push(event);
-        setEvents(newEvents);
+        await axios.post(`${process.env.REACT_APP_API_URL}projects`, event);
+        fetchData();
+        NotificationManager.success('Created new project', null, 2500);
         closeModalResetState();
       } catch {
         setSubmitError('Error, could not create project');
@@ -112,6 +110,7 @@ function EventModal({children, users, closeModal, modalStartDate, setEvents, eve
 
   return (
     <Modal callback={closeModalResetState} open={modalOpen}>
+      <NotificationContainer />
       {children}
       <h3 className={styles.modal_header}>Add new project</h3>
       <form onSubmit={e=>submit(e)} className={styles.inner}>

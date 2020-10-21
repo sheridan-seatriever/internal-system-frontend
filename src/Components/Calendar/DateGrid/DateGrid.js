@@ -1,7 +1,6 @@
 import React,{useEffect} from 'react';
 import styles from './DateGrid.module.css';
 //import sampleData from '../sampleData.js';
-import axios from 'axios';
 import eventDataGenerator from './functions/eventDataGenerator';
 import generateEventPositions from './functions/generateEventPositions';
 import containerTableGenerator from './functions/containerTableGenerator';
@@ -11,7 +10,7 @@ import Day from './Day';
 import nextId from 'react-id-generator';
 import {getDaysInPrevMonth, getDaysInMonth, getFirstMonday} from '../../../Functions/getDays';
 
-const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setEvents, setCurrentEventID}) => {
+const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setCurrentEventID}) => {
 
   //dateRange is an array which contains the dates which will be displayed for the selected month
   let dateRange = [];

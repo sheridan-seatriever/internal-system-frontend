@@ -33,14 +33,13 @@
 .cancel {
   margin: 0;
   width: 100px;
-  margin-left: auto;
+  margin-left: 4px;
   color: #777 !important;
   border-color: #777 !important;
 }
 
 .delete {
   margin: 0;
-  margin-left: 4px;
   border-color: #af3535 !important;
   color: #af3535 !important;
 }
@@ -57,8 +56,7 @@
 
 .input_group {
   display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+  align-items: center;
 }
 
 .input_group_inner {
@@ -68,11 +66,7 @@
 .input {
   width: 100%;
 }
-.input_group label {
-  margin-top: 4px;
-  font-size: .7rem;
-  width: 20%;
-}
+
 .input_large {
   height: 100px;
 }
@@ -81,4 +75,51 @@
   margin-left: 6px;
   width: .8rem;
   height: .8rem;
+}
+
+.milestone_tab_inner {
+  padding-top: 10px;
+}
+
+.time_label {
+  padding-left: 6px;
+  margin-right: 6px;
+}
+
+.date_label {
+  width: 44px;
+  margin-right: 6px;
+}
+
+.milestone_table {
+  width: 100%;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 8px;
+}
+
+.milestone_container {
+  background-color: #1a1f2f;
+  margin: 4px 0;
+  padding: 8px;
+}
+
+.new_milestone {
+  width: 100%;
+  margin: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 8px;
+}
+
+.project_tab {
+  width: 100%;
+  margin: 0;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding: 8px;
+}
+
+.ml_8 {
+  margin-left: 8px;
 }

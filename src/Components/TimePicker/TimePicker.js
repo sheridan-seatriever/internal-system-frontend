@@ -25,7 +25,7 @@ const TimePicker = ({time, setTime, onChange}) => {
     <div className={styles.container}>
       <input className={styles.child} value={time.hour} onChange={e=>hourChange(e.target.value)}></input> : 
       <input className={styles.child} value={time.minute} onChange={e=>minuteChange(e.target.value)}></input>
-      <button type="button" className={time.period==='AM'?styles.am_button:styles.pm_button} onClick={()=>periodChange(time.period)}>{time.period}</button>
+      <button type="button" className={`${time.period==='AM'?styles.am_button:styles.pm_button} ${'center'}`} onClick={()=>periodChange(time.period)}>{time.period}</button>
     </div>
   )
 }

@@ -79,8 +79,8 @@
 }
 
 .form_element {
-  margin-top: 5px;
-  margin-bottom: 12px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   width: 100%;
 }
 
@@ -111,5 +111,12 @@
 
 .center {
   display: flex;
+  justify-content: center;
   align-items: center;
+}
+
+.active {
+  background-color: #009FE3 !important;
+  border-color: #009FE3 !important;
+  color: #fff !important;
 }

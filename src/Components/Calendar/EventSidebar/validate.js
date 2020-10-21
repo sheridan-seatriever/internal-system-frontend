@@ -40,7 +40,7 @@ export const validateProjectManager = (projectManager, setProjectManagerError, u
 export const validateTitle = (title, setTitleError) => {
   setTitleError('');
   if(title.length < 1) {
-    setTitleError('Please enter a project title');
+    setTitleError('Please enter a title');
     return false;
   } else if(title.length > 50) {
     setTitleError('Must be 50 characters or less');
@@ -49,11 +49,52 @@ export const validateTitle = (title, setTitleError) => {
   return true;
 }
 
-  export const validateAssignedTo = (assignedTo, setAssignedToError) => {
-    setAssignedToError('');
-    if(assignedTo.length<1) {
-      setAssignedToError('Please select at least one member');
-      return false;
-    }
-    return true;
+export const validateAssignedTo = (assignedTo, setAssignedToError) => {
+  setAssignedToError('');
+  if(assignedTo.length<1) {
+    setAssignedToError('Please select at least one member');
+    return false;
   }
+  return true;
+}
+
+export const validateDates = (startDate, endDate, setDateError) => {
+  setDateError('');
+  console.log(startDate);
+  if((!startDate||!endDate)||(isNaN(startDate.getTime())||isNaN(endDate.getTime()))) {
+    setDateError('Please enter a valid start and end date');
+    return false;
+  } else if(startDate.getTime()>endDate.getTime()) {
+    setDateError('End date must come after start date');
+    return false;
+  }
+  return true;
+}
+
+export const validateDescription = (milestoneDescription, setMilestoneDescriptionError) => {
+  setMilestoneDescriptionError('');
+  if(!milestoneDescription) {
+    setMilestoneDescriptionError('Please add a description');
+    return false;
+  } else if(milestoneDescription.length>499) {
+    setMilestoneDescriptionError('Description must be 500 characters or less');
+  }
+  return true;
+}
+
+export const validateTime = (time, setTimeError) => {
+  if(time.hour===''||time.minute==='') {
+    setTimeError('Please enter a valid start and end time');
+    return false;
+  } if(isNaN(parseInt(time.hour))||isNaN(parseInt(time.minute))) {
+    setTimeError('Please enter a valid start and end time');
+    return false;
+  } else if(time.hour>12||time.hour<1) {
+    setTimeError('Please enter a valid start and end time');
+    return false;
+  } else if(time.minute>59||time.minute<0) {
+    setTimeError('Please enter a valid start and end time');
+    return false;
+  }
+  return true;
+}

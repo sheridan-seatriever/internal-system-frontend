@@ -46,7 +46,10 @@ const CalendarView = () => {
   }, [])
 
   const fetchData = async (startDate, endDate) => {
-    const events = (await axios.get(`${process.env.REACT_APP_API_URL}projects_between?start_date=${startDate}&end_date=${endDate}`)).data;
+    let events = (await axios.get(`${process.env.REACT_APP_API_URL}projects_between?start_date=${startDate}&end_date=${endDate}`)).data;
+    let milestones = (await axios.get(`${process.env.REACT_APP_API_URL}milestones`)).data;
+    events = events.concat(milestones);
+    console.log(events)
     setEvents(events);
   }
 
@@ -89,16 +92,14 @@ const CalendarView = () => {
         setModalStartDate={setModalStartDate} 
         fetchUsersError={fetchUsersError} 
         loadingUsers={loadingUsers} 
-        events={events} 
-        setEvents={setEvents}/>
+        fetchData={()=>fetchData(startDate, endDate)}
+        />
       <EventSidebar 
         currentEventID={currentEventID}
         setCurrentEventID={setCurrentEventID}
         users={users} 
         fetchUsersError={fetchUsersError} 
         loadingUsers={loadingUsers}
-        events={events}
-        setEvents={setEvents}
         fetchData={()=>fetchData(startDate, endDate)}
         />
       <Calendar 

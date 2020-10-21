@@ -15,7 +15,14 @@ const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEven
             htmlRowArray.push(<td key={nextId()}></td>);
           } else {
             const colspan = tempRow[0].endInt - tempRow[0].startInt;
-            htmlRowArray.push(<Event key={nextId()} id={tempRow[0].project_id} title={tempRow[0].project_title} colspan={colspan} setCurrentEventID={setCurrentEventID}/>)
+            htmlRowArray.push(
+              <Event 
+                key={nextId()} 
+                id={tempRow[0].project_id||tempRow[0].milestone_id} 
+                title={tempRow[0].project_title||tempRow[0].milestone_title} 
+                colspan={colspan} setCurrentEventID={setCurrentEventID} 
+                milestone={tempRow[0].milestone_id?true:false}
+              />)
             i+=(colspan-1);
             tempRow.shift();
           }
