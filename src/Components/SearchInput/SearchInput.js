@@ -23,7 +23,7 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback, set
   }, [data])
 
   useEffect(() => {
-    if(data.length>0) {
+    if(data&&data.length>0) {
       const filtered = data.filter(item=>item.name.toUpperCase().includes(input.toUpperCase()));
       setDataCopy(filtered);
     }

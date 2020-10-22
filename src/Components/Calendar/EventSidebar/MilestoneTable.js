@@ -34,13 +34,15 @@ const MilestoneTable = ({milestones, deleteMilestone}) => {
   return (
     <div className={`${styles.milestone_table} ${'container both'}`}>
       <table>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Deadline</th>
-          <th>✓</th>
-        </tr>
-        {mapMilestones(milestones)}
+        <tbody>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Deadline</th>
+            <th>✓</th>
+          </tr>
+          {mapMilestones(milestones)}
+        </tbody>
       </table>
       <span/>
     </div>

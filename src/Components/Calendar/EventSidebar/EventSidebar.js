@@ -46,7 +46,10 @@ const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError
     break;
     case 'task':
       render = (
-        <TaskTab />
+        <TaskTab 
+          users={users}
+          currentEventID={currentEventID} 
+        />
       )
     break;
   }

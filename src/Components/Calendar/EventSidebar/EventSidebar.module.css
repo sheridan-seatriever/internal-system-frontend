@@ -92,7 +92,6 @@
 }
 
 .date_label {
-  width: 44px;
   margin-right: 6px;
 }
 
@@ -141,4 +140,22 @@
   text-align: center;
   vertical-align: middle;
   padding: 2px 4px;
+}
+
+.max_width {
+  width: 100%;
+}
+
+.new_task {
+  width: 100%;
+  margin: 0;
+  margin-top: 30px;
+  padding: 8px;
+}
+
+.task_table {
+  width: 100%;
+  margin: 0;
+  margin-top: 30px;
+  padding: 8px;
 }

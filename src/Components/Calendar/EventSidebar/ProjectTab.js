@@ -84,7 +84,6 @@ const ProjectTab = ({currentEventID, users, setCurrentEventID, fetchUsersError, 
   }
 
   const deleteProject = async () => {
-    console.log('eyy')
     try {
       setLoadingDelete(true);
       await axios.delete(`${process.env.REACT_APP_API_URL}projects?project_id=${currentEventID}`);
