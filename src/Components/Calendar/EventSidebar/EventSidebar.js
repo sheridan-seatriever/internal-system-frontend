@@ -5,9 +5,10 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import ProjectTab from './ProjectTab';
 import MilestoneTab from './MilestoneTab';
+import TaskTab from './TaskTab';
 
 const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError, loadingUsers, events, setEvents, fetchData}) => {
-  const [tab, setTab] = useState('milestone');
+  const [tab, setTab] = useState('project');
 
   const closeAndResetState = () => {
     setCurrentEventID('');
@@ -43,14 +44,20 @@ const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError
           fetchData={fetchData}
         />)
     break;
+    case 'task':
+      render = (
+        <TaskTab />
+      )
+    break;
   }
   return (
     <>
       <NotificationContainer />
       <div className={`${styles.buffer} ${currentEventID&&styles.open}`}></div>
       <div className={`${styles.container} ${currentEventID&&styles.open}`}>
-        <div className={styles.button_group}>
+        <div className={`${styles.button_group} ${styles.mb_30}`}>
           <button type="button" className={`${styles.cancel}`} onClick={closeAndResetState}>CANCEL</button>
+          <button type="button" className={`${styles.button_primary} ${tab==='task'&&'active'}`} onClick={()=>setTab('task')}>TASKS</button>
           <button type="button" className={`${styles.button_primary} ${tab==='milestone'&&'active'}`} onClick={()=>setTab('milestone')}>MILESTONES</button>
           <button type="button" className={`${styles.button_primary} ${tab==='project'&&'active'}`} onClick={()=>setTab('project')}>PROJECT</button>
         </div>

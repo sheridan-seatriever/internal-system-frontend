@@ -120,3 +120,7 @@
   border-color: #009FE3 !important;
   color: #fff !important;
 }
+
+.width_max {
+  width: 100%;
+}

@@ -9,21 +9,23 @@ const MilestoneTable = ({milestones, deleteMilestone}) => {
     if(milestones) {
       return milestones.map(milestone=>{
         return (
-          <div className={`${styles.milestone_container}`} key={nextId()}>
-            <div>{milestone.milestone_title}</div>
-            <div>{milestone.milestone_description}</div>
-            <div>{milestone.milestone_end_date}</div>
-            <div>{milestone.milestone_is_completed?'Completed':'Not completed'}</div>
-            <button type="button" className={`${styles.delete} ${'center'}`} onClick={()=>deleteMilestone(milestone.milestone_id)}>DELETE
-              {
-                false &&
-                <div className={styles.loading_icon_container}>
-                  <img className="loading_icon" src={loadingIcon} />
-                </div>
-              }
-            </button>
-            <span/>
-          </div>
+          <tr key={nextId()}>
+            <td className={`${styles.table_data} ${'no_wrap'}`}>{milestone.milestone_title}</td>
+            <td className={`${styles.table_data} ${'width_max'}`}>{milestone.milestone_description}</td>
+            <td className={`${styles.table_data} ${'no_wrap'}`}>{milestone.milestone_end_date}</td>
+            <td className={`${styles.table_data}`}><input type="checkbox"/></td>
+            <td className={`${styles.table_data}`}>
+              <button type="button" className={`${styles.delete_small} ${'center'}`} onClick={()=>deleteMilestone(milestone.milestone_id)}>DELETE
+                {
+                  false &&
+                  <div className={styles.loading_icon_container}>
+                    <img className="loading_icon" src={loadingIcon} />
+                  </div>
+                }
+              </button>
+              <span/>
+            </td>
+          </tr>
         )
       })
     }
@@ -31,7 +33,15 @@ const MilestoneTable = ({milestones, deleteMilestone}) => {
 
   return (
     <div className={`${styles.milestone_table} ${'container both'}`}>
-      {mapMilestones(milestones)}
+      <table>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Deadline</th>
+          <th>✓</th>
+        </tr>
+        {mapMilestones(milestones)}
+      </table>
       <span/>
     </div>
   )

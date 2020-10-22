@@ -121,7 +121,6 @@ const MilestoneTab = ({currentEventID, fetchData, notifySuccess}) => {
 
   return (
     <div className={styles.milestone_tab_inner}>
-      <MilestoneTable milestones={milestones} deleteMilestone={deleteMilestone} />
       <button type="button" className={`${'button-primary center'}`} onClick={()=>setNewMilestone(!newMilestone)}>New Milestone</button>
       { 
         newMilestone &&
@@ -129,6 +128,7 @@ const MilestoneTab = ({currentEventID, fetchData, notifySuccess}) => {
           {...childProps}
         />
       }
+      <MilestoneTable milestones={milestones} deleteMilestone={deleteMilestone} />
     </div>
   )
 }

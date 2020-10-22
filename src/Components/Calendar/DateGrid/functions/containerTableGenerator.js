@@ -30,7 +30,7 @@ const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEven
           htmlRowArray.push(<td key={nextId()}></td>);
         }
       }
-      return <tr key={nextId()} className={styles.width_max}>{htmlRowArray}</tr>;
+      return <tr key={nextId()} className="width_max">{htmlRowArray}</tr>;
     }
     ////////////////////////////////////////////////
     const htmlTableArray = [];
