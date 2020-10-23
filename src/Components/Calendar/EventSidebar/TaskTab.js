@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import React,{useState, useEffect} from 'react';
 import styles from './EventSidebar.module.css';
 import NewTask from './NewTask';
@@ -27,7 +26,6 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
   const fetchTasks = async () => {
     try {
       const tasks = await axios.get(`${process.env.REACT_APP_API_URL}tasks_by_id?project_id=${currentEventID}`)
-      console.log(tasks);
       setTasks(tasks.data);
     } catch(err) {
       console.log(err)
@@ -38,7 +36,7 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
     setNewTask(false);
     setEndDateInput(new Date());
     setDateError('');
-    setEndTimeInput('');
+    setEndTimeInput({hour: '5', minute: '00', period: 'PM'});
     setTimeError('');
     setTasks(null);
   }
@@ -68,12 +66,12 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
           fetchTasks={fetchTasks}
           fetchData={fetchData}
           notifySuccess={notifySuccess}
-
         />
       }
       <TaskTable
         tasks={tasks}
         deleteTask={deleteTask}
+        users={users}
       />
     </div>
   )

@@ -3,7 +3,6 @@ import styles from './CalendarView.module.css';
 import axios from 'axios';
 import moment from 'moment';
 import Calendar from '../../Components/Calendar';
-import CalendarList from '../../Components/CalendarList';
 import EventSidebar from '../../Components/Calendar/EventSidebar';
 import EventModal from '../../Components/Calendar/EventModal';
 import DateGrid from '../../Components/Calendar/DateGrid';
@@ -107,9 +106,6 @@ const CalendarView = () => {
       />
     </Calendar>
   switch(view) {
-    case 'list':
-      render = <CalendarList />
-    break;
     case 'resource':
       render = <Resources />
     break;
@@ -138,7 +134,6 @@ const CalendarView = () => {
       <div className="width_max">
         <div className={`${styles.button_group} ${styles.mb_30}`}>
           <button type="button" className={`${styles.button_primary} ${view==='calendar'&&'active'}`} onClick={()=>setView('calendar')}>Calendar</button>
-          <button type="button" className={`${styles.button_primary} ${view==='list'&&'active'}`} onClick={()=>setView('list')}>List</button>
           <button type="button" className={`${styles.button_primary} ${view==='resource'&&'active'}`} onClick={()=>setView('resource')}>Resource</button>
         </div>
         {render}

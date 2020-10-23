@@ -6,7 +6,7 @@ import loadingIcon from './loading.png';
 const MilestoneTable = ({milestones, deleteMilestone}) => {
 
   const mapMilestones = milestones => {
-    if(milestones) {
+    if(milestones&&milestones.length>0) {
       return milestones.map(milestone=>{
         return (
           <tr key={nextId()}>
@@ -44,6 +44,10 @@ const MilestoneTable = ({milestones, deleteMilestone}) => {
           {mapMilestones(milestones)}
         </tbody>
       </table>
+      {
+        !(milestones&&milestones.length>0) &&
+        <div className={styles.no_content}><span>No milestones</span></div>
+      }
       <span/>
     </div>
   )

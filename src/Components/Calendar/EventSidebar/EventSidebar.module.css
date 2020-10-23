@@ -132,6 +132,7 @@
 
 .task_tab {
   margin-top: 30px;
+  width: 100%;
 }
 
 .table_data {
@@ -158,4 +159,12 @@
   margin-top: 30px;
   margin-bottom: 20px;
   padding: 8px;
+}
+
+.no_content {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
