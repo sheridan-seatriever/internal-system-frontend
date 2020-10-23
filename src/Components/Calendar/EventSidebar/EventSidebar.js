@@ -48,7 +48,9 @@ const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError
       render = (
         <TaskTab 
           users={users}
-          currentEventID={currentEventID} 
+          currentEventID={currentEventID}
+          notifySuccess={notifySuccess}
+          fetchData={fetchData}
         />
       )
     break;

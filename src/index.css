@@ -124,3 +124,18 @@
 .width_max {
   width: 100%;
 }
+
+.delete {
+  margin: 0;
+  border-color: #af3535 !important;
+  color: #af3535 !important;
+  white-space: nowrap;
+}
+
+.delete_small {
+  margin: 0 !important;
+  padding: 4px !important;
+  border-color: #af3535 !important;
+  color: #af3535 !important;
+  white-space: nowrap;
+}

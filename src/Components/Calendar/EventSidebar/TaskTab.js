@@ -5,7 +5,7 @@ import NewTask from './NewTask';
 import TaskTable from './TaskTable';
 import axios from 'axios';
 
-const TaskTab = ({users, currentEventID}) => {
+const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
   const [newTask, setNewTask] = useState(false);
   const [endDateInput, setEndDateInput] = useState(new Date());
   const [dateError, setDateError] = useState('');
@@ -13,14 +13,24 @@ const TaskTab = ({users, currentEventID}) => {
   const [timeError, setTimeError] = useState('');
   const [tasks, setTasks] = useState('');
 
-  const fetchTasks = async () => {
+  const deleteTask = async taskId => {
     try {
-      console.log('hello')
-      const tasks = await axios.get(`${process.env.REACT_APP_API_URL}tasks?project_id=${currentEventID}`)
-      setTasks(tasks.data);
-      console.log(tasks);
+      await axios.delete(`${process.env.REACT_APP_API_URL}tasks?task_id=${taskId}`)
+      fetchData();
+      fetchTasks(currentEventID);
+      notifySuccess('Deleted task', null, 2500);
     } catch(err) {
       console.log(err);
+    }
+  }
+
+  const fetchTasks = async () => {
+    try {
+      const tasks = await axios.get(`${process.env.REACT_APP_API_URL}tasks_by_id?project_id=${currentEventID}`)
+      console.log(tasks);
+      setTasks(tasks.data);
+    } catch(err) {
+      console.log(err)
     }
   }
 
@@ -55,10 +65,15 @@ const TaskTab = ({users, currentEventID}) => {
           setTimeError={setTimeError}
           users={users}
           currentEventID={currentEventID}
+          fetchTasks={fetchTasks}
+          fetchData={fetchData}
+          notifySuccess={notifySuccess}
+
         />
       }
       <TaskTable
         tasks={tasks}
+        deleteTask={deleteTask}
       />
     </div>
   )

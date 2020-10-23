@@ -74,7 +74,7 @@ const MilestoneTab = ({currentEventID, fetchData, notifySuccess}) => {
         project_id: currentEventID
       }
       try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}milestones`, milestone);
+        await axios.post(`${process.env.REACT_APP_API_URL}milestones`, milestone);
         fetchData();
         fetchMilestones(currentEventID);
         notifySuccess('Created milestone', null, 2500);

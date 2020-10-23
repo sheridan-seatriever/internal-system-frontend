@@ -6,30 +6,33 @@ import DatePicker from 'react-datepicker';
 import loadingIcon from './loading.png';
 import axios from 'axios';
 import moment from 'moment';
+import to24Hour from '../../../Functions/to24Hour';
 
-const submit = async (project_id, task_title, assignedTo, endDate, endTime, users) => {
-  try {
-    const task_end_date = moment(endDate).format('YYYY-MM-DD ' + endTime);
-    let task_assigned_to = users.find(user=>user.user_name===assignedTo);
-    task_assigned_to = task_assigned_to.user_id;
-    const task = {
-      project_id, 
-      task_title,
-      task_assigned_to,
-      task_end_date
-    }
-    await axios.post(`${process.env.REACT_APP_API_URL}tasks`, task);
-  } catch(err) {
-    console.log(err);
-  }
-}
 
-const NewTask = ({currentEventID, endDateInput, setEndDateInput, setDateError, endTimeInput, setEndTimeInput, setTimeError, users}) => {
+const NewTask = ({currentEventID, endDateInput, setEndDateInput, setDateError, endTimeInput, setEndTimeInput, setTimeError, users, fetchTasks, fetchData, notifySuccess}) => {
   const [title, setTitle] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
   const [assignedToError, setAssignedToError] = useState('');
 
-  const handleClick = () => submit(currentEventID, title, assignedTo, endDateInput, endTimeInput, users);
+  const submit = async () => {
+  try {
+    const task_end_date = moment(endDateInput).format('YYYY-MM-DD ' + to24Hour(endTimeInput));
+    let task_assigned_to = users.find(user=>user.user_name===assignedTo);
+    task_assigned_to = task_assigned_to.user_id;
+    const task = {
+      project_id: currentEventID, 
+      task_title: title,
+      task_assigned_to,
+      task_end_date
+    }
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}tasks`, task);
+    fetchData();
+    fetchTasks(currentEventID);
+    notifySuccess('Created task', null, 2500);
+  } catch(err) {
+    console.log(err);
+  }
+}
 
   return (
     <div className={`${'container both max_width form_element'} ${styles.new_task}`}>
@@ -48,7 +51,7 @@ const NewTask = ({currentEventID, endDateInput, setEndDateInput, setDateError, e
         <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
       </div>
       <div className={styles.button_group}>
-        <button type="button" className={`${'button-primary center'} ${styles.button_primary}`} onClick={handleClick}>SUBMIT MILESTONE 
+        <button type="button" className={`${'button-primary center'} ${styles.button_primary}`} onClick={submit}>SUBMIT TASK
           {
             false &&
             <div className={styles.loading_icon_container}>

@@ -3,12 +3,15 @@ import styles from './CalendarView.module.css';
 import axios from 'axios';
 import moment from 'moment';
 import Calendar from '../../Components/Calendar';
+import CalendarList from '../../Components/CalendarList';
 import EventSidebar from '../../Components/Calendar/EventSidebar';
 import EventModal from '../../Components/Calendar/EventModal';
 import DateGrid from '../../Components/Calendar/DateGrid';
+import Resources from '../../Components/Resources';
 import {getDaysInPrevMonth, getDaysInMonth, getFirstMonday} from '../../Functions/getDays';
 
 const CalendarView = () => {
+  const [view, setView] = useState('calendar');
   const [events, setEvents] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartDate, setModalStartDate] = useState();
@@ -30,7 +33,7 @@ const CalendarView = () => {
   
   const [month, setMonth] = useState(getCurrentMonth())
   const [year, setYear] = useState(getCurrentYear());
- 
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -48,7 +51,8 @@ const CalendarView = () => {
   const fetchData = async (startDate, endDate) => {
     let events = (await axios.get(`${process.env.REACT_APP_API_URL}projects_between?start_date=${startDate}&end_date=${endDate}`)).data;
     let milestones = (await axios.get(`${process.env.REACT_APP_API_URL}milestones`)).data;
-    events = events.concat(milestones);
+    let tasks = (await axios.get(`${process.env.REACT_APP_API_URL}tasks`)).data;
+    events = events.concat(milestones.concat(tasks)); 
     console.log(events)
     setEvents(events);
   }
@@ -82,6 +86,35 @@ const CalendarView = () => {
     }
   }, [startDate, endDate])
 
+  let render = 
+    <Calendar 
+      modalOpen={modalOpen} 
+      setModalOpen={setModalOpen} 
+      setModalStartDate={setModalStartDate} 
+      year={year}
+      month={month}
+      setYear={setYear}
+      setMonth={setMonth}
+    >
+      <DateGrid 
+        year={year}
+        month={month}
+        setModalOpen={setModalOpen}
+        setModalStartDate={setModalStartDate}
+        events={events} 
+        setEvents={setEvents} 
+        setCurrentEventID={setCurrentEventID}
+      />
+    </Calendar>
+  switch(view) {
+    case 'list':
+      render = <CalendarList />
+    break;
+    case 'resource':
+      render = <Resources />
+    break;
+  }
+
   return(
     <div className={styles.container}>
       <EventModal 
@@ -93,7 +126,7 @@ const CalendarView = () => {
         fetchUsersError={fetchUsersError} 
         loadingUsers={loadingUsers} 
         fetchData={()=>fetchData(startDate, endDate)}
-        />
+      />
       <EventSidebar 
         currentEventID={currentEventID}
         setCurrentEventID={setCurrentEventID}
@@ -101,26 +134,15 @@ const CalendarView = () => {
         fetchUsersError={fetchUsersError} 
         loadingUsers={loadingUsers}
         fetchData={()=>fetchData(startDate, endDate)}
-        />
-      <Calendar 
-        modalOpen={modalOpen} 
-        setModalOpen={setModalOpen} 
-        setModalStartDate={setModalStartDate} 
-        year={year}
-        month={month}
-        setYear={setYear}
-        setMonth={setMonth}
-      >
-        <DateGrid 
-          year={year}
-          month={month}
-          setModalOpen={setModalOpen}
-          setModalStartDate={setModalStartDate}
-          events={events} 
-          setEvents={setEvents} 
-          setCurrentEventID={setCurrentEventID}
-        />
-      </Calendar>
+      />
+      <div className="width_max">
+        <div className={`${styles.button_group} ${styles.mb_30}`}>
+          <button type="button" className={`${styles.button_primary} ${view==='calendar'&&'active'}`} onClick={()=>setView('calendar')}>Calendar</button>
+          <button type="button" className={`${styles.button_primary} ${view==='list'&&'active'}`} onClick={()=>setView('list')}>List</button>
+          <button type="button" className={`${styles.button_primary} ${view==='resource'&&'active'}`} onClick={()=>setView('resource')}>Resource</button>
+        </div>
+        {render}
+      </div>
     </div>
   )
 }

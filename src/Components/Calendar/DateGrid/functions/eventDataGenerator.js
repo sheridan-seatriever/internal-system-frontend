@@ -19,8 +19,8 @@ const eventDataGenerator = (year, month, datesInEachweek, events) => {
     }
 
     events.map(event=>{
-      const startDate = new Date(event.project_start_date||event.milestone_start_date);
-      const endDate = new Date(event.project_end_date||event.milestone_start_date);
+      const startDate = new Date(event.project_start_date||event.milestone_start_date||event.task_end_date);
+      const endDate = new Date(event.project_end_date||event.milestone_start_date||event.task_end_date);
       if(!(
         (startDate.getTime()<startRange.getTime()&&endDate.getTime()<startRange.getTime())||
         (startDate.getTime()>endRange.getTime()&&endDate.getTime()>endRange.getTime())

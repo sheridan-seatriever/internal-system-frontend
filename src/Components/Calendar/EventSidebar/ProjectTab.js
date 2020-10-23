@@ -127,7 +127,7 @@ const ProjectTab = ({currentEventID, users, setCurrentEventID, fetchUsersError, 
       <div className="error">{fetchUsersError}</div>
       <div className="error">{assignedToError}</div>
       <div className={styles.button_group}>
-        <button type="button" className={`${styles.delete} ${styles.ml_8} ${'center'}`} onClick={deleteProject}>DELETE PROJECT
+        <button type="button" className={`${styles.ml_8} ${'center delete'}`} onClick={deleteProject}>DELETE PROJECT
           {
             loadingDelete &&
             <div className={styles.loading_icon_container}>
