@@ -58,9 +58,11 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
           endDateInput={endDateInput}
           setEndDateInput={setEndDateInput}
           setDateError={setDateError}
+          dateError={dateError}
           endTimeInput={endTimeInput}
           setEndTimeInput={setEndTimeInput}
           setTimeError={setTimeError}
+          timeError={timeError}
           users={users}
           currentEventID={currentEventID}
           fetchTasks={fetchTasks}

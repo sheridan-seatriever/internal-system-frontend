@@ -7,8 +7,7 @@ import ProjectTab from './ProjectTab';
 import MilestoneTab from './MilestoneTab';
 import TaskTab from './TaskTab';
 
-const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError, loadingUsers, events, setEvents, fetchData}) => {
-  const [tab, setTab] = useState('project');
+const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError, loadingUsers, events, setEvents, fetchData, sidebarTab, setSidebarTab}) => {
 
   const closeAndResetState = () => {
     setCurrentEventID('');
@@ -19,7 +18,7 @@ const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError
   }
 
   let render = null;
-  switch(tab) {
+  switch(sidebarTab) {
     case 'project':
     render = (
       <>
@@ -62,9 +61,9 @@ const EventSidebar = ({currentEventID, users, setCurrentEventID, fetchUsersError
       <div className={`${styles.container} ${currentEventID&&styles.open}`}>
         <div className={`${styles.button_group} ${styles.mb_30}`}>
           <button type="button" className={`${styles.cancel}`} onClick={closeAndResetState}>CANCEL</button>
-          <button type="button" className={`${styles.button_primary} ${tab==='task'&&'active'}`} onClick={()=>setTab('task')}>TASKS</button>
-          <button type="button" className={`${styles.button_primary} ${tab==='milestone'&&'active'}`} onClick={()=>setTab('milestone')}>MILESTONES</button>
-          <button type="button" className={`${styles.button_primary} ${tab==='project'&&'active'}`} onClick={()=>setTab('project')}>PROJECT</button>
+          <button type="button" className={`${styles.button_primary} ${sidebarTab==='task'&&'active'}`} onClick={()=>setSidebarTab('task')}>TASKS</button>
+          <button type="button" className={`${styles.button_primary} ${sidebarTab==='milestone'&&'active'}`} onClick={()=>setSidebarTab('milestone')}>MILESTONES</button>
+          <button type="button" className={`${styles.button_primary} ${sidebarTab==='project'&&'active'}`} onClick={()=>setSidebarTab('project')}>PROJECT</button>
         </div>
         {render}
       </div>

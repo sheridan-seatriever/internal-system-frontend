@@ -4,11 +4,12 @@ import styles from './Resource.module.css';
 const ProjectDropdown = () => {
   return (
     <select>
-      <option>Holiday</option>
-      <option>Non working day</option>
-      <option>Sick</option>
-      <option>Out of office</option>
-      <option>Working from home</option>
+      <option></option>
+      <option value="Holiday">Holiday</option>
+      <option value="Non working day">Non working day</option>
+      <option value="Sick">Sick</option>
+      <option value="Out of office">Out of office</option>
+      <option value="Working from home">Working from home</option>
     </select>
   )
 }
@@ -58,13 +59,13 @@ const Resources = () => {
     <div className={styles.container}>
       <div className={styles.grid_header}>
         <div></div>
-        <div>Monday</div>
-        <div>Tuesday</div>
-        <div>Wednesday</div>
-        <div>Thursday</div>
-        <div>Friday</div>
-        <div>Saturday</div>
-        <div>Sunday</div>
+        <div className={styles.grid_header_inner}>Monday</div>
+        <div className={styles.grid_header_inner}>Tuesday</div>
+        <div className={styles.grid_header_inner}>Wednesday</div>
+        <div className={styles.grid_header_inner}>Thursday</div>
+        <div className={styles.grid_header_inner}>Friday</div>
+        <div className={styles.grid_header_inner}>Saturday</div>
+        <div className={styles.grid_header_inner}>Sunday</div>
       </div>
       {gridBody()}
       {gridBody()}

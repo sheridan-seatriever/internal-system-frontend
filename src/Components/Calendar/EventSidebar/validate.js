@@ -60,7 +60,6 @@ export const validateAssignedTo = (assignedTo, setAssignedToError) => {
 
 export const validateDates = (startDate, endDate, setDateError) => {
   setDateError('');
-  console.log(startDate);
   if((!startDate||!endDate)||(isNaN(startDate.getTime())||isNaN(endDate.getTime()))) {
     setDateError('Please enter a valid start and end date');
     return false;
@@ -69,6 +68,15 @@ export const validateDates = (startDate, endDate, setDateError) => {
     return false;
   }
   return true;
+}
+
+export const validateDate = (date, setDateError) => {
+  console.log('yo');
+  setDateError('');
+  if(!date||isNaN(date.getTime())) {
+    setDateError('Please enter a valid date');
+    return false;
+  }
 }
 
 export const validateDescription = (milestoneDescription, setMilestoneDescriptionError) => {

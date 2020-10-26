@@ -4,7 +4,7 @@ import nextId from "react-id-generator";
 import Event from '../../Event';
 import {cloneDeep} from 'lodash';
 
-const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEventID) => {
+const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEventID, setSidebarTab) => {
     //generates a colspan for each Event and pushes empty td if no Event
     const htmlRowGenerator = row => {
       let tempRow = cloneDeep(row);
@@ -15,12 +15,21 @@ const containerTableGenerator = (eventTable, dateRange, dayRange, setCurrentEven
             htmlRowArray.push(<td key={nextId()}></td>);
           } else {
             const colspan = tempRow[0].endInt - tempRow[0].startInt;
+            let tab = '';
+            if(tempRow[0].milestone_id) {
+              tab = 'milestone';
+            } else if(tempRow[0].task_id) {
+              tab = 'task';
+            } else {
+              tab = 'project'
+            }
             htmlRowArray.push(
               <Event 
                 key={nextId()} 
-                id={tempRow[0].project_id ||tempRow[0].milestone_id ||tempRow[0].task_id} 
+                id={tempRow[0].project_id || tempRow[0].milestone_id || tempRow[0].task_id} 
                 title={tempRow[0].project_title ||tempRow[0].milestone_title ||tempRow[0].task_title} 
                 colspan={colspan} setCurrentEventID={setCurrentEventID} 
+                setSidebarTab={() => setSidebarTab(tab)}
                 milestone={tempRow[0].milestone_id?true:false}
                 task={tempRow[0].task_id?true:false}
               />)

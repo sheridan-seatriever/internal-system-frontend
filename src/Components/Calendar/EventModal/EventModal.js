@@ -111,74 +111,75 @@ function EventModal({children, users, closeModal, modalStartDate, modalOpen, fet
   return (
     <Modal callback={closeModalResetState} open={modalOpen}>
       <NotificationContainer />
-      {children}
-      <h3 className={styles.modal_header}>Add new project</h3>
-      <form onSubmit={e=>submit(e)} className={styles.inner}>
-        <div className={`${styles.input_group} ${'form_element'}`}>
-          <input className={styles.input} value={title} onChange={e=>{
-            setTitle(e.target.value);
-            setTitleError('');
-        }} placeholder="Enter the Project Title"></input>
-          <div className={'error titleError no_wrap'}>{titleError}</div>
-        </div>
-        <div className={`${styles.input_group} ${'form_element'}`}>
-          <div className={styles.input}>
-            <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} placeholder="Select a project manager" setError={setProjectManagerError}/>
+      <div className={styles.modal_container}>
+        <h3 className={styles.modal_header}>Add new project</h3>
+        <form onSubmit={e=>submit(e)} className={styles.inner}>
+          <div className={`${styles.input_group} ${'form_element'}`}>
+            <input className={styles.input} value={title} onChange={e=>{
+              setTitleError('');
+              setTitle(e.target.value);
+          }} placeholder="Enter the Project Title"></input>
+            <div className={'error titleError no_wrap'}>{titleError}</div>
           </div>
-          <div className={'error titleError no_wrap'}>{projectManagerError}</div>
-        </div>
-        <div className={`${styles.input_group} ${'form_element'}`}>
-          <label className={styles.date_label}>Start:</label>
-          <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
-          <label className={styles.time_label}>At:</label>
-          <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
-        </div>
-        <div className={`${styles.input_group} ${'form_element'}`}>
-          <label className={styles.date_label}>End:</label>
-          <DatePicker selected={endDateInput} onChange={date=>{setEndDateInput(date); setDateError('')}}/>
-          <label className={styles.time_label}>At:</label>
-          <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
-        </div>
-        <div className="error">{dateError}</div>
-        <div className="error">{timeError}</div>
-        <div  className={'form_element label_group'}>
-          <label className='label_group_label'>Description:</label>
-          <textarea className={`${'label_group_content'}`} value={description} onChange={e=>setDescription(e.target.value)} />
-          <div className={'error titleError no_wrap'}>{descriptionError}</div>
-        </div>
-        <div className={'form_element label_group'}>
-        <label className='acf-label label_group_label'>Assign To:</label>
-          {
-            !users&&!fetchUsersError?
-            <div>loading</div>:
-            <div className='label_group_content'>
-              <AddList 
-                data={users.map(user=>({name: user.user_name, id: user.user_id}))} 
-                placeholder="Add user" 
-                selectedData={assignedTo} 
-                setSelectedData={setAssignedTo} 
-                setError={setAssignedToError} 
-                validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users)}
-                input={assignedToInput}
-                setInput={setAssignedToInput}
-              />
+          <div className={`${styles.input_group} ${'form_element'}`}>
+            <div className={styles.input}>
+              <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} placeholder="Select a project manager" setError={setProjectManagerError}/>
             </div>
-          }
-        </div>
-        <div className="error">{fetchUsersError}</div>
-        <div className="error">{assignedToError}</div>
-        <div className={styles.button_group}>
-          <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>
-          <button className={`${styles.button} ${'center'}`} type="submit">Submit 
+            <div className={'error titleError no_wrap'}>{projectManagerError}</div>
+          </div>
+          <div className={`${styles.input_group} ${'form_element'}`}>
+            <label className={styles.date_label}>Start:</label>
+            <DatePicker selected={startDateInput} onChange={date=>{setStartDateInput(date); setDateError('')}}/>
+            <label className={styles.time_label}>At:</label>
+            <TimePicker time={startTimeInput} setTime={setStartTimeInput} onChange={()=>setTimeError('')}/>
+          </div>
+          <div className={`${styles.input_group} ${'form_element'}`}>
+            <label className={styles.date_label}>End:</label>
+            <DatePicker selected={endDateInput} onChange={date=>{setEndDateInput(date); setDateError('')}}/>
+            <label className={styles.time_label}>At:</label>
+            <TimePicker time={endTimeInput} setTime={setEndTimeInput} onChange={()=>setTimeError('')}/>
+          </div>
+          <div className="error">{dateError}</div>
+          <div className="error">{timeError}</div>
+          <div  className={'form_element label_group'}>
+            <label className='label_group_label'>Description:</label>
+            <textarea className={`${'label_group_content'}`} value={description} onChange={e=>setDescription(e.target.value)} />
+            <div className={'error titleError no_wrap'}>{descriptionError}</div>
+          </div>
+          <div className={'form_element label_group'}>
+          <label className='acf-label label_group_label'>Assign To:</label>
             {
-              loadingSubmit &&
-              <div className={styles.loading_icon_container}>
-                <img className="loading_icon" src={loadingIcon} />
+              !users&&!fetchUsersError?
+              <div>loading</div>:
+              <div className='label_group_content'>
+                <AddList 
+                  data={users.map(user=>({name: user.user_name, id: user.user_id}))} 
+                  placeholder="Add user" 
+                  selectedData={assignedTo} 
+                  setSelectedData={setAssignedTo} 
+                  setError={setAssignedToError} 
+                  validate={input=>validateAssignedToInput(input, assignedTo, setAssignedToError, users)}
+                  input={assignedToInput}
+                  setInput={setAssignedToInput}
+                />
               </div>
-            }</button>
-        </div>
-        <div className="error">{submitError}</div>
-      </form>
+            }
+          </div>
+          <div className="error">{fetchUsersError}</div>
+          <div className="error">{assignedToError}</div>
+          <div className={styles.button_group}>
+            <button className={`${styles.button} ${styles.cancel_button}`} type="button" onClick={closeModalResetState}>Cancel</button>
+            <button className={`${styles.button} ${'center'}`} type="submit">Submit 
+              {
+                loadingSubmit &&
+                <div className={styles.loading_icon_container}>
+                  <img className="loading_icon" src={loadingIcon} />
+                </div>
+              }</button>
+          </div>
+          <div className="error">{submitError}</div>
+        </form>
+      </div>
     </Modal>
   )
 }

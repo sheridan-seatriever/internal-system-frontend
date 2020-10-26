@@ -4,13 +4,20 @@
 
 .grid_header {
   display: grid;
+  justify-content: center;
   grid-template-columns: repeat(8, 1fr);
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+.grid_header_inner {
+  display: flex;
+  justify-content: center;
+}
+
 .grid_body {
   display: grid;
-  margin-top: 10px;
+  margin-top: 5px;
+  height: 80px;
   gap: 5px;
   grid-template-columns: repeat(8, 1fr);
 }

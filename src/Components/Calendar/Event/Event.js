@@ -1,8 +1,9 @@
 import React from 'react';
 import styles from './Event.module.css';
 
-const Event = ({id, title, colspan, setCurrentEventID, milestone, task}) => {
+const Event = ({id, title, colspan, setCurrentEventID, milestone, task, setSidebarTab}) => {
   const onClick = () => {
+    setSidebarTab();
     setCurrentEventID(id);
   }
   return (

@@ -10,7 +10,7 @@ import Day from './Day';
 import nextId from 'react-id-generator';
 import {getDaysInPrevMonth, getDaysInMonth, getFirstMonday} from '../../../Functions/getDays';
 
-const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setCurrentEventID}) => {
+const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setCurrentEventID, setSidebarTab}) => {
 
   //dateRange is an array which contains the dates which will be displayed for the selected month
   let dateRange = [];
@@ -69,7 +69,7 @@ const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setCurr
   let dateRows = [];
   for(let i=0;i<rows;i++) {
     const eventTable = generateEventPositions(eventRangeWeeks[i]);
-    dateRows.push(containerTableGenerator(eventTable, datesInEachWeek[i], dayRangeWeeks[i], setCurrentEventID));
+    dateRows.push(containerTableGenerator(eventTable, datesInEachWeek[i], dayRangeWeeks[i], setCurrentEventID, setSidebarTab));
   }
 
   return(

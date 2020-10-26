@@ -10,6 +10,7 @@ import Resources from '../../Components/Resources';
 import {getDaysInPrevMonth, getDaysInMonth, getFirstMonday} from '../../Functions/getDays';
 
 const CalendarView = () => {
+  const [sidebarTab, setSidebarTab] = useState('project');
   const [view, setView] = useState('calendar');
   const [events, setEvents] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -103,6 +104,8 @@ const CalendarView = () => {
         events={events} 
         setEvents={setEvents} 
         setCurrentEventID={setCurrentEventID}
+        sidebarTab={setSidebarTab}
+        setSidebarTab={setSidebarTab}
       />
     </Calendar>
   switch(view) {
@@ -130,6 +133,8 @@ const CalendarView = () => {
         fetchUsersError={fetchUsersError} 
         loadingUsers={loadingUsers}
         fetchData={()=>fetchData(startDate, endDate)}
+        sidebarTab={sidebarTab}
+        setSidebarTab={setSidebarTab}
       />
       <div className="width_max">
         <div className={`${styles.button_group} ${styles.mb_30}`}>
