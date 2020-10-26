@@ -11,6 +11,8 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
   const [endTimeInput, setEndTimeInput] = useState({hour: '5', minute: '00', period: 'PM'});
   const [timeError, setTimeError] = useState('');
   const [tasks, setTasks] = useState('');
+  const [title, setTitle] = useState('');
+  const [assignedTo, setAssignedTo] = useState('');
 
   const deleteTask = async taskId => {
     try {
@@ -32,20 +34,23 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
     }
   }
 
-  const closeAndResetState = () => {
-    setNewTask(false);
+  const resetState = () => {
+    console.log('reset');
     setEndDateInput(new Date());
     setDateError('');
     setEndTimeInput({hour: '5', minute: '00', period: 'PM'});
     setTimeError('');
     setTasks(null);
+    setTitle('');
+    setAssignedTo('');
   }
 
   useEffect(() => {
     if(currentEventID) {
       fetchTasks();
     } else {
-      closeAndResetState();
+      resetState();
+      setNewTask(false);
     }
   }, [currentEventID])
 
@@ -55,19 +60,18 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
       {
         newTask &&
         <NewTask
-          endDateInput={endDateInput}
-          setEndDateInput={setEndDateInput}
-          setDateError={setDateError}
-          dateError={dateError}
-          endTimeInput={endTimeInput}
-          setEndTimeInput={setEndTimeInput}
-          setTimeError={setTimeError}
-          timeError={timeError}
+          endDateInput={endDateInput} setEndDateInput={setEndDateInput}
+          dateError={dateError} setDateError={setDateError}
+          endTimeInput={endTimeInput} setEndTimeInput={setEndTimeInput}
+          timeError={timeError} setTimeError={setTimeError}
+          title={title} setTitle={setTitle}
+          assignedTo={assignedTo} setAssignedTo={setAssignedTo}
           users={users}
           currentEventID={currentEventID}
           fetchTasks={fetchTasks}
           fetchData={fetchData}
           notifySuccess={notifySuccess}
+          resetState={resetState}
         />
       }
       <TaskTable

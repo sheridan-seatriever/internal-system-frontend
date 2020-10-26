@@ -9,10 +9,27 @@ import moment from 'moment';
 import to24Hour from '../../../Functions/to24Hour';
 import {validateTitle, validateAssignedTo, validateDate, validateTime} from './validate';
 
-const NewTask = ({currentEventID, endDateInput, setEndDateInput, setDateError, dateError, endTimeInput, setEndTimeInput, setTimeError, timeError, users, fetchTasks, fetchData, notifySuccess}) => {
-  const [title, setTitle] = useState('');
+const NewTask = ({
+    currentEventID,
+    endDateInput,
+    setEndDateInput, 
+    setDateError, 
+    dateError, 
+    endTimeInput, 
+    setEndTimeInput, 
+    setTimeError, 
+    timeError, 
+    users, 
+    fetchTasks, 
+    fetchData, 
+    notifySuccess, 
+    resetState,
+    title,
+    setTitle,
+    assignedTo,
+    setAssignedTo
+    }) => {
   const [titleError, setTitleError] = useState('');
-  const [assignedTo, setAssignedTo] = useState('');
   const [assignedToError, setAssignedToError] = useState('');
 
   const validateSubmit = () => {
@@ -36,7 +53,8 @@ const NewTask = ({currentEventID, endDateInput, setEndDateInput, setDateError, d
           task_assigned_to,
           task_end_date
         }
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}tasks`, task);
+        await axios.post(`${process.env.REACT_APP_API_URL}tasks`, task);
+        resetState();
         fetchData();
         fetchTasks(currentEventID);
         notifySuccess('Created task', null, 2500);

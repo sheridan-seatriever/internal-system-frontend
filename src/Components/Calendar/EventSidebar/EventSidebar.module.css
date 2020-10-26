@@ -10,6 +10,7 @@
   background-color: rgba(0,0,0,0.15);
   transition: all .4s;
   z-index: 5;
+  overflow-y: auto;
 }
 
 .buffer {

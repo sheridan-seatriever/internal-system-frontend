@@ -31,11 +31,12 @@ const MilestoneTab = ({currentEventID, fetchData, notifySuccess}) => {
     if(currentEventID) {
       fetchMilestones(currentEventID);
     } else {
-      closeAndResetState();
+      setNewMilestone(false);
+      resetState();
     }
   }, [currentEventID])
 
-  const closeAndResetState = () => {
+  const resetState = () => {
     setMilestones(null);
     setMilestoneTitle('');
     setMilestoneTitleError('');
@@ -47,7 +48,6 @@ const MilestoneTab = ({currentEventID, fetchData, notifySuccess}) => {
     setStartTimeInput({hour: '9', minute: '00', period: 'AM'});
     setEndTimeInput({hour: '5', minute: '00', period: 'PM'});
     setTimeError('');
-    setNewMilestone(false);
   }
 
   const validateSubmit = () => {
@@ -75,6 +75,7 @@ const MilestoneTab = ({currentEventID, fetchData, notifySuccess}) => {
       }
       try {
         await axios.post(`${process.env.REACT_APP_API_URL}milestones`, milestone);
+        resetState();
         fetchData();
         fetchMilestones(currentEventID);
         notifySuccess('Created milestone', null, 2500);
