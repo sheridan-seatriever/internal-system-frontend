@@ -1,6 +1,5 @@
 import React,{useEffect} from 'react';
 import styles from './DateGrid.module.css';
-//import sampleData from '../sampleData.js';
 import eventDataGenerator from './functions/eventDataGenerator';
 import generateEventPositions from './functions/generateEventPositions';
 import containerTableGenerator from './functions/containerTableGenerator';
@@ -62,7 +61,7 @@ const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setCurr
 
   //eventRangeWeeks splits events into weeks and adds startInt and endInt to each event
   let eventRangeWeeks = [];
-  if(events.length>0) {
+  if(events&&events.length>0) {
     eventRangeWeeks = eventDataGenerator(year, month, datesInEachWeek, events);
   }
 

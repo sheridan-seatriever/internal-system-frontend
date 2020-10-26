@@ -12,10 +12,11 @@ import {getDaysInPrevMonth, getDaysInMonth, getFirstMonday} from '../../Function
 const CalendarView = () => {
   const [sidebarTab, setSidebarTab] = useState('project');
   const [view, setView] = useState('calendar');
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(null);
+  const [projects, setProjects] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartDate, setModalStartDate] = useState();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(null);
   const [fetchUsersError, setFetchUsersError] = useState('');
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [currentEventID, setCurrentEventID] = useState('');
@@ -35,6 +36,12 @@ const CalendarView = () => {
   const [year, setYear] = useState(getCurrentYear());
 
   useEffect(() => {
+    if(modalOpen) {
+      setCurrentEventID('');
+    }
+  }, [modalOpen])
+
+  useEffect(() => {
     const fetchUsers = async () => {
       try {
         const users = (await axios.get(`${process.env.REACT_APP_API_URL}users_all`)).data;
@@ -47,13 +54,12 @@ const CalendarView = () => {
     }
     fetchUsers();
   }, [])
-
   const fetchData = async (startDate, endDate) => {
-    let events = (await axios.get(`${process.env.REACT_APP_API_URL}projects_between?start_date=${startDate}&end_date=${endDate}`)).data;
+    let projects = (await axios.get(`${process.env.REACT_APP_API_URL}projects_between?start_date=${startDate}&end_date=${endDate}`)).data;
+    setProjects(projects);
     let milestones = (await axios.get(`${process.env.REACT_APP_API_URL}milestones`)).data;
     let tasks = (await axios.get(`${process.env.REACT_APP_API_URL}tasks`)).data;
-    events = events.concat(milestones.concat(tasks)); 
-    console.log(events)
+    let events = tasks.concat(milestones.concat(projects)); 
     setEvents(events);
   }
 
@@ -86,33 +92,6 @@ const CalendarView = () => {
     }
   }, [startDate, endDate])
 
-  let render = 
-    <Calendar 
-      modalOpen={modalOpen} 
-      setModalOpen={setModalOpen} 
-      setModalStartDate={setModalStartDate} 
-      year={year}
-      month={month}
-      setYear={setYear}
-      setMonth={setMonth}
-    >
-      <DateGrid 
-        year={year}
-        month={month}
-        setModalOpen={setModalOpen}
-        setModalStartDate={setModalStartDate}
-        events={events} 
-        setEvents={setEvents} 
-        setCurrentEventID={setCurrentEventID}
-        sidebarTab={setSidebarTab}
-        setSidebarTab={setSidebarTab}
-      />
-    </Calendar>
-  switch(view) {
-    case 'resource':
-      render = <Resources />
-    break;
-  }
 
   return(
     <div className={styles.container}>
@@ -139,9 +118,36 @@ const CalendarView = () => {
       <div className="width_max">
         <div className={`${styles.button_group} ${styles.mb_30}`}>
           <button type="button" className={`${styles.button_primary} ${view==='calendar'&&'active'}`} onClick={()=>setView('calendar')}>Calendar</button>
-          <button type="button" className={`${styles.button_primary} ${view==='resource'&&'active'}`} onClick={()=>setView('resource')}>Resource</button>
+          <button type="button" className={`${styles.button_primary} ${view==='resource'&&'active'}`} onClick={()=>{setView('resource'); setCurrentEventID('')}}>Resource</button>
         </div>
-        {render}
+        <Calendar 
+          modalOpen={modalOpen} 
+          setModalOpen={setModalOpen} 
+          setModalStartDate={setModalStartDate} 
+          year={year}
+          month={month}
+          setYear={setYear}
+          setMonth={setMonth}
+          view={view}
+        >
+        {view==="resource"?
+          <Resources
+            users={users}
+            projects={projects}
+          />:
+          <DateGrid 
+            year={year}
+            month={month}
+            setModalOpen={setModalOpen}
+            setModalStartDate={setModalStartDate}
+            events={events} 
+            setEvents={setEvents} 
+            setCurrentEventID={setCurrentEventID}
+            sidebarTab={setSidebarTab}
+            setSidebarTab={setSidebarTab}
+          />
+        }
+        </Calendar>
       </div>
     </div>
   )

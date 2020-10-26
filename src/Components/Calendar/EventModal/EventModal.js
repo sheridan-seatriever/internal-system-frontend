@@ -118,12 +118,12 @@ function EventModal({children, users, closeModal, modalStartDate, modalOpen, fet
             <input className={styles.input} value={title} onChange={e=>{
               setTitleError('');
               setTitle(e.target.value);
-          }} placeholder="Enter the Project Title"></input>
+            }} placeholder="Enter the Project Title"></input>
             <div className={'error titleError no_wrap'}>{titleError}</div>
           </div>
           <div className={`${styles.input_group} ${'form_element'}`}>
             <div className={styles.input}>
-              <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} placeholder="Select a project manager" setError={setProjectManagerError}/>
+              <SearchInput data={users&&users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} placeholder="Select a project manager" setError={setProjectManagerError}/>
             </div>
             <div className={'error titleError no_wrap'}>{projectManagerError}</div>
           </div>

@@ -19,7 +19,9 @@ const SearchInput = ({data, input, setInput, placeholder='', selectCallback, set
   useOutsideAlerter(wrapperRef, onClose, open)
 
   useEffect(() => {
-    setDataCopy(cloneDeep(data));
+    if(data) {
+      setDataCopy(cloneDeep(data));
+    }
   }, [data])
 
   useEffect(() => {

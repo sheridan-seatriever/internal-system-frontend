@@ -108,14 +108,14 @@ const ProjectTab = ({currentEventID, users, setCurrentEventID, fetchUsersError, 
       </div>
       <div className={'form_element'}>
         <label>Project Manager:</label>
-        <SearchInput data={users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} setError={setProjectManagerError}/>
+        <SearchInput data={users&&users.map(user=>({name: user.user_name, id: user.user_id}))} input={projectManager} setInput={setProjectManager} setError={setProjectManagerError}/>
         <div className="error form_element">{projectManagerError}</div>
       </div>
       <div className="error">{fetchUsersError}</div>
       <div className={'form_element'}>
       <label>Assigned To:</label>
       <AddList
-        data={users.map(user=>({name: user.user_name, id: user.user_id}))} 
+        data={users&&users.map(user=>({name: user.user_name, id: user.user_id}))} 
         placeholder={'Add user'}
         selectedData={assignedTo} 
         setSelectedData={setAssignedTo}
