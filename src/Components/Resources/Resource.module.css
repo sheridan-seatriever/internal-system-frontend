@@ -4,7 +4,7 @@
 .grid_header {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -18,7 +18,7 @@
   margin-top: 5px;
   height: 80px;
   gap: 5px;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .grid_vertical_header {
@@ -65,4 +65,14 @@
 select {
   color: black;
   width: 100%;
+}
+
+.week_tabs {
+  display: flex;
+  justify-content: center;
+  margin: 3px;
+}
+
+.tab {
+  margin: 0px;
 }

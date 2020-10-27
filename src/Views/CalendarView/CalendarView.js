@@ -8,10 +8,11 @@ import EventModal from '../../Components/Calendar/EventModal';
 import DateGrid from '../../Components/Calendar/DateGrid';
 import Resources from '../../Components/Resources';
 import {getDaysInPrevMonth, getDaysInMonth, getFirstMonday} from '../../Functions/getDays';
+import _ from 'lodash';
 
 const CalendarView = () => {
   const [sidebarTab, setSidebarTab] = useState('project');
-  const [view, setView] = useState('calendar');
+  const [view, setView] = useState('resource');
   const [events, setEvents] = useState(null);
   const [projects, setProjects] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -93,6 +94,37 @@ const CalendarView = () => {
   }, [startDate, endDate])
 
 
+   //dateRange is an array which contains the dates which will be displayed for the selected month
+  let dateRange = [];
+
+  let daysInPrevMonth = getDaysInPrevMonth(year, month);
+  let firstMonday = getFirstMonday(year, month).format('D');
+  const daysInMonth = getDaysInMonth(year, month);
+  let rows = 0;
+  if(firstMonday==='1') {
+    rows = Math.ceil((daysInMonth)/7);
+    dateRange = _.range(1, daysInMonth+1);
+  } else {
+    //push dates in previous month to start of dategrid
+    const additional = (daysInPrevMonth-firstMonday)+1;
+    rows = Math.ceil((additional+daysInMonth)/7);
+    dateRange = _.range(firstMonday, daysInPrevMonth+1);
+    dateRange = dateRange.concat(_.range(1, daysInMonth+1));
+  }
+  //push dates from next month to end of dategrid
+  let count = 1;
+  while(dateRange.length%7!==0) {
+    dateRange.push(count);
+    count++;
+  }
+
+  //datesInEachWeek splits dateRange into one array for each week
+  const datesInEachWeek = [];
+  for(let i=0;i<rows;i++) {
+    datesInEachWeek.push(dateRange.splice(0,7));
+  }
+
+
   return(
     <div className={styles.container}>
       <EventModal 
@@ -129,13 +161,12 @@ const CalendarView = () => {
           setYear={setYear}
           setMonth={setMonth}
           view={view}
-        >
-        {view==="resource"?
-          <Resources
+          resources={<Resources
             users={users}
             projects={projects}
-          />:
-          <DateGrid 
+            datesInEachWeek={datesInEachWeek}
+          />}
+          calendar={<DateGrid 
             year={year}
             month={month}
             setModalOpen={setModalOpen}
@@ -145,9 +176,8 @@ const CalendarView = () => {
             setCurrentEventID={setCurrentEventID}
             sidebarTab={setSidebarTab}
             setSidebarTab={setSidebarTab}
-          />
-        }
-        </Calendar>
+          />}
+        />
       </div>
     </div>
   )

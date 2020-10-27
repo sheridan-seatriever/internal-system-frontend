@@ -53,7 +53,7 @@ const DateGrid = ({year, month, setModalStartDate, setModalOpen, events, setCurr
 
   //datesInEachWeek splits dateRange into one array for each week
   const datesInEachWeek = [];
-  const dayRangeWeeks = []
+  const dayRangeWeeks = [];
   for(let i=0;i<rows;i++) {
     datesInEachWeek.push(dateRange.splice(0,7));
     dayRangeWeeks.push(dayRange.splice(0,7));

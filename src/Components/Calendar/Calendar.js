@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import styles from './Calendar.module.css';
+import _ from 'lodash';
 
-function Calendar({children, modalOpen, setModalOpen, setModalStartDate, month, setMonth, year, setYear}) {
+function Calendar({modalOpen, setModalOpen, setModalStartDate, month, setMonth, year, setYear, view, resources, calendar}) {
 
   const getMonth = monthInt => {
     const months = [
@@ -65,9 +66,9 @@ function Calendar({children, modalOpen, setModalOpen, setModalStartDate, month, 
           <button className={styles.button} onClick={()=>setYear(year+1)}>Next Year</button>
         </div>
       </div>
-      {children}
+      {view==="resource"?resources:calendar}
     </div>
   )
 }
 
-export default Calendar 
+export default Calendar; 
