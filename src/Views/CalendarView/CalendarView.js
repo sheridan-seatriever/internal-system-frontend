@@ -100,30 +100,32 @@ const CalendarView = () => {
   let daysInPrevMonth = getDaysInPrevMonth(year, month);
   let firstMonday = getFirstMonday(year, month).format('D');
   const daysInMonth = getDaysInMonth(year, month);
-  let rows = 0;
   if(firstMonday==='1') {
-    rows = Math.ceil((daysInMonth)/7);
-    dateRange = _.range(1, daysInMonth+1);
+    const currentMonthRange = _.range(1, daysInMonth+1);
+    dateRange = currentMonthRange.map(date=>({day: date, month}));
   } else {
     //push dates in previous month to start of dategrid
-    const additional = (daysInPrevMonth-firstMonday)+1;
-    rows = Math.ceil((additional+daysInMonth)/7);
-    dateRange = _.range(firstMonday, daysInPrevMonth+1);
-    dateRange = dateRange.concat(_.range(1, daysInMonth+1));
+    let prevMonthRange = _.range(firstMonday, daysInPrevMonth+1);
+    prevMonthRange = prevMonthRange.map(date=>({day: date, month: month-1}));
+    let currentMonthRange = _.range(1, daysInMonth+1);
+    currentMonthRange = currentMonthRange.map(date=>({day: date, month}));
+    dateRange = dateRange.concat(prevMonthRange);
+    dateRange = dateRange.concat(currentMonthRange);
   }
   //push dates from next month to end of dategrid
   let count = 1;
   while(dateRange.length%7!==0) {
-    dateRange.push(count);
+    dateRange.push({day: count, month: month+1});
     count++;
   }
+
+  const rows = Math.ceil(dateRange.length/7);
 
   //datesInEachWeek splits dateRange into one array for each week
   const datesInEachWeek = [];
   for(let i=0;i<rows;i++) {
     datesInEachWeek.push(dateRange.splice(0,7));
   }
-
 
   return(
     <div className={styles.container}>
@@ -165,6 +167,8 @@ const CalendarView = () => {
             users={users}
             projects={projects}
             datesInEachWeek={datesInEachWeek}
+            month={month}
+            year={year}
           />}
           calendar={<DateGrid 
             year={year}

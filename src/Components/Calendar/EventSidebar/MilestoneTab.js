@@ -90,7 +90,6 @@ const MilestoneTab = ({currentEventID, fetchData, notifySuccess}) => {
       await axios.delete(`${process.env.REACT_APP_API_URL}milestones?milestone_id=${milestoneId}`);
       fetchData();
       fetchMilestones(currentEventID);
-      notifySuccess('Deleted milestone', null, 2500);
     } catch(err) {
       console.log(err);
     }

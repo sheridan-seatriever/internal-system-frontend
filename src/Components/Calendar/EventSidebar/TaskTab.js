@@ -19,7 +19,6 @@ const TaskTab = ({users, currentEventID, fetchData, notifySuccess}) => {
       await axios.delete(`${process.env.REACT_APP_API_URL}tasks?task_id=${taskId}`)
       fetchData();
       fetchTasks(currentEventID);
-      notifySuccess('Deleted task', null, 2500);
     } catch(err) {
       console.log(err);
     }
