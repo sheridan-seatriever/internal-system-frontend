@@ -28,8 +28,8 @@ const Row = ({user, projects, dates, year}) => {
     for(let i=0;i<5;i++) {
       mapped.push(
         <div key={nextId()} className={styles.grid_split}>
-          <Dropdown projects={projects} userId={user.user_id} period="AM" date={Date.UTC(year,dates[i].month,dates[i].day)}/>
-          <Dropdown projects={projects} userId={user.user_id} period="PM" date={Date.UTC(year,dates[i].month,dates[i].day)}/>
+          <Dropdown projects={projects} userId={user.user_id} period="AM" date={[year, dates[i].month, dates[i].day]}/>
+          <Dropdown projects={projects} userId={user.user_id} period="PM" date={[year, dates[i].month, dates[i].day]}/>
         </div>
       )
     }
@@ -49,14 +49,13 @@ const Row = ({user, projects, dates, year}) => {
 }
 
 const Dropdown = ({projects, userId, period, date}) => {
-  const [dataChosen, setDataChosen] = useState('unassigned');
+  const dateUTC = new Date(Date.UTC(date[0], date[1], date[2]));
+  const [selectValue, setSelectValue] = useState('unassigned');
   
   const mapProjects = () => {
     if(projects) {
       return projects.map(project=>{
-        console.log(new Date(date), new Date(project.startDateUTC), new Date(project.endDateUTC));
-        console.log(date, project.startDateUTC, project.endDateUTC);
-        if(date>=project.startDateUTC&&date<project.endDateUTC) {
+        if(dateUTC>=project.startDateUTC&&dateUTC<project.endDateUTC) {
           return <option key={nextId()} value={project.project_id}>{project.project_title}</option>
         }
       })
@@ -64,18 +63,32 @@ const Dropdown = ({projects, userId, period, date}) => {
   }
 
   return (
-    <select className={dataChosen==='unassigned'?styles.unassigned:''} onChange={e=>{
-        setDataChosen(e.target.text);
-        axios.post(`${process.env.REACT_APP_API_ULR}schedule`, {
-          user_id: userId,
-        })
+    <select className={selectValue==='unassigned'?styles.unassigned:''} value={selectValue} onChange={async e=>{
+        setSelectValue(e.target.value);
+        let project_id = null;
+        let absence_reason = null;
+        if(isNaN(parseInt(e.target.value))) {
+          absence_reason = e.target.value;
+        } else {
+          project_id = e.target.value;
+        }
+        const obj = {
+          user_id: parseInt(userId),
+          date: date.join('-'),
+          project_id,
+          absence_reason,
+          period
+        }
+        console.log(obj)
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}schedule`, obj);
+        console.log(res.data)
       }}>
-      <option value="unassigned">Unassigned</option>
-      <option value="holiday">Holiday</option>
-      <option value="non working day">Non working day</option>
-      <option value="sick">Sick</option>
-      <option value="out of office">Out of office</option>
-      <option value="working from home">Working from home</option>
+      <option key={nextId()} value="unassigned">Unassigned</option>
+      <option key={nextId()} value="holiday">Holiday</option>
+      <option key={nextId()} value="non working day">Non working day</option>
+      <option key={nextId()} value="sick">Sick</option>
+      <option key={nextId()} value="out of office">Out of office</option>
+      <option key={nextId()} value="working from home">Working from home</option>
       {mapProjects()}
     </select>
   )
