@@ -60,7 +60,7 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
   useEffect(() => {
     if(schedule) {
       currentSchedule = schedule.find(schedule=>schedule.date===dateString);
-      if(currentSchedule) {
+      if(currentSchedule&&currentSchedule.user_id===userId) {
         if(currentSchedule.project_id) {
           setSelectValue(currentSchedule.project_id);
         } else if(currentSchedule.absence_reason) {
@@ -69,8 +69,6 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
       }
     }
   }, [schedule])
-
-
   
   const mapOptions = () => {
     let options = [
@@ -91,7 +89,6 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
         let endDate = (project.project_end_date.split(' ')[0]).split('-');
         startDate = Date.UTC(startDate[0], startDate[1]-1, startDate[2]); 
         endDate = Date.UTC(endDate[0], endDate[1]-1, endDate[2]);
-        console.log(new Date(startDate), new Date(endDate), new Date(dateUTCString));
         if(dateUTCString>=startDate&&dateUTCString<endDate) return project;
       });
       projectOptions = currentProjects.map(project=><option key={nextId()} value={project.project_id}>{project.project_title}</option>)
@@ -104,23 +101,23 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
 
   return (
     <select className={selectValue==='unassigned'?styles.unassigned:''} value={selectValue} onChange={async e=>{
-        setSelectValue(e.target.value);
-        let project_id = null;
-        let absence_reason = null;
-        if(isNaN(parseInt(e.target.value))) {
-          absence_reason = e.target.value;
-        } else {
-          project_id = e.target.value;
-        }
-        const obj = {
-          user_id: parseInt(userId),
-          date: dateString,
-          project_id,
-          absence_reason,
-          period
-        }
-        await axios.post(`${process.env.REACT_APP_API_URL}schedule`, obj);
-      }}>
+      setSelectValue(e.target.value);
+      let project_id = null;
+      let absence_reason = null;
+      if(isNaN(parseInt(e.target.value))) {
+        absence_reason = e.target.value;
+      } else {
+        project_id = e.target.value;
+      }
+      const obj = {
+        user_id: parseInt(userId),
+        date: dateString,
+        project_id,
+        absence_reason,
+        period
+      }
+      await axios.post(`${process.env.REACT_APP_API_URL}schedule`, obj);
+    }}>
       {mapOptions()}
     </select>
   )
