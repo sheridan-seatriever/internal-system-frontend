@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import styles from './Resource.module.css';
 import nextId from 'react-id-generator';
 import moment from 'moment';
@@ -57,7 +57,7 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
 
   let currentSchedule;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if(schedule) {
       currentSchedule = schedule.find(schedule=>schedule.date===dateString);
       if(currentSchedule&&currentSchedule.user_id===userId) {
