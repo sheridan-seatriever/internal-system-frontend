@@ -175,8 +175,8 @@ const CalendarView = () => {
             month={month}
             setModalOpen={setModalOpen}
             setModalStartDate={setModalStartDate}
-            events={events} 
-            setEvents={setEvents} 
+            events={events}
+            setEvents={setEvents}
             setCurrentEventID={setCurrentEventID}
             sidebarTab={setSidebarTab}
             setSidebarTab={setSidebarTab}

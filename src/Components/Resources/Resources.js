@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './Resource.module.css';
 import nextId from 'react-id-generator';
+import moment from 'moment';
 import axios from 'axios';
 
 const Header = ({dates}) => {
@@ -21,15 +22,15 @@ const Header = ({dates}) => {
   )
 }
 
-const Row = ({user, projects, dates, year}) => {
+const Row = ({user, projects, dates, schedule, year}) => {
 
   const mapDates = () => {
     let mapped = []
     for(let i=0;i<5;i++) {
       mapped.push(
         <div key={nextId()} className={styles.grid_split}>
-          <Dropdown projects={projects} userId={user.user_id} period="AM" date={[year, dates[i].month, dates[i].day]}/>
-          <Dropdown projects={projects} userId={user.user_id} period="PM" date={[year, dates[i].month, dates[i].day]}/>
+          <Dropdown projects={projects} schedule={schedule} userId={user.user_id} period="AM" date={[year, dates[i].month, dates[i].day]}/>
+          <Dropdown projects={projects} schedule={schedule} userId={user.user_id} period="PM" date={[year, dates[i].month, dates[i].day]}/>
         </div>
       )
     }
@@ -48,19 +49,65 @@ const Row = ({user, projects, dates, year}) => {
   )
 }
 
-const Dropdown = ({projects, userId, period, date}) => {
+const Dropdown = ({projects, schedule, userId, period, date}) => {
   const dateUTC = new Date(Date.UTC(date[0], date[1], date[2]));
+  const dateString = moment(dateUTC).format('YYYY-MM-DD');
   const [selectValue, setSelectValue] = useState('unassigned');
-  
-  const mapProjects = () => {
-    if(projects) {
-      return projects.map(project=>{
-        if(dateUTC>=project.startDateUTC&&dateUTC<project.endDateUTC) {
-          return <option key={nextId()} value={project.project_id}>{project.project_title}</option>
-        }
-      })
-    }
+
+  let currentSchedule;
+
+  if(schedule) {
+    currentSchedule = schedule.find(schedule=>schedule.date===dateString);
   }
+  
+  const mapOptions = () => {
+    let options = [
+      {value: 'unassigned', inner: 'Unassigned'},
+      {value: 'holiday', inner: 'Holiday'},
+      {value: 'non working day', inner: 'Non working day'},
+      {value: 'sick', inner: 'Sick'},
+      {value: 'out of office', inner: 'Out of office'},
+      {value: 'working from home', inner: 'Working from home'}
+    ]
+
+    let projectOptions = [];
+    let projectsCurrentDate = [];
+
+    if(currentSchedule) {
+      if(currentSchedule.project_id) {
+        if(projects) {
+          projectOptions = projects.map(project=>{
+            if(project.project_id===currentSchedule.project_id) {
+              return <option defaultValue key={nextId()} value={project.project_id}>{project.project_title}</option>
+            } else {
+              return <option key={nextId()} value={project.project_id}>{project.project_title}</option>
+            }
+          })
+        }
+        options = options.map(option=><option key={nextId()} value={option.value}>{option.inner}</option>);
+      } else {
+        if(projects) {
+          projectOptions = projects.map(project=><option key={nextId()} value={project.project_id}>{project.project_title}</option>)
+        }
+        options = options.map(option=>{
+          if(currentSchedule.absence_reason===option.value) {
+            return <option defaultValue key={nextId()} value={option.value}>{option.inner}</option>
+          } else {
+            return <option key={nextId()} value={option.value}>{option.inner}</option>
+          }
+        });
+      }
+    } else {
+      if(projects) {
+        projectOptions = projects.map(project=><option key={nextId()} value={project.project_id}>{project.project_title}</option>)
+      }
+      options = options.map(option=><option key={nextId()} value={option.value}>{option.inner}</option>);
+    }
+    return options.concat(projectOptions);
+  }
+
+
+  console.log(mapOptions());
 
   return (
     <select className={selectValue==='unassigned'?styles.unassigned:''} value={selectValue} onChange={async e=>{
@@ -74,32 +121,24 @@ const Dropdown = ({projects, userId, period, date}) => {
         }
         const obj = {
           user_id: parseInt(userId),
-          date: date.join('-'),
+          date: dateString,
           project_id,
           absence_reason,
           period
         }
-        console.log(obj)
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}schedule`, obj);
-        console.log(res.data)
+        await axios.post(`${process.env.REACT_APP_API_URL}schedule`, obj);
       }}>
-      <option key={nextId()} value="unassigned">Unassigned</option>
-      <option key={nextId()} value="holiday">Holiday</option>
-      <option key={nextId()} value="non working day">Non working day</option>
-      <option key={nextId()} value="sick">Sick</option>
-      <option key={nextId()} value="out of office">Out of office</option>
-      <option key={nextId()} value="working from home">Working from home</option>
-      {mapProjects()}
+      {mapOptions()}
     </select>
   )
 }
 
 
-const Week = ({users, projects, dates, year, month}) => {
+const Week = ({users, projects, dates, schedule, year}) => {
   return (
     <div key={nextId()} className="form_element">
       <Header dates={dates} />
-      {users&&users.map(user=><Row key={nextId()} user={user} projects={projects} dates={dates} year={year}/>)}
+      {users&&users.map(user=><Row key={nextId()} user={user} projects={projects} dates={dates} schedule={schedule} year={year}/>)}
     </div>
   )
 }
@@ -116,6 +155,21 @@ const WeekTabs = ({datesInEachWeek, tab, setTab}) => {
 
 const Resources = ({users, projects, datesInEachWeek, year, month}) => {
   const [tab, setTab] = useState(0);
+  const [schedule, setSchedule] = useState(null);
+
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      const startDate = `${year}-${datesInEachWeek[tab][0].month+1}-${datesInEachWeek[tab][0].day}`;
+      const endDate = `${year}-${datesInEachWeek[tab][4].month+1}-${datesInEachWeek[tab][4].day}`;
+      console.log(`${process.env.REACT_APP_API_URL}schedule?start?start_date=${startDate}&&end_date=${endDate}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}schedule?start?start_date=${startDate}&&end_date=${endDate}`);
+      setSchedule(res.data);
+    }
+    if(datesInEachWeek&&year&&month) {
+      fetchSchedule();
+    }
+  }, [datesInEachWeek, year, month, tab])
+
   const mapProjects = () => {
     if(projects) {
       return projects.map(project=>{
@@ -131,7 +185,7 @@ const Resources = ({users, projects, datesInEachWeek, year, month}) => {
   return (
     <div>
       <WeekTabs datesInEachWeek={datesInEachWeek} tab={tab} setTab={setTab} />
-      <Week users={users} projects={mapProjects()} dates={datesInEachWeek&&datesInEachWeek[tab]} year={year} month={month}/>
+      <Week users={users} projects={mapProjects()} dates={datesInEachWeek&&datesInEachWeek[tab]} schedule={schedule} year={year}/>
     </div>
   )
 }
