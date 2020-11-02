@@ -50,15 +50,27 @@ const Row = ({user, projects, dates, schedule, year}) => {
 }
 
 const Dropdown = ({projects, schedule, userId, period, date}) => {
-  const dateUTC = new Date(Date.UTC(date[0], date[1], date[2]));
+  const dateUTCString = Date.UTC(date[0], date[1], date[2]);
+  const dateUTC = new Date(dateUTCString);
   const dateString = moment(dateUTC).format('YYYY-MM-DD');
   const [selectValue, setSelectValue] = useState('unassigned');
 
   let currentSchedule;
 
-  if(schedule) {
-    currentSchedule = schedule.find(schedule=>schedule.date===dateString);
-  }
+  useEffect(() => {
+    if(schedule) {
+      currentSchedule = schedule.find(schedule=>schedule.date===dateString);
+      if(currentSchedule) {
+        if(currentSchedule.project_id) {
+          setSelectValue(currentSchedule.project_id);
+        } else if(currentSchedule.absence_reason) {
+          setSelectValue(currentSchedule.absence_reason);
+        }
+      }
+    }
+  }, [schedule])
+
+
   
   const mapOptions = () => {
     let options = [
@@ -71,43 +83,24 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
     ]
 
     let projectOptions = [];
-    let projectsCurrentDate = [];
-
-    if(currentSchedule) {
-      if(currentSchedule.project_id) {
-        if(projects) {
-          projectOptions = projects.map(project=>{
-            if(project.project_id===currentSchedule.project_id) {
-              return <option defaultValue key={nextId()} value={project.project_id}>{project.project_title}</option>
-            } else {
-              return <option key={nextId()} value={project.project_id}>{project.project_title}</option>
-            }
-          })
-        }
-        options = options.map(option=><option key={nextId()} value={option.value}>{option.inner}</option>);
-      } else {
-        if(projects) {
-          projectOptions = projects.map(project=><option key={nextId()} value={project.project_id}>{project.project_title}</option>)
-        }
-        options = options.map(option=>{
-          if(currentSchedule.absence_reason===option.value) {
-            return <option defaultValue key={nextId()} value={option.value}>{option.inner}</option>
-          } else {
-            return <option key={nextId()} value={option.value}>{option.inner}</option>
-          }
-        });
-      }
-    } else {
-      if(projects) {
-        projectOptions = projects.map(project=><option key={nextId()} value={project.project_id}>{project.project_title}</option>)
-      }
-      options = options.map(option=><option key={nextId()} value={option.value}>{option.inner}</option>);
+    let currentProjects = [];
+   
+    if(projects) {
+      currentProjects = projects.filter(project=>{
+        let startDate = (project.project_start_date.split(' ')[0]).split('-');
+        let endDate = (project.project_end_date.split(' ')[0]).split('-');
+        startDate = Date.UTC(startDate[0], startDate[1]-1, startDate[2]); 
+        endDate = Date.UTC(endDate[0], endDate[1]-1, endDate[2]);
+        console.log(new Date(startDate), new Date(endDate), new Date(dateUTCString));
+        if(dateUTCString>=startDate&&dateUTCString<endDate) return project;
+      });
+      projectOptions = currentProjects.map(project=><option key={nextId()} value={project.project_id}>{project.project_title}</option>)
     }
+    options = options.map(option=><option key={nextId()} value={option.value}>{option.inner}</option>);
+
     return options.concat(projectOptions);
   }
 
-
-  console.log(mapOptions());
 
   return (
     <select className={selectValue==='unassigned'?styles.unassigned:''} value={selectValue} onChange={async e=>{
@@ -161,7 +154,6 @@ const Resources = ({users, projects, datesInEachWeek, year, month}) => {
     const fetchSchedule = async () => {
       const startDate = `${year}-${datesInEachWeek[tab][0].month+1}-${datesInEachWeek[tab][0].day}`;
       const endDate = `${year}-${datesInEachWeek[tab][4].month+1}-${datesInEachWeek[tab][4].day}`;
-      console.log(`${process.env.REACT_APP_API_URL}schedule?start?start_date=${startDate}&&end_date=${endDate}`);
       const res = await axios.get(`${process.env.REACT_APP_API_URL}schedule?start?start_date=${startDate}&&end_date=${endDate}`);
       setSchedule(res.data);
     }
