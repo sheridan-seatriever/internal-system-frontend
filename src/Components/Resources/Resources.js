@@ -60,7 +60,7 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
   useLayoutEffect(() => {
     if(schedule) {
       currentSchedule = schedule.find(schedule=>schedule.date===dateString);
-      if(currentSchedule&&currentSchedule.user_id===userId) {
+      if(currentSchedule&&currentSchedule.user_id===userId&&currentSchedule.period===period) {
         if(currentSchedule.project_id) {
           setSelectValue(currentSchedule.project_id);
         } else if(currentSchedule.absence_reason) {
