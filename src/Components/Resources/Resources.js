@@ -41,8 +41,8 @@ const Row = ({user, projects, dates, schedule, year}) => {
     <div key={nextId()} className={styles.grid_body}>
       <div className={styles.grid_vertical_header}>
         <div className={styles.grid_name}>{user.user_name}</div>
-        <div className={styles.grid_am}>AM</div>
-        <div className={styles.grid_pm}>PM</div>
+        <div className={styles.grid_am}>PM</div>
+        <div className={styles.grid_pm}>AM</div>
       </div>
       {mapDates()}
     </div>
@@ -151,13 +151,16 @@ const Resources = ({users, projects, datesInEachWeek, year, month}) => {
     const fetchSchedule = async () => {
       const startDate = `${year}-${datesInEachWeek[tab][0].month+1}-${datesInEachWeek[tab][0].day}`;
       const endDate = `${year}-${datesInEachWeek[tab][4].month+1}-${datesInEachWeek[tab][4].day}`;
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}schedule?start?start_date=${startDate}&&end_date=${endDate}`);
-      setSchedule(res.data);
+      if(users&&projects) {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}schedule?start?start_date=${startDate}&&end_date=${endDate}`);
+        console.log(res.data)
+        setSchedule(res.data);
+      }
     }
     if(datesInEachWeek&&year&&month) {
       fetchSchedule();
     }
-  }, [datesInEachWeek, year, month, tab])
+  }, [users, projects, datesInEachWeek, year, month, tab])
 
   const mapProjects = () => {
     if(projects) {
