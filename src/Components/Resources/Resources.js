@@ -59,7 +59,7 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
 
   useLayoutEffect(() => {
     if(schedule) {
-      currentSchedule = schedule.find(schedule=>schedule.date===dateString);
+      currentSchedule = schedule.find(schedule=>schedule.user_id===userId&&schedule.date===dateString&&schedule.period===period);
       if(currentSchedule&&currentSchedule.user_id===userId&&currentSchedule.period===period) {
         if(currentSchedule.project_id) {
           setSelectValue(currentSchedule.project_id);
@@ -116,7 +116,7 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
         absence_reason,
         period
       }
-      await axios.post(`${process.env.REACT_APP_API_URL}schedule`, obj);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}schedule`, obj);
     }}>
       {mapOptions()}
     </select>
