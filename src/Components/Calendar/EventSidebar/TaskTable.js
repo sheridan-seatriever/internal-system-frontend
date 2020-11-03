@@ -23,23 +23,27 @@ const TaskTable = ({tasks, deleteTask, users}) => {
   }
 
   return (
-    <div className={`${styles.task_table} ${'container both'}`}>
-      <table>
-        <tbody>
-          <tr>
-            <th>Title</th>
-            <th>Assigned to</th>
-            <th>Deadline</th>
-          </tr>
-          {mapTasks()}
-        </tbody>
-      </table>
-      <span />
+    <> 
       {
-        !(tasks&&tasks.length>0) &&
-        <div className={styles.no_content}><span>No tasks</span></div>
+        tasks&&tasks.length>0 ?
+        <div className={`${styles.task_table} ${'container both'}`}>
+          <>  
+            <table>
+              <tbody>
+                <tr>
+                  <th>Title</th>
+                  <th>Assigned to</th>
+                  <th>Deadline</th>
+                </tr>
+                {mapTasks()}
+              </tbody>
+            </table>
+            <span />
+          </> 
+        </div>:
+        <h3 className='center'>No tasks</h3>
       }
-    </div>
+    </> 
   )
 }
 

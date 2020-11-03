@@ -12,7 +12,7 @@ import _ from 'lodash';
 
 const CalendarView = () => {
   const [sidebarTab, setSidebarTab] = useState('project');
-  const [view, setView] = useState('resource');
+  const [view, setView] = useState('calendar');
   const [events, setEvents] = useState(null);
   const [projects, setProjects] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);

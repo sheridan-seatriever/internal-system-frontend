@@ -76,10 +76,15 @@ select {
 .tab {
   margin: 0px;
 }
+.unassigned option {
+  color: black;
+}
+
+.select {
+  color: black;
+  font-size: 1rem;
+}
 
 .unassigned {
   color: #007cba;
-}
-.unassigned option {
-  color: black;
 }

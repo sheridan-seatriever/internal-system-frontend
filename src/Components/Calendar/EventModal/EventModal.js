@@ -9,7 +9,7 @@ import AddList from '../../AddList';
 import SearchInput from '../../SearchInput';
 import {validateDates, validateAssignedTo, validateTime, validateTitle, validateAssignedToInput, validateProjectManager} from './validate';
 import "react-datepicker/dist/react-datepicker.css";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import to24Hour from '../../../Functions/to24Hour';
 import loadingIcon from './loading.png';
@@ -110,7 +110,6 @@ function EventModal({children, users, closeModal, modalStartDate, modalOpen, fet
 
   return (
     <Modal callback={closeModalResetState} open={modalOpen}>
-      <NotificationContainer />
       <div className={styles.modal_container}>
         <h3 className={styles.modal_header}>Add new project</h3>
         <form onSubmit={e=>submit(e)} className={styles.inner}>

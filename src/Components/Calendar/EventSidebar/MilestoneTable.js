@@ -32,24 +32,26 @@ const MilestoneTable = ({milestones, deleteMilestone}) => {
   }
 
   return (
-    <div className={`${styles.milestone_table} ${'container both'}`}>
-      <table>
-        <tbody>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Deadline</th>
-            <th>✓</th>
-          </tr>
-          {mapMilestones(milestones)}
-        </tbody>
-      </table>
-      {
-        !(milestones&&milestones.length>0) &&
-        <div className={styles.no_content}><span>No milestones</span></div>
-      }
-      <span/>
-    </div>
+    <>
+    {
+      milestones&&milestones.length>0?
+      <div className={`${styles.milestone_table} ${'container both'}`}>
+        <table>
+          <tbody>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Deadline</th>
+              <th>✓</th>
+            </tr>
+            {mapMilestones(milestones)}
+          </tbody>
+        </table>
+        <span/>
+      </div>:
+      <h3 className='center'>No Milestones</h3>
+    }
+    </>
   )
 }
 

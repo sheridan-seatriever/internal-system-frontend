@@ -100,7 +100,7 @@ const Dropdown = ({projects, schedule, userId, period, date}) => {
 
 
   return (
-    <select className={selectValue==='unassigned'?styles.unassigned:''} value={selectValue} onChange={async e=>{
+    <select className={`${styles.select} ${selectValue==='unassigned'?styles.unassigned:''} ${!isNaN(parseInt(selectValue))?styles.select_project:''}`} value={selectValue} onChange={async e=>{
       setSelectValue(e.target.value);
       let project_id = null;
       let absence_reason = null;
